@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:profpliot/screen/mobile/attendancePage.dart';
+import 'package:profpliot/view/mobile/attendancePage.dart';
 
 Widget buildListTile(String title, VoidCallback onTap) {
   return Container(

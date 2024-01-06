@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:profpliot/screen/mobile/homePage.dart';
+import 'package:profpliot/view/mobile/homePage.dart';
 
 class MobildAttendancePage extends StatefulWidget {
   @override

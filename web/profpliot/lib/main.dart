@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:profpliot/screen/error/error.dart';
-import 'package:profpliot/screen/login/login.dart';
-import 'package:profpliot/screen/mobile/homePage.dart';
-import 'package:profpliot/screen/pc/homePage.dart';
+import 'package:profpliot/view/error/error.dart';
+import 'package:profpliot/view/login/login.dart';
+import 'package:profpliot/view/mobile/homePage.dart';
+import 'package:profpliot/view/pc/homePage.dart';
 import 'package:get/get.dart';
 
 bool isMobile = GetPlatform.isMobile;

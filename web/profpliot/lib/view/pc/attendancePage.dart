@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:profpliot/screen/pc/homePage.dart';
+import 'package:profpliot/view/pc/homePage.dart';
 
 class attendancePage extends StatefulWidget {
   @override
