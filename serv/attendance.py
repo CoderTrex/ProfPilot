@@ -18,30 +18,32 @@ class AttendanceManager:
     def add_student_in_lecture(self, lecture_title, student_id, student_name):
         lecture_basic = self.db.collection(self.prof_name).document(lecture_title)
         lecture_attendance = self.db.collection(self.prof_name).document(lecture_title + '_attendance')
-
         current_student_ids = lecture_attendance.get().to_dict().get('student_id', [])
         current_student_ids.append(student_id)
-
         current_student_name = lecture_attendance.get().to_dict().get('student_name', [])
         current_student_name.append(student_name)
-        
         lecture_attendance.update({'student_id': current_student_ids, 'student_name': current_student_name})
-
         lecture_basic.update({'student_total': len(current_student_ids)})
         lecture_attendance.update({'student_total': len(current_student_ids)})
-
-    # ERROR: get_student_in_lecture() returns None        
-    # def get_student_in_lecture(self, lecture_title):
-    #     lecture_attendance = self.db.collection(self.prof_name).document(lecture_title + '_attendance')
-        
-    #     if lecture_attendance.get().exists:
-    #         print('test:')
-    #         print(lecture_attendance.get().to_dict().get('student_id', []))
-    #         print(lecture_attendance.get().to_dict().get('student_name', []))
-    #         return lecture_attendance.get().to_dict()
-    #     else:
-    #         print('Attendance document not found.')
-    #         return None
+    
+    def get_student_in_lecture(self, lecture_title):
+        lecture_attendance = self.db.collection(self.prof_name).document(lecture_title + '_attendance')
+        print("Test: ")
+        print(self.prof_name, lecture_title)
+        # 문서가 존재하는지 확인
+        document_snapshot = lecture_attendance.get()
+        if document_snapshot.exists:
+            # 문서가 존재할 경우 데이터를 가져와 사용
+            data_dict = document_snapshot.to_dict()
+            student_id = data_dict.get('student_id', [])
+            student_name = data_dict.get('student_name', [])
+            
+            result = {'student_id': student_id, 'student_name': student_name}
+            return result
+        else:
+            # 문서가 존재하지 않을 경우 에러 처리 또는 다른 작업 수행
+            print(f"Document with title {lecture_title} does not exist.")
+            return None
     
     def update_student_in_lecture(self, lecture_title, student_id, student_name):
         lecture_attendance = self.db.collection(self.prof_name).document(lecture_title + '_attendance')

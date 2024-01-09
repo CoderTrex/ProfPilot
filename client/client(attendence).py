@@ -84,9 +84,26 @@ def do_attendence_test():
     # --------------------------------------------------------------- #
     # - Case 2: get student in lecture                              - #
     # --------------------------------------------------------------- #
-    client_get_student('leeseongwon', 'computernetwork')
-    client_get_student('leeseongwon', 'database')
+    # client_get_student('leeseongwon', 'computernetwork')
+    # client_get_student('leeseongwon', 'database')
     
+    
+    # --------------------------------------------------------------- #
+    # - Case 3: update student in lecture                           - #
+    # --------------------------------------------------------------- #
+    client_update_student('leeseongwon', 'computernetwork', '2021103751', 'jeongeunseong')
+    client_update_student('leeseongwon', 'computernetwork', '2020103832', 'kimyonghun')
+    client_update_student('leeseongwon', 'computernetwork', '2022103812', 'kimkangsan')
+    client_update_student('leeseongwon', 'computernetwork', '2019103132', 'yoonjungmin')
+    
+    
+    # --------------------------------------------------------------- #
+    # - Case 4: delete student in lecture                           - #
+    # --------------------------------------------------------------- #
+    client_delete_student('leeseongwon', 'computernetwork', '2021103751', 'jeongeunseong')
+    client_delete_student('leeseongwon', 'computernetwork', '2020103832', 'kimyonghun')
+    client_delete_student('leeseongwon', 'computernetwork', '2022103812', 'kimkangsan')
+    client_delete_student('leeseongwon', 'computernetwork', '2019103132', 'yoonjungmin')
     
     
     

@@ -117,7 +117,7 @@ class MyAPI:
         def get_student_in_lecture():
             data = request.json
             lecture_title = data.get('lecture_title')
-            lecturemanager = AttendanceManager(lecture_title)
+            lecturemanager = AttendanceManager(data.get('prof_name'))
             result = lecturemanager.get_student_in_lecture(lecture_title)
             # print(result)
             return jsonify({"status": "success", "result": result})
