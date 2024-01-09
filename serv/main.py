@@ -8,6 +8,7 @@
 # import libraries
 from firebase_admin import credentials, firestore
 from flask import Flask, jsonify, request
+from flask_caching import Cache
 from datetime import datetime
 import firebase_admin
 import os
@@ -15,7 +16,7 @@ import os
 # import files
 from gpsmanager import GPSManager
 from lecturemanager import LectureManager
-from attendence import AttendanceManager
+from attendance import AttendanceManager
 
 # Set the path to the service account key file
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\\Code\\ProfPilot\\serv\\profpliot-firebase-authkey.json"
@@ -27,6 +28,7 @@ firebase_admin.initialize_app(cred)
 # Firestore service authentication
 db = firestore.client()
 app = Flask(__name__)
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 class MyAPI:
     def __init__(self):
@@ -110,13 +112,18 @@ class MyAPI:
             lecturemanager.add_student_in_lecture(lecture_title, student_id, student_name)
             return jsonify({"status": "success", "message": "Student added to lecture attendance"})
         
+        # get student in lecture attendance
+        @self.app.route('/get_student', methods=['POST'])
         def get_student_in_lecture():
             data = request.json
-            lecturemanager = AttendanceManager(data.get('prof_name'))
             lecture_title = data.get('lecture_title')
-            lecturemanager.get_student_in_lecture(lecture_title)
-            return jsonify({"status": "success", "message": "Student added to lecture attendance"})
+            lecturemanager = AttendanceManager(lecture_title)
+            result = lecturemanager.get_student_in_lecture(lecture_title)
+            # print(result)
+            return jsonify({"status": "success", "result": result})
         
+        # update student in lecture attendance
+        @self.app.route('/update_student', methods=['POST'])
         def update_student_in_lecture():
             data = request.json
             lecturemanager = AttendanceManager(data.get('prof_name'))
@@ -126,12 +133,15 @@ class MyAPI:
             lecturemanager.update_student_in_lecture(lecture_title, student_id, student_name)
             return jsonify({"status": "success", "message": "Student updated in lecture attendance"})
         
+        # delete student in lecture attendance
+        @self.app.route('/delete_student', methods=['POST'])
         def delete_student_in_lecture():
             data = request.json
             lecturemanager = AttendanceManager(data.get('prof_name'))
             lecture_title = data.get('lecture_title')
             student_id = data.get('student_id')
-            lecturemanager.delete_student_in_lecture(lecture_title, student_id)
+            student_name = data.get('student_name')
+            lecturemanager.delete_student_in_lecture(lecture_title, student_id, student_name)
             return jsonify({"status": "success", "message": "Student deleted in lecture attendance"})
         
         # add today's attendance
@@ -155,7 +165,8 @@ class MyAPI:
                 return jsonify({"status": "fail", "message": "Attendance already exists"})
 
     def run(self):
-        self.app.run(debug=True)
+        # debug=True: auto-reload on code change, threaded=True: multiple requests at once (for testing)
+        self.app.run(debug=False, threaded=True) 
 
 if __name__ == '__main__':
     my_api = MyAPI()
