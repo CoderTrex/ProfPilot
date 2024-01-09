@@ -1,8 +1,7 @@
 --- comment format example ---
 # -------------------------------------------------------------------------- #
-#- title : set_lecture()
+#- title : lectureMananger
 #- who made it : eunseong
-#- purpose: make new lecture in firestore
 #- first create : 05.01.23
 #- last modified : 05.01.23
 #- function: 1. lecture infomation table generation in firestore
