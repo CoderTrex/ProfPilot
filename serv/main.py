@@ -4,7 +4,6 @@
 # Developer: Jeong Eun Seong
 # =====================================================================================================
 
-
 # import libraries
 from firebase_admin import credentials, firestore
 from flask import Flask, jsonify, request
@@ -19,7 +18,7 @@ from lecturemanager import LectureManager
 from attendance import AttendanceManager
 
 # Set the path to the service account key file
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\\Code\\ProfPilot\\serv\\profpliot-firebase-authkey.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\\Code\\ProfPilot\\serv\\profpilot-firebase-authkey.json"
 
 # Firestore service authentication
 cred = credentials.Certificate("C:\Code\ProfPilot\serv\profpliot-firebase-authkey.json")
@@ -109,9 +108,13 @@ class MyAPI:
             lecture_title = data.get('lecture_title')
             student_id = data.get('student_id')
             student_name = data.get('student_name')
-            lecturemanager.add_student_in_lecture(lecture_title, student_id, student_name)
-            return jsonify({"status": "success", "message": "Student added to lecture attendance"})
-        
+            success = lecturemanager.add_student_in_lecture(lecture_title, student_id, student_name)
+            
+            if (success):
+                return jsonify({"status": "success", "message": "Student added to lecture attendance"})
+            else:
+                return jsonify({"status": "fail", "message": "Student already exists"})
+
         # get student in lecture attendance
         @self.app.route('/get_student', methods=['POST'])
         def get_student_in_lecture():

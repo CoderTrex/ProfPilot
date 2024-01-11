@@ -19,13 +19,19 @@ class AttendanceManager:
         lecture_basic = self.db.collection(self.prof_name).document(lecture_title)
         lecture_attendance = self.db.collection(self.prof_name).document(lecture_title + '_attendance')
         current_student_ids = lecture_attendance.get().to_dict().get('student_id', [])
-        current_student_ids.append(student_id)
         current_student_name = lecture_attendance.get().to_dict().get('student_name', [])
+        
+        if student_id in current_student_ids or student_name in current_student_name:
+            print("Document with the same student_id exists")
+            return False
+    
+        current_student_ids.append(student_id)
         current_student_name.append(student_name)
         lecture_attendance.update({'student_id': current_student_ids, 'student_name': current_student_name})
         lecture_basic.update({'student_total': len(current_student_ids)})
         lecture_attendance.update({'student_total': len(current_student_ids)})
-    
+        return True
+
     def get_student_in_lecture(self, lecture_title):
         lecture_attendance = self.db.collection(self.prof_name).document(lecture_title + '_attendance')
         print("Test: ")

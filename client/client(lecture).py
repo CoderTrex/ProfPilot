@@ -62,35 +62,35 @@ def do_lecture_test():
     # --------------------------------------------------------------- #
     # - Case 1: set lecture                                         - #
     # --------------------------------------------------------------- #
-    # client_set_lecture('leeseongwon', 'computernetwork', '10-00-00', '11-30-00', '경희대_전정대')
-    client_set_lecture('leeseongwon', 'algorithm', '13-00-00', '14-30-00', '경희대_전정대')
-    client_set_lecture('leeseongwon', 'database', '15-00-00', '16-30-00', '경희대_전정대')
-    client_set_lecture('leeseongwon', 'softwareengineering', '17-00-00', '18-30-00', '경희대_전정대')
-    client_set_lecture('leeseongwon', 'operatingsystem', '19-00-00', '20-30-00', '경희대_전정대')
+    client_set_lecture('leeseongwon', 'computernetwork', '10-00-00', '11-30-00', '경희대_전정대')
+    # client_set_lecture('leeseongwon', 'algorithm', '13-00-00', '14-30-00', '경희대_전정대')
+    # client_set_lecture('leeseongwon', 'database', '15-00-00', '16-30-00', '경희대_전정대')
+    # client_set_lecture('leeseongwon', 'softwareengineering', '17-00-00', '18-30-00', '경희대_전정대')
+    # client_set_lecture('leeseongwon', 'operatingsystem', '19-00-00', '20-30-00', '경희대_전정대')
 
     # --------------------------------------------------------------- #
     # - Case 2: get lecture                                         - #
     # --------------------------------------------------------------- #
-    client_get_lecture('leeseongwon', 'computernetwork')
-    client_get_lecture('leeseongwon', 'algorithm')
-    client_get_lecture('leeseongwon', 'database')
-    client_get_lecture('leeseongwon', 'softwareengineering')
-    client_get_lecture('leeseongwon', 'operatingsystem')
+    # client_get_lecture('leeseongwon', 'computernetwork')
+    # client_get_lecture('leeseongwon', 'algorithm')
+    # client_get_lecture('leeseongwon', 'database')
+    # client_get_lecture('leeseongwon', 'softwareengineering')
+    # client_get_lecture('leeseongwon', 'operatingsystem')
     
     # --------------------------------------------------------------- #
     # - Case 3: update lecture                                      - #
     # --------------------------------------------------------------- #
-    client_update_lecture('leeseongwon', 'computernetwork', '11-00-00', '12-30-00', '경희대_전정대')
-    client_update_lecture('leeseongwon', 'algorithm', '14-00-00', '15-30-00', '경희대_전정대')
+    # client_update_lecture('leeseongwon', 'computernetwork', '11-00-00', '12-30-00', '경희대_전정대')
+    # client_update_lecture('leeseongwon', 'algorithm', '14-00-00', '15-30-00', '경희대_전정대')
 
     # --------------------------------------------------------------- #
     # - Case 4: delete lecture                                      - #
     # --------------------------------------------------------------- #
-    client_delete_lecture('leeseongwon', 'computernetwork')
-    client_delete_lecture('leeseongwon', 'algorithm')
-    client_delete_lecture('leeseongwon', 'database')
-    client_delete_lecture('leeseongwon', 'softwareengineering')
-    client_delete_lecture('leeseongwon', 'operatingsystem')
+    # client_delete_lecture('leeseongwon', 'computernetwork')
+    # client_delete_lecture('leeseongwon', 'algorithm')
+    # client_delete_lecture('leeseongwon', 'database')
+    # client_delete_lecture('leeseongwon', 'softwareengineering')
+    # client_delete_lecture('leeseongwon', 'operatingsystem')
 
 # add student client test
 if __name__ == "__main__":

@@ -73,7 +73,7 @@ def do_attendence_test():
     # --------------------------------------------------------------- #
     # - Case 1: add student in lecture                              - #
     # --------------------------------------------------------------- #
-    # client_add_student('leeseongwon', 'computernetwork', '2021103751', 'jeongeunseong')
+    client_add_student('leeseongwon', 'computernetwork', '2021103751', 'jeongeunseong')
     # client_add_student('leeseongwon', 'computernetwork', '2020103832', 'kimyonghun')
     # client_add_student('leeseongwon', 'computernetwork', '2022103812', 'kimkangsan')
     # client_add_student('leeseongwon', 'computernetwork', '2019103132', 'yoonjungmin')
@@ -91,19 +91,19 @@ def do_attendence_test():
     # --------------------------------------------------------------- #
     # - Case 3: update student in lecture                           - #
     # --------------------------------------------------------------- #
-    client_update_student('leeseongwon', 'computernetwork', '2021103751', 'jeongeunseong')
-    client_update_student('leeseongwon', 'computernetwork', '2020103832', 'kimyonghun')
-    client_update_student('leeseongwon', 'computernetwork', '2022103812', 'kimkangsan')
-    client_update_student('leeseongwon', 'computernetwork', '2019103132', 'yoonjungmin')
+    # client_update_student('leeseongwon', 'computernetwork', '2021103751', 'jeongeunseong')
+    # client_update_student('leeseongwon', 'computernetwork', '2020103832', 'kimyonghun')
+    # client_update_student('leeseongwon', 'computernetwork', '2022103812', 'kimkangsan')
+    # client_update_student('leeseongwon', 'computernetwork', '2019103132', 'yoonjungmin')
     
     
     # --------------------------------------------------------------- #
     # - Case 4: delete student in lecture                           - #
     # --------------------------------------------------------------- #
-    client_delete_student('leeseongwon', 'computernetwork', '2021103751', 'jeongeunseong')
-    client_delete_student('leeseongwon', 'computernetwork', '2020103832', 'kimyonghun')
-    client_delete_student('leeseongwon', 'computernetwork', '2022103812', 'kimkangsan')
-    client_delete_student('leeseongwon', 'computernetwork', '2019103132', 'yoonjungmin')
+    # client_delete_student('leeseongwon', 'computernetwork', '2021103751', 'jeongeunseong')
+    # client_delete_student('leeseongwon', 'computernetwork', '2020103832', 'kimyonghun')
+    # client_delete_student('leeseongwon', 'computernetwork', '2022103812', 'kimkangsan')
+    # client_delete_student('leeseongwon', 'computernetwork', '2019103132', 'yoonjungmin')
     
     
     
