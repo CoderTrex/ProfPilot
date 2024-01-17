@@ -63,8 +63,8 @@ def do_lecture_test():
     # - Case 1: set lecture                                         - #
     # --------------------------------------------------------------- #
     client_set_lecture('leeseongwon', 'computernetwork', '10-00-00', '11-30-00', '경희대_전정대')
-    # client_set_lecture('leeseongwon', 'algorithm', '13-00-00', '14-30-00', '경희대_전정대')
-    # client_set_lecture('leeseongwon', 'database', '15-00-00', '16-30-00', '경희대_전정대')
+    client_set_lecture('leeseongwon', 'algorithm', '13-00-00', '14-30-00', '경희대_전정대')
+    client_set_lecture('leeseongwon', 'database', '15-00-00', '16-30-00', '경희대_전정대')
     # client_set_lecture('leeseongwon', 'softwareengineering', '17-00-00', '18-30-00', '경희대_전정대')
     # client_set_lecture('leeseongwon', 'operatingsystem', '19-00-00', '20-30-00', '경희대_전정대')
 

@@ -1,10 +1,3 @@
-# =====================================================================================================
-# This file is the main file of the server.
-# All rights reserved to ProfPilot Team.
-# Developer: Jeong Eun Seong
-# =====================================================================================================
-
-# import libraries
 from firebase_admin import credentials, firestore
 from flask import Flask, jsonify, request
 from flask_caching import Cache
@@ -21,7 +14,7 @@ from attendance import AttendanceManager
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\\Code\\ProfPilot\\serv\\profpilot-firebase-authkey.json"
 
 # Firestore service authentication
-cred = credentials.Certificate("C:\Code\ProfPilot\serv\profpliot-firebase-authkey.json")
+cred = credentials.Certificate("C:\Code\ProfPilot\serv\profpilot-firebase-authkey.json")
 firebase_admin.initialize_app(cred)
 
 # Firestore service authentication

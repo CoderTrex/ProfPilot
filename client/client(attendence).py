@@ -73,7 +73,7 @@ def do_attendence_test():
     # --------------------------------------------------------------- #
     # - Case 1: add student in lecture                              - #
     # --------------------------------------------------------------- #
-    client_add_student('leeseongwon', 'computernetwork', '2021103751', 'jeongeunseong')
+    # client_add_student('leeseongwon', 'computernetwork', '2021103751', 'jeongeunseong')
     # client_add_student('leeseongwon', 'computernetwork', '2020103832', 'kimyonghun')
     # client_add_student('leeseongwon', 'computernetwork', '2022103812', 'kimkangsan')
     # client_add_student('leeseongwon', 'computernetwork', '2019103132', 'yoonjungmin')
@@ -106,17 +106,16 @@ def do_attendence_test():
     # client_delete_student('leeseongwon', 'computernetwork', '2019103132', 'yoonjungmin')
     
     
-    
     # --------------------------------------------------------------- #
     # - Case 5: add attendance                                      - #
     # --------------------------------------------------------------- #
-    # client_add_attendance('leeseongwon', 'computernetwork', '2021103751', 'jeongeunseong')
-    # client_add_attendance('leeseongwon', 'computernetwork', '2020103832', 'kimyonghun')
-    # client_add_attendance('leeseongwon', 'computernetwork', '2022103812', 'kimkangsan')
-    # client_add_attendance('leeseongwon', 'computernetwork', '2019103132', 'yoonjungmin')
+    client_add_attendance('leeseongwon', 'computernetwork', '2021103751', 'jeongeunseong')
+    client_add_attendance('leeseongwon', 'computernetwork', '2020103832', 'kimyonghun')
+    client_add_attendance('leeseongwon', 'computernetwork', '2022103812', 'kimkangsan')
+    client_add_attendance('leeseongwon', 'computernetwork', '2019103132', 'yoonjungmin')
     
-    # client_add_attendance('leeseongwon', 'database', '2021103751', 'jeongeunseong')
-    # client_add_attendance('leeseongwon', 'database', '2020103832', 'kimyonghun')
+    client_add_attendance('leeseongwon', 'database', '2021103751', 'jeongeunseong')
+    client_add_attendance('leeseongwon', 'database', '2020103832', 'kimyonghun')
 
 
 if __name__ == "__main__":
