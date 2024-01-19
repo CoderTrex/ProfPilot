@@ -18,7 +18,8 @@ Future<Null> main() async {
     home = MobileHomePage();
     print("Platform is is Mobile");
   } else if (isDesktop) {
-    home = PcLogin();
+    home = FigmaToCodeApp();
+    // home = HomePage();
     // home = PcHomePage();
     print("Platform is is PC");
   } else {
