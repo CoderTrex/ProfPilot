@@ -36,6 +36,7 @@ from firebase_admin import firestore
 #    Returns                 : True if the attendance is added successfully, 
 #                               False if the attendance record already exists for the student.
 # ============================================================================== #
+
 class AttendanceManager:
     def __init__(self, prof_name):
         self.prof_name = prof_name
