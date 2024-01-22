@@ -27,6 +27,24 @@ class MyAPI:
         self.app = Flask(__name__)
         self.setup_routes()
 
+    def login_in():
+        pass
+    
+    def login_out():
+        pass
+    
+    def signup():
+        data = request.json
+        name = data.get('name')
+        email = data.get('email')
+        password = data.get('password')
+        
+        pass
+    
+    
+    
+    
+    
     def setup_routes(self):
         # ========================================================================== #
         # GPS management                                                             #
