@@ -1,15 +1,41 @@
-# ----------------------------------------------------------------------------- #
-#- title                                     : AttendanceManager                #
-#- who made it                               : eunseong                         #
-#- first create                              : 05.01.23                         #
-#- last modified                             : 09.01.23                         #
-#- function: 1. add student in lecture attendance                               #
-#-           2. add today's attendance                                          #
-# ----------------------------------------------------------------------------- #
-
 from datetime import datetime
 from firebase_admin import firestore
 
+# ================================================================================= #
+# Attendance Management                                                             #
+#
+# The AttendanceManager class provides functionalities for managing student 
+# attendance in Firestore database. It includes methods for adding, retrieving, 
+# updating, and deleting student attendance information.
+#
+# 1. add_student_in_lecture  : Adds a student to the attendance list of a lecture 
+#                               in the Firestore database.
+#    Parameters              : lecture_title (str), student_id (str), student_name (str)
+#    Returns                 : True if the student is added successfully, 
+#                               False if the student already exists in the attendance list.
+#
+# 2. get_student_in_lecture  : Retrieves the list of students present in a specific 
+#                               lecture from the Firestore database.
+#    Parameters              : lecture_title (str)
+#    Returns                 : Dictionary containing lists of student IDs and names.
+#
+# 3. update_student_in_lecture: Updates the attendance list in a lecture with a new 
+#                               student in the Firestore database.
+#    Parameters              : lecture_title (str), student_id (str), student_name (str)
+#    Returns                 : None
+#
+# 4. delete_student_in_lecture: Deletes a student from the attendance list of a lecture 
+#                               in the Firestore database.
+#    Parameters              : lecture_title (str), student_id (str), student_name (str)
+#    Returns                 : None
+#
+# 5. add_today_attendance     : Adds today's attendance record for a student in a lecture 
+#                               to the Firestore database.
+#    Parameters              : prof_name (str), lecture_title (str), student_id (str), 
+#                               student_name (str)
+#    Returns                 : True if the attendance is added successfully, 
+#                               False if the attendance record already exists for the student.
+# ============================================================================== #
 class AttendanceManager:
     def __init__(self, prof_name):
         self.prof_name = prof_name
@@ -40,9 +66,9 @@ class AttendanceManager:
         document_snapshot = lecture_attendance.get()
         if document_snapshot.exists:
             # 문서가 존재할 경우 데이터를 가져와 사용
-            data_dict       = document_snapshot.to_dict()
-            student_id      = data_dict.get('student_id', [])
-            student_name    = data_dict.get('student_name', [])
+            data_dict           = document_snapshot.to_dict()
+            student_id          = data_dict.get('student_id', [])
+            student_name        = data_dict.get('student_name', [])
             
             result = {'student_id': student_id, 'student_name': student_name}
             return result

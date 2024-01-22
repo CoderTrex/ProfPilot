@@ -13,13 +13,13 @@ Future<Null> main() async {
   Widget home;
   if (isMobile) {
     home = MobileHomePage();
-    print("Platform is is Mobile");
+    // print("Platform is is Mobile");
   } else if (isDesktop) {
-    home = FigmaToCodeApp();
-    print("Platform is is PC");
+    home = const LoginPage();
+    // print("Platform is is PC");
   } else {
     home = PlatformErrorPage();
-    print("Platform is is unknown");
+    // print("Platform is is unknown");
   }
   runApp(MaterialApp(home: home));
 }

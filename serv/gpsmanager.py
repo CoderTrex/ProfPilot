@@ -1,13 +1,25 @@
-# ----------------------------------------------------------------------------- #
-#- title                                     : GPSManager                       #
-#- who made it                               : eunseong                         #
-#- first create                              : 08.01.23                         #
-#- last modified                             : 08.01.23                         #
-#- description                               : gps manager                      #
-#- function: 1. compare student gps with building gps                           #
-# ----------------------------------------------------------------------------- #
-
 import math
+
+# ================================================================================= #
+# GPS Management                                                                    #
+#                                                                                   #                          
+# The GPSManager class provides functionalities for managing GPS coordinates        # 
+# and distance calculations. It includes methods for measuring the distance         #
+# between two GPS points and checking whether a student's GPS location is within    #
+# an allowed distance from a specified building.                                    #
+#                                                                                   #
+# 1. measure          : Calculates the distance in meters between two GPS           #
+#                       coordinates using the Haversine formula.                    #
+#    Parameters      : lat1 (float), lon1 (float), lat2 (float), lon2 (float)       #
+#    Returns         : Distance in meters.                                          #
+#                                                                                   #
+# 2. check_gps       : Checks if a student's GPS location is within the allowed     #
+#                       distance from a specified building.                         #
+#    Parameters      : student_gps_info (dict) - Dictionary containing student's    #
+#                       latitude and longitude.                                     #   
+#    Returns         : Dictionary with distance in meters and a boolean indicating  #
+#                       whether the student is within the allowed distance.         #
+# ================================================================================= #
 
 class GPSManager:
     def __init__(self, building_gps_info):

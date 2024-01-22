@@ -1,14 +1,18 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
-class FigmaToCodeApp extends StatefulWidget {
-  const FigmaToCodeApp({Key? key}) : super(key: key);
+import 'package:profpliot/view/login/signup.dart';
+import 'package:profpliot/view/login/popup.dart';
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  _FigmaToCodeAppState createState() => _FigmaToCodeAppState();
+  _LoginPageAppState createState() => _LoginPageAppState();
 }
 
-class _FigmaToCodeAppState extends State<FigmaToCodeApp> {
+class _LoginPageAppState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,121 +33,6 @@ class SignUp extends StatefulWidget {
   _SignUpState createState() => _SignUpState();
 }
 
-Widget _highlightTitles(String content) {
-  List<String> lines = content.split('\n');
-  List<Widget> widgets = [];
-
-  for (String line in lines) {
-    if (line.trim().startsWith(RegExp(r'^\d+-\d+\.'))) {
-      widgets.add(
-        Text(
-          line,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    } else {
-      widgets.add(Text(line));
-    }
-  }
-
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: widgets,
-  );
-}
-
-Widget _buildPolicySection(String title, String content) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        title,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
-      ),
-      const SizedBox(height: 8),
-      _highlightTitles(content),
-      const SizedBox(height: 16),
-    ],
-  );
-}
-
-void _showPopup(BuildContext context) {
-  String termOfServiceTitle = '1. Terms of Service';
-  String termsOfService = '''
-    1.1. Use of services
-      1.1.1 By using the Service, you must comply with all applicable laws and regulations.
-      1.2. Any illegal activity through the service is prohibited, and actions that may cause harm to other users are also strictly prohibited.
-
-    1.2. Account security
-      1.2.1 Users must keep their account information safe.
-      1.2.2 Accessing another user's account or providing account information to a third party is prohibited, and the account holder is responsible for the consequences.
-
-    1.3. Service changes and interruptions
-      1.3.1 The Company reserves the right to change or discontinue any or all of the Services without prior notice.
-      1.3.2 The Company is not responsible for any losses suffered by users due to changes or interruptions in the service.
-  ''';
-
-  String privacyPolicyTitle = '2. Privacy Policy';
-  String privacyPolicy = '''
-    2. Privacy Policy
-      2.1. Information collected
-        2.1.1 This service may collect essential information such as name and email when registering as a member.
-        2.1.2 In addition, data collected while using the service is described in detail in the privacy policy.
-
-      2.2. Use of information
-        2.2.1 The collected information is mainly used to provide, maintain, and improve services, and to develop new services.
-        2.2.2 Personal information will not be provided to other companies or organizations without the user's consent.
-
-      2.3. Security measures
-        2.3.1 Collected information is safely protected through appropriate security measures.
-        2.3.2 User information will be safely disposed of even when the service is terminated.
-  ''';
-
-  String cookieUsePolicyTitle = '3. Cookie Use Policy';
-  String cookieUsePolicy = '''
-    3. Cookie Use Policy
-      3.1. Use of cookies
-        3.1.1 This service uses cookies to improve user experience and provide services.
-        3.1.2 Cookies help you set up and maintain certain features.
-
-      3.2. Refusal of cookies
-        3.2.1 You may not consent to the use of cookies. However, some features may be limited in this case.
-        3.2.2 More information about rejecting cookies can be found in our Cookie Use Policy.
-  ''';
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Terms and Policies'),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildPolicySection(termOfServiceTitle, termsOfService),
-              _buildPolicySection(privacyPolicyTitle, privacyPolicy),
-              _buildPolicySection(cookieUsePolicyTitle, cookieUsePolicy),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('Close'),
-          ),
-        ],
-      );
-    },
-  );
-}
-
 class _SignUpState extends State<SignUp> {
   final TextEditingController _textControllerName = TextEditingController();
   final TextEditingController _textControllerEmail = TextEditingController();
@@ -157,7 +46,7 @@ class _SignUpState extends State<SignUp> {
         Column(
           children: [
             Container(
-              width: MediaQuery.of(context).size.width * 0.5,
+              width: MediaQuery.of(context).size.width * 0.6,
               height: MediaQuery.of(context).size.height,
               clipBehavior: Clip.antiAlias,
               decoration: const BoxDecoration(color: Colors.white),
@@ -203,13 +92,13 @@ class _SignUpState extends State<SignUp> {
                                 ),
                               ),
                             ),
-                            // Enter your name
+                            // enter your email address
                             Positioned(
                               left: 0,
-                              top: 175,
+                              top: 130,
                               child: SizedBox(
-                                width: 404,
-                                height: 58,
+                                width: 400,
+                                height: 60,
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -223,7 +112,7 @@ class _SignUpState extends State<SignUp> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Name',
+                                          'Email address',
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 14,
@@ -234,11 +123,12 @@ class _SignUpState extends State<SignUp> {
                                         ),
                                       ],
                                     ),
+                                    const SizedBox(height: 10),
                                     Container(
-                                      width: 404,
-                                      height: 32,
+                                      width: 400,
+                                      height: 30,
                                       padding: const EdgeInsets.only(
-                                          top: 10, left: 10, bottom: 10),
+                                          top: 5, left: 10, bottom: 10),
                                       clipBehavior: Clip.antiAlias,
                                       decoration: ShapeDecoration(
                                         shape: RoundedRectangleBorder(
@@ -254,13 +144,14 @@ class _SignUpState extends State<SignUp> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                            CrossAxisAlignment.center,
                                         children: [
                                           Expanded(
                                             child: TextField(
-                                              controller: _textControllerName,
+                                              controller: _textControllerEmail,
                                               decoration: const InputDecoration(
-                                                hintText: 'Enter your name',
+                                                hintText:
+                                                    'Enter your email address',
                                                 hintStyle: TextStyle(
                                                   color: Color(0xFFD9D9D9),
                                                   fontSize: 10,
@@ -289,10 +180,10 @@ class _SignUpState extends State<SignUp> {
                             // enter your password
                             Positioned(
                               left: 0,
-                              top: 265.92,
+                              top: 220,
                               child: SizedBox(
-                                width: 404,
-                                height: 58,
+                                width: 400,
+                                height: 60,
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -317,11 +208,12 @@ class _SignUpState extends State<SignUp> {
                                         ),
                                       ],
                                     ),
+                                    const SizedBox(height: 10),
                                     Container(
                                       width: 404,
                                       height: 32,
                                       padding: const EdgeInsets.only(
-                                          top: 10, left: 10, bottom: 10),
+                                          top: 5, left: 10, bottom: 10),
                                       clipBehavior: Clip.antiAlias,
                                       decoration: ShapeDecoration(
                                         shape: RoundedRectangleBorder(
@@ -370,6 +262,34 @@ class _SignUpState extends State<SignUp> {
                                 ),
                               ),
                             ),
+                            // Sign in
+                            Positioned(
+                              left: 0,
+                              top: 388.49,
+                              child: GestureDetector(
+                                onTap: saveToJson,
+                                child: Container(
+                                  width: 404,
+                                  height: 35.02,
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromARGB(255, 3, 55, 23),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'Sign in',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w700,
+                                        height: 0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                             // distinguished from login
                             Positioned(
                               left: 3,
@@ -400,93 +320,23 @@ class _SignUpState extends State<SignUp> {
                                 ),
                               ),
                             ),
-                            // I agree to the terms & policy
+                            // Don't have an account? Sign Up
                             Positioned(
-                              left: -0,
-                              top: 343.62,
-                              child: SizedBox(
-                                width: 400,
-                                height: 15.32,
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                      left: 15,
-                                      top: 0,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          // 텍스트를 눌렀을 때 팝업 창 표시 로직 추가
-                                          _showPopup(context);
-                                        },
-                                        child: const SizedBox(
-                                          width: 400,
-                                          height: 15.32,
-                                          child: Text.rich(
-                                            TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text:
-                                                      'I agree to the terms & policy (click to check the details)',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 10,
-                                                    fontFamily: 'Poppins',
-                                                    fontWeight: FontWeight.w500,
-                                                    height: 0,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      left: 0,
-                                      top: 2.19,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          // 클릭 이벤트 처리
-                                          setState(() {
-                                            isAgreed = !isAgreed;
-                                          });
-                                        },
-                                        child: Container(
-                                          width: 9,
-                                          height: 9.85,
-                                          decoration: ShapeDecoration(
-                                            shape: RoundedRectangleBorder(
-                                              side: const BorderSide(width: 1),
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                            ),
-                                            color: isAgreed
-                                                ? Colors.blue
-                                                : Colors
-                                                    .transparent, // 클릭 여부에 따라 색상 변경
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const Positioned(
-                              left: 113,
+                              left: 100,
                               top: 570,
                               child: SizedBox(
-                                width: 183,
-                                height: 22.98,
+                                width: 250,
+                                height: 25,
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text.rich(
-                                      TextSpan(
+                                    RichText(
+                                      text: TextSpan(
                                         children: [
-                                          TextSpan(
-                                            text: 'Have an account?  ',
+                                          const TextSpan(
+                                            text: 'Don\'t have an account?  ',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 14,
@@ -496,102 +346,59 @@ class _SignUpState extends State<SignUp> {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: 'Sign In',
-                                            style: TextStyle(
+                                            text: 'Sign Up',
+                                            style: const TextStyle(
                                               color: Color(0xFF0F3CDE),
                                               fontSize: 14,
                                               fontFamily: 'Poppins',
                                               fontWeight: FontWeight.w500,
                                               height: 0,
+                                              decoration: TextDecoration
+                                                  .underline, // 밑줄 추가
                                             ),
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () {
+                                                Navigator.push(
+                                                  context,
+                                                  PageRouteBuilder(
+                                                    pageBuilder: (context,
+                                                            animation,
+                                                            secondaryAnimation) =>
+                                                        const SignUpPage(),
+                                                    transitionsBuilder:
+                                                        (context,
+                                                            animation,
+                                                            secondaryAnimation,
+                                                            child) {
+                                                      const begin =
+                                                          Offset(1.0, 0.0);
+                                                      const end = Offset.zero;
+                                                      const curve =
+                                                          Curves.easeInOut;
+                                                      var tween = Tween(
+                                                              begin: begin,
+                                                              end: end)
+                                                          .chain(CurveTween(
+                                                              curve: curve));
+                                                      var offsetAnimation =
+                                                          animation
+                                                              .drive(tween);
+                                                      return SlideTransition(
+                                                          position:
+                                                              offsetAnimation,
+                                                          child: child);
+                                                    },
+                                                    transitionDuration:
+                                                        Duration(
+                                                            milliseconds: 900),
+                                                  ),
+                                                );
+                                              },
                                           ),
                                         ],
                                       ),
                                     ),
                                   ],
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 0,
-                              top: 388.49,
-                              child: GestureDetector(
-                                onTap: () {
-                                  print('Signup');
-                                  saveToJson();
-                                },
-                                child: Container(
-                                  width: 404,
-                                  height: 35.02,
-                                  decoration: const BoxDecoration(
-                                      color: Color(0xFFEDF2F7)),
-                                  child: Stack(
-                                    children: [
-                                      Positioned(
-                                        left: 0,
-                                        top: 0,
-                                        child: SizedBox(
-                                          height: 32,
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                width: 404,
-                                                height: 32,
-                                                padding: const EdgeInsets.only(
-                                                    top: 10,
-                                                    left: 10,
-                                                    bottom: 10),
-                                                clipBehavior: Clip.antiAlias,
-                                                decoration: ShapeDecoration(
-                                                  color:
-                                                      const Color(0xFF3A5B22),
-                                                  shape: RoundedRectangleBorder(
-                                                    side: const BorderSide(
-                                                        width: 1,
-                                                        color:
-                                                            Color(0xFF3A5B22)),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                ),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Container(),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      const Positioned(
-                                        left: 185,
-                                        top: 6,
-                                        child: Text(
-                                          'Signup',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 13,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w700,
-                                            height: 0,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
                                 ),
                               ),
                             ),
@@ -606,7 +413,7 @@ class _SignUpState extends State<SignUp> {
           ],
         ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.5,
+          width: MediaQuery.of(context).size.width * 0.4,
           height: MediaQuery.of(context).size.height,
           decoration: const BoxDecoration(
             color: Colors.white, // 흰색 배경
