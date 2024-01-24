@@ -48,6 +48,21 @@ class MyAPI:
             else:
                 return jsonify({"status": "fail", "message": "Email is duplicate"})
         
+        
+        @self.app.route('/send_verification_email', methods=['POST'])
+        def send_verification_email():
+            data                = request.json
+            email               = data.get('email')
+            verifiy_code        = data.get('verifiy_code')
+            
+            login_manager       = LoginAngSignupManager()
+            success             = login_manager.send_verification_email(email, verifiy_code)
+            
+            if (success):
+                return jsonify({"status": "success", "message": "Email is sent"})
+            else:
+                return jsonify({"status": "fail", "message": "Email is not sent"})
+        
         # sign up
         @self.app.route('/signup', methods=['POST'])
         def signup():
@@ -78,8 +93,6 @@ class MyAPI:
                 return jsonify({"status": "success", "message": "Login success"})
             else:
                 return jsonify({"status": "fail", "message": "Login fail"})
-        
-        
         
         # ========================================================================== #
         # GPS management                                                             #
@@ -123,7 +136,6 @@ class MyAPI:
             lecture_basic, lecture_attendance = lecturemanager.get_lecture(lecture_title)
             
             return jsonify({"status": "success", "lecture_basic": lecture_basic, "lecture_attendance": lecture_attendance})
-        
         
         @self.app.route('/update_lecture', methods=['POST'])
         def update_lecture():

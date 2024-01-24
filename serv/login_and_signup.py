@@ -37,7 +37,7 @@ class LoginAngSignupManager:
         else:
             print("Document with the same email does not exist")
             return True
-    
+        
     def signup(self, name, email, password):
         user_basic = {
             'name': name,

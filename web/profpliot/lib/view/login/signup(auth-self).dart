@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:profpliot/view/login/login.dart';
 import 'package:profpliot/view/login/popup.dart';
 import 'package:flutter/gestures.dart';
@@ -273,7 +272,7 @@ class _SignUpState extends State<SignUp> {
                                             // 클릭 이벤트 처리
                                             setState(
                                               () {
-                                                // checkEmailVerify();
+                                                checkEmailVerify();
                                                 if (isExist == false) {
                                                   isChecked = !isChecked;
                                                 } else {
@@ -496,20 +495,7 @@ class _SignUpState extends State<SignUp> {
                               left: 0,
                               top: 388.49,
                               child: GestureDetector(
-                                onTap: () async {
-                                  try {
-                                    await FirebaseAuth.instance
-                                        .createUserWithEmailAndPassword(
-                                      email: _textControllerEmail.text.trim(),
-                                      password:
-                                          _textControllerPassword.text.trim(),
-                                    );
-                                    // Account creation successful
-                                  } catch (e) {
-                                    print("Error creating account: $e");
-                                    // Handle the error as needed
-                                  }
-                                },
+                                onTap: signUPCall,
                                 child: Container(
                                   width: 404,
                                   height: 35.02,
@@ -675,5 +661,118 @@ class _SignUpState extends State<SignUp> {
         ),
       ],
     );
+  }
+
+// sign up functions.
+  void checkEmailVerify() async {
+    String url = "http://localhost:5000/check_email";
+
+    Map<String, dynamic> data = {
+      'email': _textControllerEmail.text,
+    };
+
+    try {
+      http.Response response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> result = jsonDecode(response.body);
+        result.forEach(
+          (key, value) {
+            if (key == "status") {
+              if (value == "success") {
+                isExist = false;
+              } else {
+                isExist = true;
+              }
+            }
+          },
+        );
+      } else {
+        // showDialog(context: context, builder: builder)
+        // print("Error: ${response.statusCode}");
+      }
+    } catch (e) {
+      // print("Error: $e");
+    }
+  }
+
+  void signUPCall() async {
+    String url = "http://localhost:5000/signup";
+
+    Map<String, dynamic> data = {
+      'name': _textControllerName.text,
+      'email': _textControllerEmail.text,
+      'password': _textControllerPassword.text,
+    };
+
+    try {
+      http.Response response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> result = jsonDecode(response.body);
+        result.forEach(
+          (key, value) {
+            if (key == "status") {
+              if (value == "success") {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const LoginPage(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      const curve = Curves.easeInOut;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
+                      return SlideTransition(
+                          position: offsetAnimation, child: child);
+                    },
+                    transitionDuration: const Duration(milliseconds: 900),
+                  ),
+                );
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text("Error"),
+                      content: Text(value),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
+            }
+          },
+        );
+      } else {
+        // showDialog(context: context, builder: builder)
+        // print("Error: ${response.statusCode}");
+      }
+    } catch (e) {
+      // print("Error: $e");
+    }
   }
 }

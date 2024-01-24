@@ -1,4 +1,3 @@
-import 'package:profpliot/view/login/login.dart';
 import 'package:flutter/material.dart';
 
 Widget _highlightTitles(String content) {
