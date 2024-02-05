@@ -43,6 +43,8 @@ class _SignUpState extends State<SignUp> {
   bool isChecked = false;
   bool isExist = true;
 
+  User? user;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -151,28 +153,30 @@ class _SignUpState extends State<SignUp> {
                                             CrossAxisAlignment.center,
                                         children: [
                                           Expanded(
-                                            child: TextField(
-                                              controller: _textControllerName,
-                                              decoration: const InputDecoration(
-                                                hintText: 'Enter your name',
-                                                hintStyle: TextStyle(
-                                                  color: Color(0xFFD9D9D9),
-                                                  fontSize: 10,
-                                                  fontFamily: 'Poppins',
-                                                  fontWeight: FontWeight.w500,
-                                                  height: 0,
-                                                ),
-                                                border: InputBorder.none,
-                                              ),
-                                              style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 15,
+                                              child: TextField(
+                                            controller: _textControllerName,
+                                            cursorWidth: 10,
+                                            cursorHeight: 1,
+                                            cursorColor: Colors.black,
+                                            decoration: const InputDecoration(
+                                              hintText: 'Enter your name',
+                                              hintStyle: TextStyle(
+                                                color: Color(0xFFD9D9D9),
+                                                fontSize: 10,
                                                 fontFamily: 'Poppins',
                                                 fontWeight: FontWeight.w500,
-                                                height: 0,
+                                                height: 1,
                                               ),
+                                              border: InputBorder.none,
                                             ),
-                                          ),
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w500,
+                                              height: 0,
+                                            ),
+                                          )),
                                         ],
                                       ),
                                     ),
@@ -240,6 +244,9 @@ class _SignUpState extends State<SignUp> {
                                                 child: TextField(
                                                   controller:
                                                       _textControllerEmail,
+                                                  cursorWidth: 10,
+                                                  cursorHeight: 1,
+                                                  cursorColor: Colors.black,
                                                   decoration:
                                                       const InputDecoration(
                                                     hintText:
@@ -395,6 +402,9 @@ class _SignUpState extends State<SignUp> {
                                             child: TextField(
                                               controller:
                                                   _textControllerPassword,
+                                              cursorWidth: 10,
+                                              cursorHeight: 1,
+                                              cursorColor: Colors.black,
                                               decoration: const InputDecoration(
                                                 hintText: 'Enter your password',
                                                 hintStyle: TextStyle(
@@ -498,12 +508,23 @@ class _SignUpState extends State<SignUp> {
                               child: GestureDetector(
                                 onTap: () async {
                                   try {
-                                    await FirebaseAuth.instance
-                                        .createUserWithEmailAndPassword(
+                                    UserCredential userCredential =
+                                        await FirebaseAuth.instance
+                                            .createUserWithEmailAndPassword(
                                       email: _textControllerEmail.text.trim(),
                                       password:
                                           _textControllerPassword.text.trim(),
                                     );
+                                    user = userCredential.user;
+                                    if (user != null && !user!.emailVerified) {
+                                      await user!.sendEmailVerification();
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LoginPage(),
+                                        ),
+                                      );
+                                    }
                                     // Account creation successful
                                   } catch (e) {
                                     print("Error creating account: $e");
@@ -562,7 +583,7 @@ class _SignUpState extends State<SignUp> {
                                 ),
                               ),
                             ),
-                            // Don't have an account? Sign Up
+                            // have an account? Sign In
                             Positioned(
                               left: 100,
                               top: 570,

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -34,11 +35,14 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  final TextEditingController _textControllerName = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   final TextEditingController _textControllerEmail = TextEditingController();
   final TextEditingController _textControllerPassword = TextEditingController();
 
   bool isAgreed = false;
+  User? user;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -267,7 +271,29 @@ class _SignUpState extends State<SignUp> {
                               left: 0,
                               top: 388.49,
                               child: GestureDetector(
-                                onTap: saveToJson,
+                                onTap: () async {
+                                  try {
+                                    // print("TEST");
+                                    final credential =
+                                        await _auth.signInWithEmailAndPassword(
+                                      email: _textControllerEmail.text.trim(),
+                                      password:
+                                          _textControllerPassword.text.trim(),
+                                    );
+                                    // UserCredential userCredential =
+                                    //     await FirebaseAuth.instance
+                                    //         .signInWithEmailAndPassword(
+                                    //   email: _textControllerEmail.text.trim(),
+                                    //   password:
+                                    //       _textControllerPassword.text.trim(),
+                                    // );
+                                    if (credential.user != null) {
+                                      print("User ID: ${credential.user!.uid}");
+                                    }
+                                  } catch (e) {
+                                    print("Error creating account: $e");
+                                  }
+                                },
                                 child: Container(
                                   width: 404,
                                   height: 35.02,
@@ -432,17 +458,5 @@ class _SignUpState extends State<SignUp> {
         ),
       ],
     );
-  }
-
-  void saveToJson() {
-    Map<String, dynamic> data = {
-      'name': _textControllerName.text,
-      'email': _textControllerEmail.text,
-      'password': _textControllerPassword.text,
-    };
-
-    String jsonData = jsonEncode(data);
-
-    print('JSON Data: $jsonData');
   }
 }
