@@ -1,13 +1,14 @@
+import 'package:profpliot/controller/checkemail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:profpliot/view/error/signup_error.dart';
 import 'package:profpliot/view/login/login.dart';
 import 'package:profpliot/view/login/popup.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
+// ignore_for_file: library_private_types_in_public_api
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({super.key});
 
   @override
   _SignUpPageAppState createState() => _SignUpPageAppState();
@@ -21,7 +22,7 @@ class _SignUpPageAppState extends State<SignUpPage> {
         scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
       ),
       home: Scaffold(
-        body: ListView(children: [
+        body: ListView(children: const [
           SignUp(),
         ]),
       ),
@@ -30,6 +31,8 @@ class _SignUpPageAppState extends State<SignUpPage> {
 }
 
 class SignUp extends StatefulWidget {
+  const SignUp({super.key});
+
   @override
   _SignUpState createState() => _SignUpState();
 }
@@ -68,7 +71,7 @@ class _SignUpState extends State<SignUp> {
                     children: [
                       Container(
                         padding: const EdgeInsets.only(left: 100),
-                        width: MediaQuery.of(context).size.width * 0.6,
+                        width: MediaQuery.of(context).size.width * 0.5,
                         height: MediaQuery.of(context).size.height * 0.8,
                         child: Stack(
                           children: [
@@ -273,71 +276,75 @@ class _SignUpState extends State<SignUp> {
                                             ],
                                           ),
                                         ),
-                                        const SizedBox(width: 10),
-                                        Positioned(
-                                            child: GestureDetector(
-                                          onTap: () {
-                                            // 클릭 이벤트 처리
-                                            setState(
-                                              () {
-                                                // checkEmailVerify();
-                                                if (isExist == false) {
-                                                  isChecked = !isChecked;
-                                                } else {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title:
-                                                            const Text("Error"),
-                                                        content: const Text(
-                                                            "Email is not available. Please enter another email address."),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                            child: const Text(
-                                                                "OK"),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                }
-                                              },
-                                            );
-                                          },
-                                          child: Container(
-                                            width: 10,
-                                            height: 10,
-                                            decoration: ShapeDecoration(
-                                              shape: RoundedRectangleBorder(
-                                                side:
-                                                    const BorderSide(width: 1),
-                                                borderRadius:
-                                                    BorderRadius.circular(2),
-                                              ),
-                                              color: isChecked
-                                                  ? Colors.blue
-                                                  : Colors
-                                                      .transparent, // 클릭 여부에 따라 색상 변경
-                                            ),
-                                          ),
-                                        )),
-                                        const SizedBox(width: 10),
-                                        const Text(
-                                          'Check email useable',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 10,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w500,
-                                            height: 0,
-                                          ),
-                                        ),
+                                        // const SizedBox(width: 10),
+                                        // Positioned(
+                                        //     child: GestureDetector(
+                                        //   onTap: () async {
+                                        //     // 클릭 이벤트 처리
+                                        //     setState(
+                                        //       () async {
+                                        //         // if email is exist, return false
+                                        //         isExist =
+                                        //             await checkEmailVerify(
+                                        //                 _textControllerEmail
+                                        //                     .text);
+                                        //         if (!isExist)
+                                        //           isChecked = !isChecked;
+                                        //         else {
+                                        //           showDialog(
+                                        //             context: context,
+                                        //             builder:
+                                        //                 (BuildContext context) {
+                                        //               return AlertDialog(
+                                        //                 title:
+                                        //                     const Text("Error"),
+                                        //                 content: const Text(
+                                        //                     "Email is not available. Please enter another email address."),
+                                        //                 actions: [
+                                        //                   TextButton(
+                                        //                     onPressed: () {
+                                        //                       Navigator.pop(
+                                        //                           context);
+                                        //                     },
+                                        //                     child: const Text(
+                                        //                         "OK"),
+                                        //                   ),
+                                        //                 ],
+                                        //               );
+                                        //             },
+                                        //           );
+                                        //         }
+                                        //       },
+                                        //     );
+                                        //   },
+                                        //   child: Container(
+                                        //     width: 10,
+                                        //     height: 10,
+                                        //     decoration: ShapeDecoration(
+                                        //       shape: RoundedRectangleBorder(
+                                        //         side:
+                                        //             const BorderSide(width: 1),
+                                        //         borderRadius:
+                                        //             BorderRadius.circular(2),
+                                        //       ),
+                                        //       color: isChecked
+                                        //           ? Colors.blue
+                                        //           : Colors
+                                        //               .transparent, // 클릭 여부에 따라 색상 변경
+                                        //     ),
+                                        //   ),
+                                        // )),
+                                        // const SizedBox(width: 10),
+                                        // const Text(
+                                        //   'Check email available',
+                                        //   style: TextStyle(
+                                        //     color: Colors.black,
+                                        //     fontSize: 10,
+                                        //     fontFamily: 'Poppins',
+                                        //     fontWeight: FontWeight.w500,
+                                        //     height: 0,
+                                        //   ),
+                                        // ),
                                       ],
                                     ),
                                   ],
@@ -508,6 +515,50 @@ class _SignUpState extends State<SignUp> {
                               child: GestureDetector(
                                 onTap: () async {
                                   try {
+                                    if (_textControllerName.text.isEmpty) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return const ErrorDialog(
+                                              errorMessage:
+                                                  "Name is empty. Please enter your name.");
+                                        },
+                                      );
+                                      return;
+                                    } else if (_textControllerEmail
+                                        .text.isEmpty) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return const ErrorDialog(
+                                              errorMessage:
+                                                  "Email is empty. Please enter your email address.");
+                                        },
+                                      );
+                                      return;
+                                    } else if (_textControllerPassword
+                                        .text.isEmpty) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return const ErrorDialog(
+                                              errorMessage:
+                                                  "Password is empty. Please enter your password.");
+                                        },
+                                      );
+                                      return;
+                                    } else if (!isAgreed) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return const ErrorDialog(
+                                              errorMessage:
+                                                  "Please agree to the terms & policy.");
+                                        },
+                                      );
+                                      return;
+                                    }
+
                                     UserCredential userCredential =
                                         await FirebaseAuth.instance
                                             .createUserWithEmailAndPassword(
@@ -518,6 +569,7 @@ class _SignUpState extends State<SignUp> {
                                     user = userCredential.user;
                                     if (user != null && !user!.emailVerified) {
                                       await user!.sendEmailVerification();
+                                      // ignore: use_build_context_synchronously
                                       Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                           builder: (context) =>
@@ -527,8 +579,16 @@ class _SignUpState extends State<SignUp> {
                                     }
                                     // Account creation successful
                                   } catch (e) {
-                                    print("Error creating account: $e");
-                                    // Handle the error as needed
+                                    String errorMessage =
+                                        "Error creating account: $e";
+                                    // ignore: use_build_context_synchronously
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return ErrorDialog(
+                                            errorMessage: errorMessage);
+                                      },
+                                    );
                                   }
                                 },
                                 child: Container(

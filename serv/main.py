@@ -31,68 +31,35 @@ class MyAPI:
         self.setup_routes()
 
     def setup_routes(self):
-        # ============================================================================== #
-        # Login and signup management                                                    #
-        # ============================================================================== #
-        # check email duplicate
-        @self.app.route('/check_email', methods=['POST'])
-        def check_email():
-            data                = request.json
-            email               = data.get('email')
-            
-            login_manager       = LoginAngSignupManager()
-            success             = login_manager.check_email(email)
-            
-            if (success):
-                return jsonify({"status": "success", "message": "Email is not duplicate"})
+        # ========================================================================== #
+        # Login and Signup management                                                #
+        # ========================================================================== #
+        # check email can be used
+        @self.app.route('/check_email_available', methods=['GET', 'POST'])
+
+        def check_email_available():
+            email = request.args.get('email')
+            print("check email:", email)  
+            login_manager = LoginAngSignupManager()
+            result = login_manager.check_email_available(email)
+            if not result:
+                return jsonify({"status": "success", "message": "Email is available"})
             else:
-                return jsonify({"status": "fail", "message": "Email is duplicate"})
+                return jsonify({"status": "fail", "message": "Email is not available"})
         
         
-        @self.app.route('/send_verification_email', methods=['POST'])
-        def send_verification_email():
-            data                = request.json
-            email               = data.get('email')
-            verifiy_code        = data.get('verifiy_code')
-            
-            login_manager       = LoginAngSignupManager()
-            success             = login_manager.send_verification_email(email, verifiy_code)
-            
-            if (success):
-                return jsonify({"status": "success", "message": "Email is sent"})
-            else:
-                return jsonify({"status": "fail", "message": "Email is not sent"})
+        # @self.app.route('/check_email_available', methods=['GET'])
+        # def check_email_available():
+        #     data = request.json
+        #     login_manager = LoginAngSignupManager()
+        #     email = data.get('email')
+        #     print("check email: {0}".foramt(email))
+        #     result = login_manager.check_email_available(email)
+        #     if (result == False):
+        #         return jsonify({"status": "success", "message": "Email is available"})
+        #     else:
+        #         return jsonify({"status": "fail", "message": "Email is not available"})
         
-        # sign up
-        @self.app.route('/signup', methods=['POST'])
-        def signup():
-            data                = request.json
-            name                = data.get('name')
-            email               = data.get('email')
-            password            = data.get('password')
-            
-            login_manager       = LoginAngSignupManager()
-            success             = login_manager.signup(name, email, password)
-            
-            if (success):
-                return jsonify({"status": "success", "message": "Signup success"})
-            else:
-                return jsonify({"status": "fail", "message": "Signup fail"})
-        
-        # login
-        @self.app.route('/login', methods=['POST'])
-        def login():
-            data                = request.json
-            email               = data.get('email')
-            password            = data.get('password')
-            
-            login_manager       = LoginAngSignupManager()
-            success             = login_manager.login(email, password)
-            
-            if (success):
-                return jsonify({"status": "success", "message": "Login success"})
-            else:
-                return jsonify({"status": "fail", "message": "Login fail"})
         
         # ========================================================================== #
         # GPS management                                                             #

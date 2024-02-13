@@ -1,15 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-
 import 'package:profpliot/view/login/signup.dart';
-import 'package:profpliot/view/login/popup.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPageAppState createState() => _LoginPageAppState();
 }
 
@@ -30,7 +28,10 @@ class _LoginPageAppState extends State<LoginPage> {
 }
 
 class SignUp extends StatefulWidget {
+  const SignUp({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _SignUpState createState() => _SignUpState();
 }
 
@@ -65,8 +66,8 @@ class _SignUpState extends State<SignUp> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        padding: const EdgeInsets.only(left: 50),
-                        width: MediaQuery.of(context).size.width * 0.4,
+                        padding: const EdgeInsets.only(left: 100),
+                        width: MediaQuery.of(context).size.width * 0.5,
                         height: MediaQuery.of(context).size.height * 0.8,
                         child: Stack(
                           children: [
