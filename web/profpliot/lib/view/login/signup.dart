@@ -1,3 +1,4 @@
+import 'package:profpliot/controller/checkemail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:profpliot/view/error/signup_error.dart';
 import 'package:profpliot/view/login/login.dart';
@@ -514,50 +515,6 @@ class _SignUpState extends State<SignUp> {
                               child: GestureDetector(
                                 onTap: () async {
                                   try {
-                                    if (_textControllerName.text.isEmpty) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return const ErrorDialog(
-                                              errorMessage:
-                                                  "Name is empty. Please enter your name.");
-                                        },
-                                      );
-                                      return;
-                                    } else if (_textControllerEmail
-                                        .text.isEmpty) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return const ErrorDialog(
-                                              errorMessage:
-                                                  "Email is empty. Please enter your email address.");
-                                        },
-                                      );
-                                      return;
-                                    } else if (_textControllerPassword
-                                        .text.isEmpty) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return const ErrorDialog(
-                                              errorMessage:
-                                                  "Password is empty. Please enter your password.");
-                                        },
-                                      );
-                                      return;
-                                    } else if (!isAgreed) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return const ErrorDialog(
-                                              errorMessage:
-                                                  "Please agree to the terms & policy.");
-                                        },
-                                      );
-                                      return;
-                                    }
-
                                     UserCredential userCredential =
                                         await FirebaseAuth.instance
                                             .createUserWithEmailAndPassword(
@@ -568,7 +525,6 @@ class _SignUpState extends State<SignUp> {
                                     user = userCredential.user;
                                     if (user != null && !user!.emailVerified) {
                                       await user!.sendEmailVerification();
-                                      // ignore: use_build_context_synchronously
                                       Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                           builder: (context) =>
@@ -580,7 +536,6 @@ class _SignUpState extends State<SignUp> {
                                   } catch (e) {
                                     String errorMessage =
                                         "Error creating account: $e";
-                                    // ignore: use_build_context_synchronously
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {

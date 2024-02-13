@@ -12,12 +12,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
-        apiKey: "AIzaSyBw1wpNFoRzAvLBLTf8HBMN5Y_1fzpkIiY",
-        appId: '1:853383036131:web:198c5b2db4548fcff059d6',
-        messagingSenderId: "853383036131",
-        projectId: "prof-pilot"),
+      apiKey: "AIzaSyBw1wpNFoRzAvLBLTf8HBMN5Y_1fzpkIiY",
+      appId: "1:853383036131:web:198c5b2db4548fcff059d6",
+      messagingSenderId: "853383036131",
+      projectId: "prof-pilot",
+    ),
   );
-  // runApp(home);
   runApp(const Myproject());
 }
 
