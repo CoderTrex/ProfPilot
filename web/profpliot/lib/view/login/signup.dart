@@ -1,4 +1,3 @@
-import 'package:profpliot/controller/checkemail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:profpliot/view/error/signup_error.dart';
 import 'package:profpliot/view/login/login.dart';
