@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Lecture_list</title>
+</head>
+<body>
+
+    <div class="create-class" th:if="${userRole == 'prof'}">
+        <a th:href="@{/lecture/create}">
+            <button class="btn btn-primary">create Lecture</button>
+        </a>
+    </div>
+
+    <br><br><br><br><br><br>
+    <div layout:fragment="content" class="container my-3">
+        <table class="table">
+            <thead class="table-dark">
+            <tr class="text-center">
+                <th style="width:10%">번호</th>
+                <th style="width:40%">강의명</th>
+                <th style="width:30%">수업시작시간</th>
+                <th style="width:10%">출석률</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-center" th:each="lecture, loop : ${lectureList}">
+                <td th:text="${loop.index + 1}"></td>
+                <td class="text-start">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
