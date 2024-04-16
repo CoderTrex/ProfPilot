@@ -1,29 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" layout:decorator="~{layout}">
-<div layout:fragment="content" class="container">
-    <h5 class="my-3 border-bottom pb-2">수업 생성</h5>
-    <form th:object="${LectureForm}" method="post">
-<!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
-<!--        <div th:replace="~{form_errors :: formErrorsFragment}"></div>-->
-        <div class="mb-3">
-            <label for="lectureName" class="form-label">강의명</label>
-            <input type="text" th:field="*{lectureName}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="lectureRoom" class="form-label">내용</label>
-            <textarea th:field="*{lectureRoom}" class="form-control" rows="1"></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="lectureStartTime" class="form-label">시작 시간</label>
-            <textarea th:field="*{lectureStartTime}" class="form-control" rows="1"></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="lectureEndTime" class="form-label">종료 시간</label>
-            <textarea th:field="*{lectureEndTime}" class="form-control" rows="1"></textarea>
-        </div>
-        <input type="submit" value="저장하기" class="btn btn-primary my-2">
-    </form>
-</div>
+<html lang="en" layout:decorator="~{utils/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>ProfPilot✈️: Lecture Create</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+        <h5 class="my-3 border-bottom pb-2">수업 생성</h5>
+        <form th:object="${lectureForm}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <div th:replace="~{utils/form_errors :: formErrorsFragment}"></div>
+            <div class="mb-3">
+                <label for="lectureName" class="form-label">강의명</label>
+                <input type="text" th:field="*{lectureName}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="lectureRoom" class="form-label">강의실</label>
+                <input type="text" th:field="*{lectureRoom}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="lectureStartTime" class="form-label">시작 시간</label>
+                <input type="text" th:field="*{lectureStartTime}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="lectureEndTime" class="form-label">종료 시간</label>
+                <input type="text" th:field="*{lectureEndTime}" class="form-control">
+            </div>
+            <input type="submit" value="저장하기" class="btn btn-primary my-2">
+        </form>
+    </div>
+</body>
 </html>
 
 

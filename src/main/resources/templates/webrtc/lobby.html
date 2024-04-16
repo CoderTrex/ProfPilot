@@ -5,15 +5,15 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Room</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='styles/main.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='styles/lobby.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/styles/main.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/styles/lobby.css'>
 </head>
 <body>
     <header id="nav">
        <div class="nav--list">
             <a href="lobby.html">
                 <h3 id="logo">
-                    <img src="images/logo.png" alt="Site Logo">
+                    <img src="/images/logo.png" alt="Site Logo">
                     <span>Mumble</span>
                 </h3>
             </a>
@@ -44,10 +44,7 @@
                      </label>
                  </div>
                  <div class="form__field__wrapper">
-                     <label>Room Name</label>
-                     <label>
-                         <input type="text" name="room"  placeholder="Enter room name..." />
-                     </label>
+                         <input type="hidden" name="lectureName" th:value="${lectureName}" />
                  </div>
                  <div class="form__field__wrapper">
                      <button type="submit">Go to Room
@@ -59,5 +56,5 @@
      </main>
 
 </body>
-<script type="text/javascript" src="js/lobby.js"></script>
+<script type="text/javascript" src="/js/lobby.js"></script>
 </html>

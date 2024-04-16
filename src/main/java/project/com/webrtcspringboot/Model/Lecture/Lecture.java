@@ -27,6 +27,9 @@ public class Lecture {
     @Column(nullable = false)
     private String endTime;
 
+    @OneToOne
+    private Users professor;
+
     @ManyToMany
     private List<Users> users;
 
