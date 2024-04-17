@@ -15,6 +15,9 @@ public class LectureForm {
     @NotEmpty(message = "강의실을 입력해주세요.")
     private String lectureRoom;
 
+    @NotEmpty(message = "요일을 입력해주세요.")
+    private String lectureDay;
+
     @NotEmpty(message = "시작 시간을 입력해주세요.")
     private String lectureStartTime;
 

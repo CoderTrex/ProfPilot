@@ -14,10 +14,12 @@ import java.security.Principal;
 public class LectureService {
     private final LectureRepository lectureRepository;
     private final UserRepository userRepository;
-    public void create(String lectureName, String lectureRoom, String lectureStartTime, String lectureEndTime, Principal principal) {
+    public void create(String lectureName, String lectureRoom, String lectureDay,
+            String lectureStartTime, String lectureEndTime, Principal principal) {
         Lecture lecture = new Lecture();
         lecture.setName(lectureName);
         lecture.setRoom(lectureRoom);
+        lecture.setLectureDay(lectureDay);
         lecture.setStartTime(lectureStartTime);
         lecture.setEndTime(lectureEndTime);
         Users user = this.userRepository.findByName(principal.getName());

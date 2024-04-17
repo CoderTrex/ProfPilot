@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Searched Lectures</title>
+    <style>
+        .lecture-info {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>Searched Lectures</h1>
+
+<div id="lecture-container">
+    <!-- 여기에 강의 정보가 동적으로 추가될 예정입니다 -->
+</div>
+
+<script>
+    // URL에서 쿼리 문자열을 가져오기
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    // 각 검색 결과에 대해 반복하여 강의 정보를 화면에 추가
+    let lectureContainer = document.getElementById("lecture-container");
+    urlParams.forEach((value, key) => {
+        if (key.startsWith("lectureName")) {
+            let lectureInfo = document.createElement("div");
+            lectureInfo.classList.add("lecture-info");
+            lectureInfo.innerHTML = `
+                <h2>Lecture Details</h2>
+                <p>Name: ${value}</p>
+                <p>Professor: ${urlParams.get("professorName" + key.substring(11))}</p>
+                <p>Room: ${urlParams.get("room" + key.substring(11))}</p>
+                <p>Day: ${urlParams.get("day" + key.substring(11))}</p>
+                <p>Start Time: ${urlParams.get("startTime" + key.substring(11))}</p>
+                <p>End Time: ${urlParams.get("endTime" + key.substring(11))}</p>
+            `;
+            lectureContainer.appendChild(lectureInfo);
+        }
+    });
+</script>
+</body>
+</html>

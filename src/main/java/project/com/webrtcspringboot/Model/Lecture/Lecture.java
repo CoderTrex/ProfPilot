@@ -22,12 +22,15 @@ public class Lecture {
     private String Room;
 
     @Column(nullable = false)
+    private String lectureDay;
+
+    @Column(nullable = false)
     private String startTime;
 
     @Column(nullable = false)
     private String endTime;
 
-    @OneToOne
+    @ManyToOne
     private Users professor;
 
     @ManyToMany

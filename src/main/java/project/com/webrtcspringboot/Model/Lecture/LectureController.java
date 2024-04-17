@@ -5,11 +5,10 @@ import lombok.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestParam;
+import project.com.webrtcspringboot.Model.User.Users;
+import project.com.webrtcspringboot.Model.User.UserRepository;
 
 
 import java.security.Principal;
@@ -21,28 +20,30 @@ import java.util.List;
 public class LectureController {
     private final LectureService lectureService;
     private final LectureRepository lectureRepository;
+    private final UserRepository UserRepository;
 
     @GetMapping("/list")
     public String list(Model model, Principal principal) {
         String username = principal.getName();
+        Users user = this.UserRepository.findByName(username);
         List<Lecture> lectureList = this.lectureRepository.findAll();
-        model.addAttribute("userRole", "prof");
+        model.addAttribute("userRole", user.getRole());
         model.addAttribute("lectureList", lectureList);
-        return "Lecture/lecture_list";
+        return "lecture/lecture_list";
     }
 
     @GetMapping("/create")
     public String create(LectureForm lectureForm) {
-        return "Lecture/lecture_create";
+        return "lecture/lecture_create";
     }
 
 
     @PostMapping("/create")
     public String create(@Valid LectureForm lectureForm, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
-            return "Lecture/lecture_create";
+            return "lecture/lecture_create";
         }
-        this.lectureService.create(lectureForm.getLectureName(), lectureForm.getLectureRoom(),
+        this.lectureService.create(lectureForm.getLectureName(), lectureForm.getLectureRoom(), lectureForm.getLectureDay(),
                                 lectureForm.getLectureStartTime(), lectureForm.getLectureEndTime(), principal);
         return "redirect:/lecture/list";
     }
@@ -51,6 +52,17 @@ public class LectureController {
     public String enter(@RequestParam("name") String lectureName, Model model) {
         model.addAttribute("lectureName", lectureName);
         return "webrtc/lobby";
+    }
+//    lecture/room.html?room=room1
+    @GetMapping("/room.html")
+    public String room(@RequestParam("room") String roomName, Model model) {
+        model.addAttribute("roomName", roomName);
+        return "webrtc/room";
+    }
+    @GetMapping("/list/search/{lectureName}")
+    public @ResponseBody List<Lecture> search(@PathVariable String lectureName) {
+        System.out.println(lectureName);
+        return this.lectureRepository.findByKeyword(lectureName);
     }
 
 }
