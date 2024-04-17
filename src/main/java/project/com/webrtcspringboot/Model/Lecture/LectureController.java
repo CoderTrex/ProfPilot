@@ -26,7 +26,8 @@ public class LectureController {
     public String list(Model model, Principal principal) {
         String username = principal.getName();
         Users user = this.UserRepository.findByName(username);
-        List<Lecture> lectureList = this.lectureRepository.findAll();
+        Long userId = user.getId();
+        List<Lecture> lectureList = this.lectureRepository.findAllByUserId(userId);
         model.addAttribute("userRole", user.getRole());
         model.addAttribute("lectureList", lectureList);
         return "lecture/lecture_list";
@@ -53,16 +54,23 @@ public class LectureController {
         model.addAttribute("lectureName", lectureName);
         return "webrtc/lobby";
     }
-//    lecture/room.html?room=room1
+
     @GetMapping("/room.html")
     public String room(@RequestParam("room") String roomName, Model model) {
         model.addAttribute("roomName", roomName);
         return "webrtc/room";
     }
+
     @GetMapping("/list/search/{lectureName}")
     public @ResponseBody List<Lecture> search(@PathVariable String lectureName) {
-        System.out.println(lectureName);
         return this.lectureRepository.findByKeyword(lectureName);
     }
 
+    @PostMapping("/add/{lectureName}")
+    public @ResponseBody String add(@PathVariable String lectureName, Principal principal) {
+        System.out.println("add");
+        this.lectureService.addUser(lectureName, principal);
+        System.out.println("add");
+        return "강의 추가 완료";
+    }
 }

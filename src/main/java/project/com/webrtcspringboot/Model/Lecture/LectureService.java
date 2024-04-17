@@ -26,4 +26,16 @@ public class LectureService {
         lecture.setProfessor(user);
         this.lectureRepository.save(lecture);
     }
+
+    public void addUser(String lectureName, Principal principal) {
+        Lecture lecture = this.lectureRepository.findByName(lectureName);
+        Users user = this.userRepository.findByName(principal.getName());
+        if (lecture.getUsers().contains(user)) {
+            return;
+        }
+        else {
+            lecture.getUsers().add(user);
+        }
+        this.lectureRepository.save(lecture);
+    }
 }

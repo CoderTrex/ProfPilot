@@ -5,6 +5,12 @@
     <title>Title</title>
 </head>
 <body>
-
+    <div layout:fragment="content" class="container">
+        <h5 class="my-3 border-bottom pb-2">프로필</h5>
+        <div class="mb-3">
+            <label for="username" class="form-label fw-bold">사용자 이름 : </label>
+            <span th:text="${user.Name}"></span>
+        </div>
+    </div>
 </body>
 </html>

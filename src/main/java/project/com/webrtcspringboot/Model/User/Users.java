@@ -34,9 +34,6 @@ public class Users {
     @Column(nullable = false)
     private String status;
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
-    private List<Lecture> lectures;
-
     @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
     private List<Attendance> attendances;
     public Users() {

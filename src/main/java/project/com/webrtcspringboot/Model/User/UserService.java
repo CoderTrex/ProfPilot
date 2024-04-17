@@ -15,6 +15,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    public List<Users> findAll() {
+        return this.userRepository.findAll();
+    }
+
+    public Users findByName(String name) {
+        return this.userRepository.findByName(name);
+    }
     public void signup(String username, String email, String password) {
         Users user = new Users();
         user.setName(username);
