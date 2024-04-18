@@ -14,8 +14,9 @@ $(function() {
 
                     // 각 검색 결과에 대해 팝업 정보 구성
                     for (var i = 0; i < data.length; i++) {
-
                         // 현재 강의 정보 구성
+                        console.log(data[i]);
+                        var lectureId = data[i].id;
                         var lectureName = data[i].name;
                         var professorName = "Professor: " + data[i].professor.name;
                         var room = "Room: " + data[i].room;
@@ -32,7 +33,7 @@ $(function() {
                         popupContent += '<p id="search-lecture-day">' + day + '</p>';
                         popupContent += '<p id="search-lecture-startTime">' + startTime + '</p>';
                         popupContent += '<p id="search-lecture-endTime">' + endTime + '</p>';
-                        popupContent += '<button class="search-lecture-add btn btn-primary" data-lecture-name="' + lectureName + '">Add</button>';
+                        popupContent += '<button class="search-lecture-add btn btn-primary" data-lecture-id="' + lectureId + '">Add</button>';
                         popupContent += '</div><br></div>';
                     }
 
@@ -44,8 +45,8 @@ $(function() {
                     // Add 버튼 클릭 이벤트 처리
                     $(".search-lecture-add").click(function() {
 
-                        var lectureName = $(this).data("lecture-name");
-                        addLecture(lectureName);
+                        var lectureId = $(this).data("lecture-id");
+                        addLecture(lectureId);
                     });
                 } else {
                     // 검색 결과가 없을 경우에 대한 처리
@@ -57,11 +58,11 @@ $(function() {
 
 
      // Add 버튼 클릭 시 강의 추가 요청 보내기
-function addLecture(lectureName) {
+function addLecture(lectureId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
     $.ajax({
-        url: "/lecture/add/" + lectureName,
+        url: "/lecture/add/" + lectureId,
         type: "POST",
         beforeSend: function(xhr) {
             xhr.setRequestHeader(header, token);

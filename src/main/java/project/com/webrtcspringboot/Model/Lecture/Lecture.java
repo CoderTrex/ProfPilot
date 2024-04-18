@@ -7,8 +7,8 @@ import project.com.webrtcspringboot.Model.User.Users;
 import java.util.List;
 
 
-@Setter
 @Getter
+@Setter
 @Entity
 public class Lecture {
     @Id
@@ -33,7 +33,7 @@ public class Lecture {
     @ManyToOne
     private Users professor;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     private List<Users> users;
 
     public Lecture() {

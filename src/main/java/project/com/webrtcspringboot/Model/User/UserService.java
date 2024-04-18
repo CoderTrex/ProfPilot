@@ -48,4 +48,19 @@ public class UserService {
             return true;
         }
     }
+
+    public void changePassword(String name, String currentPassword, String newPassword) {
+        Users user = this.userRepository.findByName(name);
+        System.out.println("Current password: " + currentPassword);
+        if (passwordEncoder.matches(currentPassword, user.getPassword())) {
+            System.out.println("Password matched");
+            user.setPassword(passwordEncoder.encode(newPassword));
+            this.userRepository.save(user);
+        }
+    }
+
+//    this.userService.requestProfAuth(email);  해당 이메일을 서비스의 공식계정 이메일에 요청하는 이메일을 보내게 한다.
+    public void requestProfAuth(String email, String name) {
+        EmailController.sendEmailProfAuth(email, name);
+    }
 }

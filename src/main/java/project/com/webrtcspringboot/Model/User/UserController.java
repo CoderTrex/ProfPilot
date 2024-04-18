@@ -100,4 +100,21 @@ public class UserController {
         this.userService.findPassword(email);
         return "success";
     }
+
+    @PostMapping("/change_password")
+    public @ResponseBody String changePassword(@RequestParam("currentPassword") String currentPassword, @RequestParam("newPassword") String newPassword, Principal principal) {
+        System.out.println("Current password: " + currentPassword);
+        this.userService.changePassword(principal.getName(), currentPassword, newPassword);
+        return "success";
+    }
+
+//    request_prof_auth',
+    @PostMapping("/request_prof_auth")
+    public @ResponseBody String requestProfAuth(Principal principal) {
+        Users user = this.userService.findByName(principal.getName());
+        String email = user.getEmail();
+        String name = user.getName();
+        this.userService.requestProfAuth(email, name);
+        return "success";
+    }
 }

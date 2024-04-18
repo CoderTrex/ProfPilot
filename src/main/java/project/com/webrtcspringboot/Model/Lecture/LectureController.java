@@ -10,9 +10,12 @@ import lombok.RequiredArgsConstructor;
 import project.com.webrtcspringboot.Model.User.UserService;
 import project.com.webrtcspringboot.Model.User.Users;
 import project.com.webrtcspringboot.Model.User.UserRepository;
+import project.com.webrtcspringboot.Model.attendance.Attendance;
+import project.com.webrtcspringboot.Model.attendance.AttendanceRepository;
 
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -23,6 +26,7 @@ public class LectureController {
     private final LectureRepository lectureRepository;
     private final UserRepository UserRepository;
     private final UserService userService;
+    private final AttendanceRepository attendanceRepository;
 
     @GetMapping("/list")
     public String list(Model model, Principal principal) {
@@ -52,9 +56,14 @@ public class LectureController {
     }
 
     @GetMapping("/enter")
-    public String enter(@RequestParam("name") String lectureName, Model model) {
-        model.addAttribute("lectureName", lectureName);
-        return "webrtc/lobby";
+    public String enter(@RequestParam("name") String lectureName, Model model, Principal principal) {
+        Users user = this.UserRepository.findByName(principal.getName());
+        Lecture lecture = this.lectureRepository.findByName(lectureName);
+        model.addAttribute("lecture", lecture);
+        ArrayList<Attendance> attendance = this.attendanceRepository.findByLectNameAndUserId(lectureName, user.getId());
+        model.addAttribute("attendance", attendance);
+        return "lecture/lecture_detail";
+        //        return "webrtc/lobby";
     }
 
     @GetMapping("/room.html")
@@ -68,9 +77,9 @@ public class LectureController {
         return this.lectureRepository.findByKeyword(lectureName);
     }
 
-    @PostMapping("/add/{lectureName}")
-    public @ResponseBody String add(@PathVariable String lectureName, Principal principal) {
-        this.lectureService.addUser(lectureName, principal);
+    @PostMapping("/add/{lectureId}")
+    public @ResponseBody String add(@PathVariable Long lectureId, Principal principal) {
+        this.lectureService.addUser(lectureId, principal);
         return "강의 추가 완료";
     }
 }

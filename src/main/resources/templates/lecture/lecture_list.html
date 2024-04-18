@@ -62,7 +62,7 @@
             <button id="listBtn" class="btn btn-primary">검색</button>
         </div>
         <br><br><br><br>
-        <div class="create-class" th:if="${userRole == 'student'}">
+        <div class="create-class" th:if="${userRole == 'prof'}">
             <a th:href="@{/lecture/create}">
                 <button class="btn btn-primary">create Lecture</button>
             </a>

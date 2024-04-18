@@ -8,6 +8,7 @@ import project.com.webrtcspringboot.Model.User.UserService;
 import project.com.webrtcspringboot.Model.User.Users;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -27,15 +28,15 @@ public class LectureService {
         this.lectureRepository.save(lecture);
     }
 
-    public void addUser(String lectureName, Principal principal) {
-        Lecture lecture = this.lectureRepository.findByName(lectureName);
+    public void addUser(Long lectureId, Principal principal) {
+        Optional<Lecture> lecture = this.lectureRepository.findById(lectureId);
         Users user = this.userRepository.findByName(principal.getName());
-        if (lecture.getUsers().contains(user)) {
+        if (lecture.get().getUsers().contains(user)) {
             return;
         }
         else {
-            lecture.getUsers().add(user);
+            lecture.get().getUsers().add(user);
         }
-        this.lectureRepository.save(lecture);
+        this.lectureRepository.save(lecture.get());
     }
 }

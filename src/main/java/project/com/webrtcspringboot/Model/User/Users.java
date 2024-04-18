@@ -8,6 +8,7 @@ import lombok.Setter;
 import project.com.webrtcspringboot.Model.Lecture.Lecture;
 import project.com.webrtcspringboot.Model.attendance.Attendance;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -34,7 +35,10 @@ public class Users {
     @Column(nullable = false)
     private String status;
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
+    private List<Lecture> lectures;
+
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.REMOVE)
     private List<Attendance> attendances;
     public Users() {
     }
