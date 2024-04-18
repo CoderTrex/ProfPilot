@@ -26,7 +26,6 @@
             }
         }
     </script>
-    
 </head>
 <body>
     <div layout:fragment="content" class="container my-3">
@@ -56,11 +55,13 @@
             </tr>
             </tbody>
         </table>
+        <br><br><br><br>
         <div class="search-lecture">
             <h3 class="search-lecture-header">강의 검색</h3>
             <input type="text" id="search-lecture-input" class="form-control" placeholder="강의명 혹은 교수명을 입력하세요">
             <button id="listBtn" class="btn btn-primary">검색</button>
         </div>
+        <br><br><br><br>
         <div class="create-class" th:if="${userRole == 'student'}">
             <a th:href="@{/lecture/create}">
                 <button class="btn btn-primary">create Lecture</button>

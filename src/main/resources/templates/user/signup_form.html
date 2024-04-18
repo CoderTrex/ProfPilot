@@ -1,30 +1,46 @@
 <!DOCTYPE html>
 <html layout:decorate="~{utils/layout}">
-<div layout:fragment="content" class="container my-3">
-    <div class="my-3 border-bottom">
-        <div>
-            <h4>회원가입</h4>
+    <head>
+        <title>회원가입</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    </head>
+<body>
+    <div layout:fragment="content" class="container my-3">
+        <div class="my-3 border-bottom">
+            <div>
+                <h4>회원가입</h4>
+            </div>
         </div>
+        <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
+            <div th:replace="~{utils/form_errors :: formErrorsFragment}"></div>
+            <div class="mb-3">
+                <label for="name" class="form-label">이름</label>
+                <input type="text" th:field="*{name}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">이메일</label>
+                <input type="email" th:field="*{email}" class="form-control">
+                <button type="button" class="btn btn-primary" id="send_email">인증코드 전송</button>
+            </div>
+            <div class="mb-3">
+                <label for="verifyCode" class="form-label">인증코드</label>
+                <input type="text" th:field="*{VerificationStatus}" class="form-control">
+                <button type="button" class="btn btn-primary" id="check_email">인증</button>
+            </div>
+            <div class="mb-3">
+                <label for="password1" class="form-label">비밀번호</label>
+                <input type="password" th:field="*{password1}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="password2" class="form-label">비밀번호 확인</label>
+                <input type="password" th:field="*{Password2}" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">회원가입</button>
+        </form>
+        
+        <script type="text/javascript" src="/js/user_signup.js"></script>
     </div>
-    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
-        <div th:replace="~{utils/form_errors :: formErrorsFragment}"></div>
-        <div class="mb-3">
-            <label for="name" class="form-label">이름</label>
-            <input type="text" th:field="*{name}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">이메일</label>
-            <input type="email" th:field="*{email}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="password1" class="form-label">비밀번호</label>
-            <input type="password" th:field="*{password1}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="password2" class="form-label">비밀번호 확인</label>
-            <input type="password" th:field="*{Password2}" class="form-control">
-        </div>
-        <button type="submit" class="btn btn-primary">회원가입</button>
-    </form>
-</div>
+</body>
 </html>

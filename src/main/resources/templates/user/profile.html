@@ -8,8 +8,30 @@
     <div layout:fragment="content" class="container">
         <h5 class="my-3 border-bottom pb-2">프로필</h5>
         <div class="mb-3">
-            <label for="username" class="form-label fw-bold">사용자 이름 : </label>
-            <span th:text="${user.Name}"></span>
+            <div class="mb-3">
+                <label for="username" class="form-label fw-bold">이름</label>
+                <span th:text="${user.Name}"></span>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label fw-bold">이메일</label>
+                <span th:text="${user.Email}"></span>
+            </div>
+            <div class="mb-3">
+                <label for="my_lec" class="form-label fw-bold">내 강의</label>
+<!--                <span th:text="${user.Lecture}"></span>-->
+            </div>
+
+
+
+
+            <div class="mb-3">
+                <button class="btn btn-primary" id="reset_password">비밀번호 재설정</button>
+            </div>
+            <div class="mb-3">
+                <label for="role" class="form-label fw-bold">권한</label>
+                <span th:text="${user.Role}"></span>
+                <button class="btn btn-primary" id="request_prof_auth">교수 권한 신청</button>
+            </div>
         </div>
     </div>
 </body>

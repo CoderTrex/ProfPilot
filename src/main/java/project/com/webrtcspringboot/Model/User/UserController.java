@@ -1,14 +1,20 @@
 package project.com.webrtcspringboot.Model.User;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import project.com.webrtcspringboot.Model.User.email.EmailController;
+import project.com.webrtcspringboot.Model.User.email.GenerateRandomString;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -16,6 +22,7 @@ import java.security.Principal;
 public class UserController {
 
     private final UserService userService;
+    private final Map<String, Pair<String, String>> emailMap = new HashMap<>();
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -31,9 +38,19 @@ public class UserController {
             bindingResult.rejectValue("password1", "error.userCreateForm", "Passwords do not match");
             return "user/signup_form";
         }
+        if (emailMap.containsKey(userCreateForm.getEmail())) {
+            Pair<String, String> pair = emailMap.get(userCreateForm.getEmail());
+            String verifyCode = pair.getFirst();
+            if (pair.getSecond().equals("verified") && verifyCode.equals(userCreateForm.getVerificationStatus())) {
+                emailMap.remove(userCreateForm.getEmail());
+            }
+        } else {
+            bindingResult.rejectValue("email", "error.userCreateForm", "Email is not verified");
+            return "user/signup_form";
+        }
+
         try {
             this.userService.signup(userCreateForm.getName(), userCreateForm.getEmail(), userCreateForm.getPassword1());
-
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.rejectValue("email", "error.userCreateForm", "Email already exists");
@@ -47,7 +64,6 @@ public class UserController {
         return "redirect:/";
     }
 
-
     @GetMapping("/login")
     public String login() {
         return "user/login";
@@ -58,5 +74,30 @@ public class UserController {
         Users user = this.userService.findByName(principal.getName());
         model.addAttribute("user", user);
         return "user/profile";
+    }
+
+    @PostMapping("/send_code_email/{email}")
+    public @ResponseBody String sendCodeEmail(@RequestParam("email") String email) {
+        GenerateRandomString generateRandomString = new GenerateRandomString();
+        String verificationCode = generateRandomString.getRandomPassword2(10);
+        emailMap.put(email, Pair.of(verificationCode, "verify"));
+        EmailController.sendEmailVerifyCode(email, verificationCode);
+        return "success";
+    }
+
+    @PostMapping("/check_verify_code")
+    public @ResponseBody String checkVerifyCode(@RequestParam("email") String email, @RequestParam("verifyCode") String verifyCode) {
+        Pair<String, String> pair = emailMap.get(email);
+        if (pair != null && pair.getFirst().equals(verifyCode) && pair.getSecond().equals("verify")) {
+            emailMap.put(email, Pair.of(verifyCode, "verified"));
+            return "success";
+        }
+        return "fail";
+    }
+
+    @PostMapping("/find_password")
+    public @ResponseBody String findPassword(@RequestParam("email") String email) {
+        this.userService.findPassword(email);
+        return "success";
     }
 }

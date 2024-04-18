@@ -25,5 +25,4 @@ public class MainController {
     public String lecture(@RequestParam("room") String room) {
         return "webrtc/room";
     }
-
 }

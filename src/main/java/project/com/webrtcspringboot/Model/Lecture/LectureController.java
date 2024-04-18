@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
+import project.com.webrtcspringboot.Model.User.UserService;
 import project.com.webrtcspringboot.Model.User.Users;
 import project.com.webrtcspringboot.Model.User.UserRepository;
 
@@ -21,6 +22,7 @@ public class LectureController {
     private final LectureService lectureService;
     private final LectureRepository lectureRepository;
     private final UserRepository UserRepository;
+    private final UserService userService;
 
     @GetMapping("/list")
     public String list(Model model, Principal principal) {
@@ -68,9 +70,7 @@ public class LectureController {
 
     @PostMapping("/add/{lectureName}")
     public @ResponseBody String add(@PathVariable String lectureName, Principal principal) {
-        System.out.println("add");
         this.lectureService.addUser(lectureName, principal);
-        System.out.println("add");
         return "강의 추가 완료";
     }
 }

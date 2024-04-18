@@ -3,18 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>ProfPilot✈️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
-<body>
 <body>
 <div layout:fragment="content" class="container my-3">
     <form th:action="@{/user/login}" method="post">
         <div th:if="${param.error}">
             <div class="alert alert-danger">
-                사용자ID 또는 비밀번호를 확인해 주세요.
+                이메일 또는 비밀번호를 확인해 주세요.
             </div>
         </div>
         <div class="mb-3">
-            <label for="username" class="form-label">사용자ID</label>
+            <label for="username" class="form-label">이메일</label>
             <input type="text" name="username" id="username" class="form-control">
         </div>
         <div class="mb-3">
@@ -23,7 +32,71 @@
         </div>
         <button type="submit" class="btn btn-primary">로그인</button>
     </form>
+    <div class="mt-3">
+        <p><button id="forgotPassword">비밀번호를 잊으셨나요?</button></p>
+        <!-- 모달 -->
+        <div class="modal fade" id="forgotPasswordModal" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="forgotPasswordModalLabel">비밀번호 재설정</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form id="forgotPasswordForm">
+                            <div class="form-group">
+                                <label for="email">이메일</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">확인</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                // 비밀번호 재설정 모달 표시
+                $('#forgotPassword').click(function(e) {
+                    e.preventDefault(); // 링크의 기본 동작 방지
+                    $('#forgotPasswordModal').modal('show');
+                });
+
+                function closeModal() {
+                    $('#forgotPasswordModal').modal('hide');
+                }
+
+                window.onclick = function(event) {
+                    var modal = document.getElementById('forgotPasswordModal');
+                    if (event.target == modal) {
+                        closeModal();
+                    }
+                }
+                
+                $('#forgotPasswordForm').submit(function(e) {
+                    e.preventDefault(); // 폼 제출 방지
+                    var email = $('#email').val(); // 입력된 이메일 가져오기
+                    var token = $("meta[name='_csrf']").attr("content");
+                    var header = $("meta[name='_csrf_header']").attr("content");
+                    $.ajax({
+                        url: '/user/find_password',
+                        type: 'POST',
+                        data: { email: email },
+                        beforeSend: function(xhr) {
+                            if (token && header)
+                                xhr.setRequestHeader(header, token);
+                        },
+                        success: function(response) {
+                            alert('이메일로 새로운 비밀번호를 전송했습니다.');
+                        },
+                        error: function(error) {
+                            alert('오류가 발생했습니다. 다시 시도해 주세요.');
+                        }
+                    });
+                });
+            });
+        </script>
+    </div>
 </div>
-</body>
 </body>
 </html>
