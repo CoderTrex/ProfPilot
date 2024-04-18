@@ -3,8 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <title>ProfPilot✈️: Lecture Detail</title>
+    <style>
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .table th, .table td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .table thead {
+            background-color: #343a40;
+            color: #fff;
+        }
+
+        .lecture_board td {
+            width: 20%;
+        }
+    </style>
 </head>
 <body>
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:20%">강의명</th>
+                <th style="width:5%">강의실</th>
+                <th style="width:10%">수업요일</th>
+                <th style="width:10%">수업시작</th>
+                <th style="width:10%">수업종료</th>
+                <th style="width:10%">교수</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="text-center">
+                <td th:text="${lecture.name}"></td>
+                <td th:text="${lecture.Room}"></td>
+                <td th:text="${lecture.LectureDay}"></td>
+                <td th:text="${lecture.startTime}"></td>
+                <td th:text="${lecture.endTime}"></td>
+                <td th:text="${lecture.professor.getName()}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <br><br>
 
+    <!-- 출석부 
+        public class Attendance {
+            @Id
+            @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+            private Long id;
+            @Column(nullable = false)
+            private String date;
+            @Column(nullable = false)
+            private String status;
+            
+            @Column(nullable = false)
+            private Long userId;
+            
+            @Column(nullable = false)
+            private String lectName;
+            public Attendance() {
+            }
+    -->
+    <h5 class="my-3 border-bottom pb-2">출석부</h5>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:20%">날짜</th>
+                <th style="width:5%">상태</th>
+                <th style="width:10%">학번</th>
+                <th style="width:10%">강의명</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="text-center" th:each="attendance : ${attendances}">
+                <td th:text="${attendance.date}"></td>
+                <td th:text="${attendance.status}"></td>
+                <td th:text="${attendance.userId}"></td>
+                <td th:text="${attendance.lectName}"></td>
+            </tr>
+        </tbody>
 </body>
 </html>

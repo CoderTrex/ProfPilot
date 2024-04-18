@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProfPilot✈️: Lecture Create</title>
+    <link rel="stylesheet" th:href="@{/styles/lecture_create.css}">
     <style>
         body {
             background-color: #8e4d4d;
@@ -69,14 +70,46 @@
             <label for="lectureRoom" class="form-label">강의실</label>
             <input type="text" th:field="*{lectureRoom}" class="form-control">
         </div>
+        <br>
         <div class="mb-3">
             <label for="lectureDay" class="form-label">요일</label>
-            <input type="text" th:field="*{lectureDay}" class="form-control">
+            <div class="dowPicker" style="display: flex;">
+                <div class="dowPickerOption" style="margin-right: 10px;">
+                    <input type="checkbox" id="dow1" name="lectureDay" value="S">
+                    <label for="dow1">Sun</label>
+                </div>
+                <div class="dowPickerOption" style="margin-right: 10px;">
+                    <input type="checkbox" id="dow2" name="lectureDay" value="M">
+                    <label for="dow2">Mon</label>
+                </div>
+                <div class="dowPickerOption" style="margin-right: 10px;">
+                    <input type="checkbox" id="dow3" name="lectureDay" value="T">
+                    <label for="dow3">Tue</label>
+                </div>
+                <div class="dowPickerOption" style="margin-right: 10px;">
+                    <input type="checkbox" id="dow4" name="lectureDay" value="W">
+                    <label for="dow4">Wed</label>
+                </div>
+                <div class="dowPickerOption" style="margin-right: 10px;">
+                    <input type="checkbox" id="dow5" name="lectureDay" value="T">
+                    <label for="dow5">Thu</label>
+                </div>
+                <div class="dowPickerOption" style="margin-right: 10px;">
+                    <input type="checkbox" id="dow6" name="lectureDay" value="F">
+                    <label for="dow6">Fri</label>
+                </div>
+                <div class="dowPickerOption">
+                    <input type="checkbox" id="dow7" name="lectureDay" value="S">
+                    <label for="dow7">Sat</label>
+                </div>
+            </div>
         </div>
+        <br><br>
         <div class="mb-3">
             <label for="lectureStartTime" class="form-label">시작 시간</label>
             <input type="time" th:field="*{lectureStartTime}" class="form-control" step="300">
         </div>
+        <br>
         <div class="mb-3">
             <label for="lectureEndTime" class="form-label">종료 시간</label>
             <input type="time" th:field="*{lectureEndTime}" class="form-control" step="300">

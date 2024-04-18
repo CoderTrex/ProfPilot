@@ -56,6 +56,36 @@
                 <span th:text="${user.Email}"></span>
             </div>
             <div class="mb-3">
+                <label for="role" class="form-label fw-bold">권한</label>
+                <span th:text="${user.Role}"></span>
+                <div class="mb-3" th:if = "${user.Role == 'student'}">
+                    <button class="btn btn-primary" id="request_prof_auth">교수 권한 신청</button>
+                    <script type="text/javascript">
+                        $(document).ready(function () {
+                            var token = $("meta[name='_csrf']").attr("content");
+                            var header = $("meta[name='_csrf_header']").attr("content");
+                            $('#request_prof_auth').click(function (e) {
+                                e.preventDefault();
+                                $.ajax({
+                                    url: '/user/request_prof_auth',
+                                    type: 'POST',
+                                    beforeSend: function (xhr) {
+                                        if (token && header)
+                                            xhr.setRequestHeader(header, token);
+                                    },
+                                    success: function (response) {
+                                        alert('교수 권한 신청이 완료되었습니다. 해당 이메일을 통해 관리자가 연락을 드릴 예정입니다.');
+                                    },
+                                    error: function (error) {
+                                        alert('오류가 발생했습니다. 다시 시도해 주세요.');
+                                    }
+                                });
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+            <div class="mb-3">
                 <button class="btn btn-primary" id="reset_password">비밀번호 재설정</button>
                 <!-- 비밀번호 재설정 모달 -->
                 <div class="modal fade" id="resetPasswordModal" tabindex="-1" role="dialog" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
@@ -130,36 +160,6 @@
                     });
                 });
             </script>
-            <div class="mb-3">
-                <label for="role" class="form-label fw-bold">권한</label>
-                <span th:text="${user.Role}"></span>
-                <div class="mb-3" th:if = "${user.Role == 'student'}">
-                    <button class="btn btn-primary" id="request_prof_auth">교수 권한 신청</button>
-                    <script type="text/javascript">
-                        $(document).ready(function () {
-                            var token = $("meta[name='_csrf']").attr("content");
-                            var header = $("meta[name='_csrf_header']").attr("content");
-                            $('#request_prof_auth').click(function (e) {
-                                e.preventDefault();
-                                $.ajax({
-                                    url: '/user/request_prof_auth',
-                                    type: 'POST',
-                                    beforeSend: function (xhr) {
-                                        if (token && header)
-                                            xhr.setRequestHeader(header, token);
-                                    },
-                                    success: function (response) {
-                                        alert('교수 권한 신청이 완료되었습니다. 해당 이메일을 통해 관리자가 연락을 드릴 예정입니다.');
-                                    },
-                                    error: function (error) {
-                                        alert('오류가 발생했습니다. 다시 시도해 주세요.');
-                                    }
-                                });
-                            });
-                        });
-                    </script>
-                </div>
-            </div>
         </div>
     </div>
 </body>
