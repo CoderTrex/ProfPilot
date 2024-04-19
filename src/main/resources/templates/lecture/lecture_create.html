@@ -54,6 +54,28 @@
             padding-bottom: 5px;
             margin-bottom: 20px;
         }
+        .dowPicker {
+            width: 500px;
+            text-align: center;
+            padding: 10px 0 0 0;
+            margin: 10px auto;
+            
+            .dowPickerOption {
+                    display: inline-block;
+                    input[type=checkbox] {
+                        display: none;
+                }
+                label {
+                    font-size: 30px;
+                    color: #A7A7A7;
+                    cursor: pointer;
+                }
+                input[type=checkbox]:checked ~ label {
+                    color: #464646;
+                    font-weight: 500;
+                }
+            }
+        }
     </style>
 </head>
 <body>
@@ -71,35 +93,35 @@
             <input type="text" th:field="*{lectureRoom}" class="form-control">
         </div>
         <br>
-        <div class="mb-3">
+        <div class="weekPicker">
             <label for="lectureDay" class="form-label">요일</label>
-            <div class="dowPicker" style="display: flex;">
-                <div class="dowPickerOption" style="margin-right: 10px;">
-                    <input type="checkbox" id="dow1" name="lectureDay" value="S">
+            <div class="dowPicker">
+                <div class="dowPickerOption">
+                    <input type="checkbox" id="dow1" name="lectureDay" value="Sun">
                     <label for="dow1">Sun</label>
                 </div>
-                <div class="dowPickerOption" style="margin-right: 10px;">
-                    <input type="checkbox" id="dow2" name="lectureDay" value="M">
+                <div class="dowPickerOption">
+                    <input type="checkbox" id="dow2" name="lectureDay" value="Mon">
                     <label for="dow2">Mon</label>
                 </div>
-                <div class="dowPickerOption" style="margin-right: 10px;">
-                    <input type="checkbox" id="dow3" name="lectureDay" value="T">
+                <div class="dowPickerOption">
+                    <input type="checkbox" id="dow3" name="lectureDay" value="Tue">
                     <label for="dow3">Tue</label>
                 </div>
-                <div class="dowPickerOption" style="margin-right: 10px;">
-                    <input type="checkbox" id="dow4" name="lectureDay" value="W">
+                <div class="dowPickerOption">
+                    <input type="checkbox" id="dow4" name="lectureDay" value="Wed">
                     <label for="dow4">Wed</label>
                 </div>
-                <div class="dowPickerOption" style="margin-right: 10px;">
-                    <input type="checkbox" id="dow5" name="lectureDay" value="T">
+                <div class="dowPickerOption">
+                    <input type="checkbox" id="dow5" name="lectureDay" value="Thu">
                     <label for="dow5">Thu</label>
                 </div>
-                <div class="dowPickerOption" style="margin-right: 10px;">
-                    <input type="checkbox" id="dow6" name="lectureDay" value="F">
+                <div class="dowPickerOption">
+                    <input type="checkbox" id="dow6" name="lectureDay" value="Fri">
                     <label for="dow6">Fri</label>
                 </div>
                 <div class="dowPickerOption">
-                    <input type="checkbox" id="dow7" name="lectureDay" value="S">
+                    <input type="checkbox" id="dow7" name="lectureDay" value="Sat">
                     <label for="dow7">Sat</label>
                 </div>
             </div>

@@ -1,10 +1,13 @@
 package project.com.webrtcspringboot.Model.Lecture;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import project.com.webrtcspringboot.Model.User.Users;
 import java.util.List;
+import project.com.webrtcspringboot.Model.flight.Flight;
 
 
 @Getter
@@ -31,11 +34,16 @@ public class Lecture {
     private String endTime;
 
     @ManyToOne
+    @JsonManagedReference
     private Users professor;
 
     @ManyToMany(cascade = CascadeType.REMOVE)
+    @JsonManagedReference
     private List<Users> users;
 
+    @OneToMany(mappedBy = "lecture", cascade = CascadeType.REMOVE)
+    @JsonBackReference
+    private List<Flight> flights;
     public Lecture() {
     }
 }

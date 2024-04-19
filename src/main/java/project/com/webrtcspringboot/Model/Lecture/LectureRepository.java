@@ -9,12 +9,9 @@ import java.util.Optional;
 public interface LectureRepository extends JpaRepository<Lecture, Long> {
 
     Lecture findByName(String name);
-
-
-
     Optional<Lecture> findById(Long id);
-
-    @Query("SELECT l FROM Lecture l WHERE l.name LIKE %:keyword%")
+    // 교수님 이름 혹은 강의이름 검색
+    @Query("SELECT l FROM Lecture l WHERE l.name LIKE %:keyword% OR l.professor.name LIKE %:keyword%")
     List<Lecture> findByKeyword(String keyword);
 
     @Query("SELECT l FROM Lecture l join l.users u WHERE u.id = :userId")

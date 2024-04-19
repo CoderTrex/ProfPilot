@@ -21,11 +21,13 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(
+                                new AntPathRequestMatcher("/upload/**"),
                                 new AntPathRequestMatcher("/**"),
                                 new AntPathRequestMatcher("/user/send_code_email/**")
-                        ).permitAll()
+                        ).permitAll().anyRequest().authenticated()
                 )
                 .csrf((csrf) -> csrf
+
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))
                 )
                 .headers((headers) -> headers

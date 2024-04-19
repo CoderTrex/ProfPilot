@@ -6,17 +6,16 @@ h1 {
 }
 
 .dowPicker {
-    width: 300px;
-    margin: 0 auto;
+    width: 500px;
     text-align: center;
-    padding: 40px 0 0 0;
+    padding: 0px 0 0 0;
     .dowPickerOption {
         display: inline-block;
         input[type=checkbox] {
             display: none;
         }
         label {
-        font-size: 50px;
+        font-size: 10px;
         color: #A7A7A7;
         cursor: pointer;
         }

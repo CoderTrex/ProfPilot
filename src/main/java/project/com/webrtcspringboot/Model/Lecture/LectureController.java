@@ -12,8 +12,10 @@ import project.com.webrtcspringboot.Model.User.Users;
 import project.com.webrtcspringboot.Model.User.UserRepository;
 import project.com.webrtcspringboot.Model.attendance.Attendance;
 import project.com.webrtcspringboot.Model.attendance.AttendanceRepository;
+import project.com.webrtcspringboot.Model.flight.FlightService;
 
 
+import javax.swing.plaf.PanelUI;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,8 @@ public class LectureController {
     private final UserRepository UserRepository;
     private final UserService userService;
     private final AttendanceRepository attendanceRepository;
+    private final FlightService flightService;
+
 
     @GetMapping("/list")
     public String list(Model model, Principal principal) {
@@ -52,6 +56,9 @@ public class LectureController {
         }
         this.lectureService.create(lectureForm.getLectureName(), lectureForm.getLectureRoom(), lectureForm.getLectureDay(),
                                 lectureForm.getLectureStartTime(), lectureForm.getLectureEndTime(), principal);
+        this.flightService.createFlight(lectureForm.getLectureName(), lectureForm.getLectureRoom(), lectureForm.getLectureDay(),
+                                lectureForm.getLectureStartTime(), lectureForm.getLectureEndTime(), principal);
+//        add(lectureRepository.findByName(lectureForm.getLectureName()).getId(), principal);
         return "redirect:/lecture/list";
     }
 
@@ -60,7 +67,7 @@ public class LectureController {
         Users user = this.UserRepository.findByName(principal.getName());
         Lecture lecture = this.lectureRepository.findByName(lectureName);
         model.addAttribute("lecture", lecture);
-        ArrayList<Attendance> attendance = this.attendanceRepository.findByLectNameAndUserId(lectureName, user.getId());
+        ArrayList<Attendance> attendance = this.attendanceRepository.findByLectNameAndUserId(lectureName, user);
         model.addAttribute("attendance", attendance);
         return "lecture/lecture_detail";
         //        return "webrtc/lobby";
@@ -81,5 +88,12 @@ public class LectureController {
     public @ResponseBody String add(@PathVariable Long lectureId, Principal principal) {
         this.lectureService.addUser(lectureId, principal);
         return "강의 추가 완료";
+    }
+
+//    <a th:href="@{/lecture/delete(name=${lecture.name})}">
+    @GetMapping("/delete/{name}")
+    public String delete(@PathVariable String name, Principal principal) {
+        this.lectureService.deleteUser(name, principal);
+        return "redirect:/lecture/list";
     }
 }

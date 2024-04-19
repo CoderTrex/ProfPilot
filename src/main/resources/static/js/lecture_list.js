@@ -5,7 +5,6 @@ $(function() {
             type: "GET",
             success: function(data) {
                 console.log(data);
-
                 // 검색 결과가 있을 경우에만 팝업을 생성하여 정보 표시
                 if (data.length > 0) {
                     // 데이터 표시 부분 수정
@@ -15,7 +14,6 @@ $(function() {
                     // 각 검색 결과에 대해 팝업 정보 구성
                     for (var i = 0; i < data.length; i++) {
                         // 현재 강의 정보 구성
-                        console.log(data[i]);
                         var lectureId = data[i].id;
                         var lectureName = data[i].name;
                         var professorName = "Professor: " + data[i].professor.name;
