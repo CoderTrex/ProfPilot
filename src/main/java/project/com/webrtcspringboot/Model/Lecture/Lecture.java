@@ -22,6 +22,9 @@ public class Lecture {
     private String name;
 
     @Column(nullable = false)
+    private String building;
+
+    @Column(nullable = false)
     private String Room;
 
     @Column(nullable = false)

@@ -12,6 +12,9 @@ public class LectureForm {
     @Size(max = 50, message = "강의명은 50자 이내로 입력해주세요.")
     private String lectureName;
 
+    @NotEmpty(message = "강의 건물을 입력해주세요.")
+    private String lectureBuilding;
+
     @NotEmpty(message = "강의실을 입력해주세요.")
     private String lectureRoom;
 

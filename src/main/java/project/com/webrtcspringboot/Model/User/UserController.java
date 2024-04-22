@@ -22,6 +22,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
     private final Map<String, Pair<String, String>> emailMap = new HashMap<>();
 
     @GetMapping("/signup")
@@ -31,7 +32,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() || userRepository.findByEmail(userCreateForm.getEmail()) != null) {
             return "user/signup_form";
         }
         if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
@@ -103,7 +104,6 @@ public class UserController {
 
     @PostMapping("/change_password")
     public @ResponseBody String changePassword(@RequestParam("currentPassword") String currentPassword, @RequestParam("newPassword") String newPassword, Principal principal) {
-        System.out.println("Current password: " + currentPassword);
         this.userService.changePassword(principal.getName(), currentPassword, newPassword);
         return "success";
     }

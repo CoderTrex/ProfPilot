@@ -51,9 +51,7 @@ public class UserService {
 
     public void changePassword(String name, String currentPassword, String newPassword) {
         Users user = this.userRepository.findByName(name);
-        System.out.println("Current password: " + currentPassword);
         if (passwordEncoder.matches(currentPassword, user.getPassword())) {
-            System.out.println("Password matched");
             user.setPassword(passwordEncoder.encode(newPassword));
             this.userRepository.save(user);
         }

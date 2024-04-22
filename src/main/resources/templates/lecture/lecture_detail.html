@@ -105,23 +105,31 @@
         </tbody>
     </table>
     <br><br>
-    <h5 class="my-3 border-bottom pb-2">출석부</h5>
+    <h5 class="my-3 border-bottom pb-2">강의 목록</h5>
 
     <table class="table">
         <thead>
             <tr>
-                <th style="width:20%">날짜</th>
-                <th style="width:5%">상태</th>
-                <th style="width:10%">학번</th>
-                <th style="width:10%">강의명</th>
+                <th style="width:5%">출석</th>
+                <th style="width:10%">주차</th>
+                <th style="width:10%">차시</th>
+                <th style="width:10%">출석룰</th>
+                <th style="width:10%">학습자료</th>
+                
             </tr>
         </thead>
         <tbody>
-            <tr class="text-center" th:each="attendance : ${attendances}">
-                <td th:text="${attendance.date}"></td>
-                <td th:text="${attendance.status}"></td>
-                <td th:text="${attendance.userId}"></td>
-                <td th:text="${attendance.lectName}"></td>
+            <tr class="text-center" th:each="flight : ${flightList}">
+                <td><button class="btn btn-primary">출석</button>
+                <td th:text="${flight.week} + '주차'"></td>
+                <td th:if="${flight.ordinal == 0}"><a th:href="@{/flight/detail/{id}(id=${flight.id})}" th:text="1차시"></a></td>
+                <td th:if="${flight.ordinal == 1}"><a th:href="@{/flight/detail/{id}(id=${flight.id})}" th:text="2차시"></a></td>
+                <td th:if="${flight.ordinal == 2}"><a th:href="@{/flight/detail/{id}(id=${flight.id})}" th:text="3차시"></a></td>
+                <td th:if="${flight.ordinal == 3}"><a th:href="@{/flight/detail/{id}(id=${flight.id})}" th:text="4차시"></a></td>
+                <td th:if="${flight.ordinal == 4}"><a th:href="@{/flight/detail/{id}(id=${flight.id})}" th:text="5차시"></a></td>
+                <td th:each="file : ${flight.files}">
+                    <a th:href="@{/download/{fileName}(fileName=${file})}" th:text="${file}"></a>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -131,19 +139,20 @@
 
     <br><br>
     <!-- 강의 삭제 버튼 모달 기능을 이용해 정말 삭제하겠습니까?가 나오고 이후에 /lecture/delete 호출-->
-    <div class="delete-lecture">
+    <div class="delete-lecture" th:if="${userRole != 'prof'}">
         <button class="btn btn-danger" onclick="openModal()">Delete Lecture</button>
         <div id="lecture-popup" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
                 <p>정말 삭제하시겠습니까?</p>
                 <!-- @GetMapping("/delete/{name}") -->
-                <a th:href="@{/lecture/delete/{name}(name=${lecture.name})}">
+                <a th:href="@{/lecture/delete/{name}(name=${lecture.id})}">
                     <button class="btn btn-danger">삭제</button>
                 </a>
             </div>
         </div>
     </div>
+    
     <script>
         function openModal() {
             document.getElementById('lecture-popup').style.display = 'block';

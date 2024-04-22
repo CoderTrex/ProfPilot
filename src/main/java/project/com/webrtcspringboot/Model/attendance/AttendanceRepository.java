@@ -3,6 +3,7 @@ package project.com.webrtcspringboot.Model.attendance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import project.com.webrtcspringboot.Model.User.Users;
+import project.com.webrtcspringboot.Model.flight.Flight;
 
 import java.util.ArrayList;
 

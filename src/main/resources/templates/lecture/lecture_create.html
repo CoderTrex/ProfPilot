@@ -77,6 +77,7 @@
             }
         }
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 <div layout:fragment="content" class="container">
@@ -90,7 +91,46 @@
         </div>
         <div class="mb-3">
             <label for="lectureRoom" class="form-label">강의실</label>
+            <select id="university" class="form-control">
+                <option value="">대학 선택</option>
+                <option value="1">경희대학교</option>
+            </select>
+            <select id="building" class="form-control" disabled>
+                <option value="">건물 선택</option>
+                <!-- lectureBuilding값 js에서 받아서 lectureBuilding이라는 값으로 보내기-->
+                <input type="hidden" th:field="*{lectureBuilding}" id="lectureBuilding">
+            </select>
             <input type="text" th:field="*{lectureRoom}" class="form-control">
+        
+            <script>
+                // 사용자가 대학 선택 시 건물 선택 옵션 활성화
+                document.getElementById('university').addEventListener('change', function() {
+                    var buildingSelect = document.getElementById('building');
+                    buildingSelect.disabled = false;
+                    buildingSelect.innerHTML = '<option value="">건물 선택</option>';
+                    $.ajax({
+                        url: '/api/buildings?universityId=' + this.value,
+                        type: 'GET',
+                        success: function(data) {
+                            data.forEach(function(building) {
+                                var option = document.createElement('option');
+                                option.value = building.id;
+                                option.text = building.buildingName;
+                                buildingSelect.appendChild(option);
+                            });
+
+                            // 선택된 건물 이름을 lectureBuilding 필드에 저장
+                            document.getElementById('building').addEventListener('change', function() {
+                                var selectedBuilding = this.options[this.selectedIndex].text;
+                                console.log(selectedBuilding);
+                                document.getElementById('lectureBuilding').value = selectedBuilding;
+                            });
+                            
+                        }
+                    });
+                });
+                
+            </script>
         </div>
         <br>
         <div class="weekPicker">

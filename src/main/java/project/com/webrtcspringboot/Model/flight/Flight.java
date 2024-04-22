@@ -13,6 +13,7 @@ import project.com.webrtcspringboot.Model.Lecture.Lecture;
 import project.com.webrtcspringboot.Model.User.Users;
 import project.com.webrtcspringboot.Model.attendance.Attendance;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -26,6 +27,9 @@ public class Flight {
 
     @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    private String building;
 
     @Column(nullable = false)
     private String Room;
@@ -44,6 +48,9 @@ public class Flight {
 
     @Column(nullable = false)
     private String endTime;
+
+    @Column(nullable = false)
+    private ArrayList<String> files;
 
     @ManyToOne
     @JoinColumn(name = "pilot_id", nullable = false)

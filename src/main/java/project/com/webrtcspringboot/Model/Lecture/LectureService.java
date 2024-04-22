@@ -16,10 +16,13 @@ import java.util.Optional;
 public class LectureService {
     private final LectureRepository lectureRepository;
     private final UserRepository userRepository;
-    public void create(String lectureName, String lectureRoom, String lectureDay,
-            String lectureStartTime, String lectureEndTime, Principal principal) {
+    public void create(String lectureName, String lectureBuilding,
+                       String lectureRoom, String lectureDay,
+                       String lectureStartTime, String lectureEndTime,
+                       Principal principal) {
         Lecture lecture = new Lecture();
         lecture.setName(lectureName);
+        lecture.setBuilding(lectureBuilding);
         lecture.setRoom(lectureRoom);
         lecture.setLectureDay(lectureDay);
         lecture.setStartTime(lectureStartTime);
@@ -46,8 +49,8 @@ public class LectureService {
     }
 
 
-    public void deleteUser(String lectureName, Principal principal) {
-        Optional<Lecture> lecture = Optional.ofNullable(this.lectureRepository.findByName(lectureName));
+    public void deleteUser(Long id, Principal principal) {
+        Optional<Lecture> lecture = Optional.ofNullable(this.lectureRepository.findById(id).orElse(null));
         Users user = this.userRepository.findByName(principal.getName());
         if (lecture.isPresent()) {
             if (lecture.get().getUsers().contains(user)) {
