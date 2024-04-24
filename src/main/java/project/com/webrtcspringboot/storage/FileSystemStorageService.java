@@ -1,5 +1,6 @@
 package project.com.webrtcspringboot.storage;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -16,6 +17,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
+import project.com.webrtcspringboot.Model.flight.FlightRepository;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -33,22 +35,20 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	@Override
-	public void store(MultipartFile file) {
+	public void store(MultipartFile file, Long id, String prof_name) {
 		try {
 			if (file.isEmpty()) {
 				throw new StorageException("Failed to store empty file.");
 			}
-			Path destinationFile = this.rootLocation.resolve(
-					Paths.get(Objects.requireNonNull(file.getOriginalFilename())))
+			Path destinationFolder = Paths.get(this.rootLocation.toString(), prof_name, id.toString());
+			Path destinationFile = destinationFolder.resolve(Paths.get(Objects.requireNonNull(file.getOriginalFilename())))
 					.normalize().toAbsolutePath();
-			if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
-				// This is a security check
-				throw new StorageException(
-						"Cannot store file outside current directory.");
+			if (!Files.exists(destinationFile)) {
+				Files.createDirectories(destinationFile);
 			}
 			try (InputStream inputStream = file.getInputStream()) {
-				Files.copy(inputStream, destinationFile,
-					StandardCopyOption.REPLACE_EXISTING);
+				// 매개변수 1. 파일의 InputStream, 2. 저장될 파일의 경로, 3. 파일이 이미 존재할 경우 덮어쓸지 여부
+				Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
 			}
 		}
 		catch (IOException e) {
@@ -57,11 +57,15 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	@Override
-	public Stream<Path> loadAll() {
+	public Stream<Path> loadAll(Long id, String prof_name) {
 		try {
-			return Files.walk(this.rootLocation, 1)
-				.filter(path -> !path.equals(this.rootLocation))
-				.map(this.rootLocation::relativize);
+			Path destinationFolder = Paths.get(this.rootLocation.toString(), prof_name, id.toString());
+			if (!Files.exists(destinationFolder)) {
+				return Stream.empty();
+			}
+			return Files.walk(destinationFolder, 1)
+					.filter(path -> !path.equals(destinationFolder))
+					.map(destinationFolder::relativize);
 		}
 		catch (IOException e) {
 			throw new StorageException("Failed to read stored files", e);
@@ -78,8 +82,11 @@ public class FileSystemStorageService implements StorageService {
 	public Resource loadAsResource(String filename) {
 		try {
 			Path file = load(filename);
+
 			Resource resource = new UrlResource(file.toUri());
+			System.out.println("resource: " + resource);
 			if (resource.exists() || resource.isReadable()) {
+				System.out.println("resource: 222" + resource);
 				return resource;
 			}
 			else {

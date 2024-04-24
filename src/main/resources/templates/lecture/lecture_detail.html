@@ -134,13 +134,10 @@
         </tbody>
     </table>
 
-    <!-- 파일 업로드 html로 이동 file_upload.html -->
-    <a th:href="@{/upload/}">파일 업로드</a>
-
     <br><br>
     <!-- 강의 삭제 버튼 모달 기능을 이용해 정말 삭제하겠습니까?가 나오고 이후에 /lecture/delete 호출-->
-    <div class="delete-lecture" th:if="${userRole != 'prof'}">
-        <button class="btn btn-danger" onclick="openModal()">Delete Lecture</button>
+    <div class="delete-lecture">
+        <button class="btn btn-danger" onclick="openModal()" th:if="${userRole != 'prof'}" >Delete Lecture</button>
         <div id="lecture-popup" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>

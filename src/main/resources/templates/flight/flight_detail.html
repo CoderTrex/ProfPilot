@@ -9,13 +9,45 @@
             <span th:text="${flight.name}"></span>
             <span th:text="${flight.building}"></span>
             <span th:text="${flight.Room}"></span>
-            <span th:text="${flight.week}"></span>
-            <span th:text="${flight.ordinal}"></span>
+            <span th:text="${flight.week}"></span><span>주차</span>
+            <span th:text="${flight.ordinal}"></span><span>차시</span>
             <span th:text="${flight.lectureDay}"></span>
             <span th:text="${flight.startTime}"></span>
             <span th:text="${flight.endTime}"></span>
-            <span th:text="${flight.files}"></span>
             <span th:text="${flight.pilot.getName()}"></span>
             <span th:text="${flight.lecture.getName()}"></span>
     </body>
+    <div>
+        <br>
+        <span>수업자료 업로드</span>
+        <form method="POST" enctype="multipart/form-data" th:action="@{|/upload/${flight.id}|}">
+            <table>
+                <tr>
+                    <td><input type="file" name="file" /></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Upload" /></td>
+                </tr>
+            </table>
+        </form>
+        <br>
+        <span>수업자료</span>
+        <div>
+            <ul>
+                <li th:each="file : ${files}">
+                    <a th:href="${file}" id="filename" th:text="${file}"></a>
+                    <script>
+                        var fileElement = document.getElementById("filename");
+                        var href = fileElement.getAttribute("href");
+                        var flightId = href.split("?")[0];
+                        var title = flightId.split("/")[5];
+                        console.log(title);
+                        fileElement.textContent = title; // 수정된 부분
+                    </script>
+                    <button th:href="@{|/upload/delete/${flight.id}/${file}|}">delete</button>
+                </li>
+            </ul>
+        </div>
+
+    </div>
 </html>
