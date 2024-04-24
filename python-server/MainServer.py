@@ -1,4 +1,3 @@
-
 import math
 import pymysql
 import time
@@ -46,12 +45,10 @@ class MainServer:
         now_time = now_hour * 60 + now_minute
         return target_time, now_time, int_lecture_day, now_hour, now_minute, start_hour, start_minute, lecture_day
 
-
     def insert_attendance(self, lecture_name, status, flight_id, user_id):
         cursor = self.conn.cursor()
         cursor.execute("INSERT INTO attendance (date, lect_name, status, flight_id, user_id) VALUES (NOW(), %s, %s, %s, %s)", (lecture_name, status, flight_id, user_id))
         self.conn.commit()
-
 
     def lecture_check_in(self):
         student_id = request.args.get('student_id')
@@ -83,13 +80,16 @@ class MainServer:
                     return jsonify({'result': '출석 성공'})
                 else:
                     return jsonify({'result': '출석 실패[출석 가능 거리 초과]', '출석 가능 거리로 부터 남은 거리(단위: m)': round(distance - lecture_allowed_distance, 2)})
+            if (now_time >= target_time + 10 and now_time <= target_time + 30):
+                self.insert_attendance(lecture_name, '지각', lecture_id, student_id)
+                return jsonify({'result': '지각 성공'})
             else:    
                 return jsonify({'result': '출석 실패[수업 시작 시간 10문 간격으로 출석가능]', '현재 시간' : f'{now_hour}:{now_minute}', '수업 시작 시간': f'{start_hour}:{start_minute}'})
         else:
             return jsonify({'result': '출석 실패[출석 가능한 요일이 아님]', '현재 날짜' : self.list_day[time.localtime().tm_wday], '수업 요일': lecture_day})
     
     def run(self):
-        self.app.run(debug=True)
+        self.app.run(debug=True, threaded=True)
 
 if __name__ == '__main__':
     main_server = MainServer()

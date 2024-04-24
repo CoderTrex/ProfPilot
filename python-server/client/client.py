@@ -18,5 +18,17 @@ def get_content_api():
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
 
+def attendance_check_api():
+    url = "http://localhost:5001/attendance_check"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        result = response.json()
+        return result
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+
+
 if __name__ == '__main__':
-    print(get_content_api())
+    # print(get_content_api())
+    print(attendance_check_api())
