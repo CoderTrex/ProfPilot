@@ -36,6 +36,7 @@ class SubServer:
         now_time = now_hour * 60 + now_minute
         return target_time, now_time, int_lecture_day, now_hour, now_minute, start_hour, start_minute, lecture_day
 
+
     def attendance_check(self):
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM lecture")
@@ -58,8 +59,10 @@ class SubServer:
                         else:
                             cursor.execute("UPDATE attendance SET status = '결석' WHERE flight_id = %s", (flight_row[0],))
                             self.conn.commit()
-
         return jsonify({'result': 'success'})
+
+
+
     def run(self):
         self.app.run(threaded=True, port=5001)
 

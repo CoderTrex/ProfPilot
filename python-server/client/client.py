@@ -29,6 +29,22 @@ def attendance_check_api():
         print(f"Error: {e}")
 
 
+def lecture_attendance_create():
+    url = "http://localhost:5000/lecture_attendance_create"
+    data = {
+        'lecture_name': '풀스텍',
+        'lecture_id': '1',
+        'flight_id': '1',
+    }
+    try:
+        response = requests.post(url, json=data)
+        response.raise_for_status()
+        result = response.json()
+        return result
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+
 if __name__ == '__main__':
     # print(get_content_api())
-    print(attendance_check_api())
+    # print(attendance_check_api())
+    print(lecture_attendance_create())

@@ -35,10 +35,7 @@ public class Flight {
     private String Room;
 
     @Column(nullable = false)
-    private Integer week;
-
-    @Column(nullable = false)
-    private Integer ordinal;
+    private String today;
 
     @Column(nullable = false)
     private String lectureDay;

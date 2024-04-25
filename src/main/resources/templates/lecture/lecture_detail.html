@@ -3,83 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>ProfPilot✈️: Lecture Detail</title>
-    <style>
-        /* 모달 스타일 */
-        .modal {
-            display: none; /* 기본적으로 모달은 숨김 */
-            position: fixed; /* 위치를 고정 */
-            z-index: 1; /* 모달을 다른 요소 위에 표시 */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto; /* 스크롤이 생길 경우 스크롤 지원 */
-            background-color: rgba(0,0,0,0.4); /* 배경을 어둡고 투명하게 */
-        }
-
-        .modal-content {
-            background-color: #fefefe; /* 모달 내용의 배경색 */
-            margin: 15% auto; /* 모달이 화면 중앙에 위치하도록 */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px; /* 모달의 최대 너비 설정 */
-            border-radius: 10px;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* 테이블 및 버튼 스타일 */
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        .table th, .table td {
-            border: 1px solid #dee2e6;
-            padding: 8px;
-            text-align: center;
-        }
-
-        .table thead {
-            background-color: #343a40;
-            color: #fff;
-        }
-
-        .lecture_board td {
-            width: 20%;
-        }
-
-        .delete-lecture {
-            text-align: center;
-        }
-
-        .delete-lecture button {
-            padding: 10px 20px;
-            background-color: #dc3545;
-            border: none;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .delete-lecture button:hover {
-            background-color: #c82333;
-        }
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/lecture/lecture_detail.css">
+    <script type="text/javascript" src="/js/lecture/lecture_detail.js"></script>
 </head>
 <body>
     <table class="table">
@@ -111,8 +37,6 @@
         <thead>
             <tr>
                 <th style="width:5%">출석</th>
-                <th style="width:10%">주차</th>
-                <th style="width:10%">차시</th>
                 <th style="width:10%">출석룰</th>
                 <th style="width:10%">학습자료</th>
                 
@@ -121,12 +45,6 @@
         <tbody>
             <tr class="text-center" th:each="flight : ${flightList}">
                 <td><button class="btn btn-primary">출석</button>
-                <td th:text="${flight.week} + '주차'"></td>
-                <td th:if="${flight.ordinal == 0}"><a th:href="@{/flight/detail/{id}(id=${flight.id})}" th:text="1차시"></a></td>
-                <td th:if="${flight.ordinal == 1}"><a th:href="@{/flight/detail/{id}(id=${flight.id})}" th:text="2차시"></a></td>
-                <td th:if="${flight.ordinal == 2}"><a th:href="@{/flight/detail/{id}(id=${flight.id})}" th:text="3차시"></a></td>
-                <td th:if="${flight.ordinal == 3}"><a th:href="@{/flight/detail/{id}(id=${flight.id})}" th:text="4차시"></a></td>
-                <td th:if="${flight.ordinal == 4}"><a th:href="@{/flight/detail/{id}(id=${flight.id})}" th:text="5차시"></a></td>
                 <td th:each="file : ${flight.files}">
                     <a th:href="@{/download/{fileName}(fileName=${file})}" th:text="${file}"></a>
                 </td>
@@ -135,7 +53,6 @@
     </table>
 
     <br><br>
-    <!-- 강의 삭제 버튼 모달 기능을 이용해 정말 삭제하겠습니까?가 나오고 이후에 /lecture/delete 호출-->
     <div class="delete-lecture">
         <button class="btn btn-danger" onclick="openModal()" th:if="${userRole != 'prof'}" >Delete Lecture</button>
         <div id="lecture-popup" class="modal">
@@ -149,23 +66,5 @@
             </div>
         </div>
     </div>
-    
-    <script>
-        function openModal() {
-            document.getElementById('lecture-popup').style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('lecture-popup').style.display = 'none';
-        }
-
-        // 모달 외부 클릭 시 닫기
-        window.onclick = function(event) {
-            var modal = document.getElementById('lecture-popup');
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
-    </script>
 </body>
 </html>

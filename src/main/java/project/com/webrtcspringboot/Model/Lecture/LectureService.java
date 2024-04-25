@@ -16,6 +16,7 @@ import java.util.Optional;
 public class LectureService {
     private final LectureRepository lectureRepository;
     private final UserRepository userRepository;
+
     public void create(String lectureName, String lectureBuilding,
                        String lectureRoom, String lectureDay,
                        String lectureStartTime, String lectureEndTime,

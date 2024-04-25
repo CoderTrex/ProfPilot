@@ -9,17 +9,15 @@
             <span th:text="${flight.name}"></span>
             <span th:text="${flight.building}"></span>
             <span th:text="${flight.Room}"></span>
-            <span th:text="${flight.week}"></span><span>주차</span>
-            <span th:text="${flight.ordinal}"></span><span>차시</span>
             <span th:text="${flight.lectureDay}"></span>
             <span th:text="${flight.startTime}"></span>
             <span th:text="${flight.endTime}"></span>
             <span th:text="${flight.pilot.getName()}"></span>
             <span th:text="${flight.lecture.getName()}"></span>
     </body>
-    <div>
+    <div th:if="${user.role == 'prof'}">
         <br>
-        <span>수업자료 업로드</span>
+        <span >수업자료 업로드</span>
         <form method="POST" enctype="multipart/form-data" th:action="@{|/upload/${flight.id}|}">
             <table>
                 <tr>

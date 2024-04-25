@@ -4,9 +4,23 @@
     <meta charset="UTF-8">
     <title>ProfPilot✈️: main page</title>
 </head>
-
 </head>
 <body>
+    <div layout:fragment="content" class="container my-3">
+        <table class="table">
+            <tr class="text-center" th:each="lecture, loop : ${lectureList}">
+                <div class="lecture_board">
+                    <td th:if="${user.role == 'prof'}"><a th:href="@{/lecture/start(id=${lecture.id})}" th:text="${lecture.name}"></a></td>
+                    <td th:if="${user.role == 'student'}"><a th:href="@{/lecture/flight(id=${lecture.id})}" th:text="${lecture.name}"></a></td>
+                    <td th:text="${lecture.LectureDay}"></td>
+                    <td th:text="${lecture.startTime}"></td>
+                    <td th:text="${lecture.endTime}"></td>
+                </div>
+            </tr>
+            </tbody>
+        </table>
+        <script type="text/javascript" src="/js/lecture_list.js"></script>
+    </div>
 </body>
 </html>
 </html>

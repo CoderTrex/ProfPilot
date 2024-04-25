@@ -84,9 +84,9 @@ public class FileSystemStorageService implements StorageService {
 			Path file = load(filename);
 
 			Resource resource = new UrlResource(file.toUri());
-			System.out.println("resource: " + resource);
+//			System.out.println("resource: " + resource);
 			if (resource.exists() || resource.isReadable()) {
-				System.out.println("resource: 222" + resource);
+//				System.out.println("resource: 222" + resource);
 				return resource;
 			}
 			else {

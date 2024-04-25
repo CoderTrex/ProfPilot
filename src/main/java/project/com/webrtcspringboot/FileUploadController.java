@@ -46,7 +46,6 @@ public class FileUploadController {
 	public ResponseEntity<Resource> serveFile(@PathVariable String filename, @RequestParam("flightId") Long flightId) {
 		Flight flight = FlightRepository.findById(flightId).orElseThrow(() -> new IllegalArgumentException("Invalid flight Id:" + flightId));
 		String prof_name = flight.getPilot().getName();
-		System.out.println("prof_name: " + prof_name);
 		filename = prof_name + "/" + flightId + "/" + filename;
 		Resource file = storageService.loadAsResource(filename);
 		if (file == null)

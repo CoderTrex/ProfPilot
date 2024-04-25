@@ -5,78 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProfPilot✈️: Lecture Create</title>
     <link rel="stylesheet" th:href="@{/styles/lecture_create.css}">
-    <style>
-        body {
-            background-color: #8e4d4d;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .form-label {
-            font-weight: bold;
-        }
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            margin-top: 5px;
-            margin-bottom: 15px;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .my-3 {
-            margin-top: 15px !important;
-            margin-bottom: 15px !important;
-        }
-        .border-bottom {
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 5px;
-            margin-bottom: 20px;
-        }
-        .dowPicker {
-            width: 500px;
-            text-align: center;
-            padding: 10px 0 0 0;
-            margin: 10px auto;
-            
-            .dowPickerOption {
-                    display: inline-block;
-                    input[type=checkbox] {
-                        display: none;
-                }
-                label {
-                    font-size: 30px;
-                    color: #A7A7A7;
-                    cursor: pointer;
-                }
-                input[type=checkbox]:checked ~ label {
-                    color: #464646;
-                    font-weight: 500;
-                }
-            }
-        }
-    </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
@@ -101,7 +29,6 @@
                 <input type="hidden" th:field="*{lectureBuilding}" id="lectureBuilding">
             </select>
             <input type="text" th:field="*{lectureRoom}" class="form-control">
-        
             <script>
                 // 사용자가 대학 선택 시 건물 선택 옵션 활성화
                 document.getElementById('university').addEventListener('change', function() {
@@ -125,11 +52,11 @@
                                 console.log(selectedBuilding);
                                 document.getElementById('lectureBuilding').value = selectedBuilding;
                             });
-                            
+
                         }
                     });
                 });
-                
+
             </script>
         </div>
         <br>
