@@ -1,30 +1,25 @@
-## 프로젝트 개요
+## Project Overview
+This project is a WebRTC (Web Real-Time Communication) education management service implemented based on Spring Boot.
 
-이 프로젝트는 Spring Boot를 기반으로 구현된 WebRTC(웹 실시간 통신) 솔루션입니다. 사용자들 간에 웹 브라우저를 통해 실시간으로 텍스트 채팅, 파일 전송 및 화상 통화를 할 수 있습니다.
+### Features
+1. **Attendance Management**: Implemented an attendance authentication method based on GPS, providing more accurate attendance verification.
+2. **Video Chat**: Provides video chat, screen sharing, and chat services as part of the class functionalities, powered by WebRTC.
+3. **File Management**: Offers the ability to share materials for each class by storing and sharing files.
+4. **User Management**: Provides services for both professors and students separately.
 
-### 기능
-
-1. **텍스트 채팅**: 사용자들은 웹 애플리케이션을 통해 실시간으로 텍스트 메시지를 주고받을 수 있습니다.
-2. **파일 전송**: 파일 전송 기능을 통해 사용자들은 서로 파일을 손쉽게 공유할 수 있습니다.
-3. **화상채팅**: 웹캠 및 마이크를 사용하여 사용자들은 화상 통화를 할 수 있습니다.
-
-### 개발 환경
+### Development Environment
 - Oracle OpenJDK version 21.0.2
 - Spring Boot 3.2.4
-- WebRTC
-- flask
-- mysql
+- WebRTC (Agora service)
+- Flask 3.0.2
+- MySQL Ver 8.0.36 for Win64 on x86_64 (MySQL Community Server - GPL)
 
-### 시작하기
+### Getting Started
 
-1. 이 저장소를 클론합니다.
-2. 프로젝트를 로컬 환경에 빌드하고 실행합니다.
-3. 브라우저에서 해당 서버의 주소로 접속하여 기능을 테스트합니다.
+1. Clone this repository.
+2. Build and run the project in your local environment.
+3. Access the server's address in your browser to test the features.
 
-### 기여하기
+### License
 
-이 프로젝트에 관심을 가지셨나요? 기여를 환영합니다! 버그 리포트, 기능 제안 또는 코드 기여를 통해 프로젝트를 발전시킬 수 있습니다. 자세한 내용은 [CONTRIBUTING.md](CONTRIBUTING.md)를 참조해주세요.
-
-### 라이선스
-
-이 프로젝트는 [MIT 라이선스](LICENSE) 하에 제공됩니다. 자세한 내용은 라이선스 파일을 참조해주세요.
+This project is provided under the [MIT License](LICENSE). Please refer to the license file for more details.
