@@ -12,5 +12,6 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
     ArrayList<Flight> findByLectId(Long id);
     @Query("SELECT a FROM Flight a WHERE a.today = ?1")
     Flight findByToday(String today);
-
+    @Query("SELECT a FROM Flight a WHERE a.today = ?1 AND a.lecture.id = ?2")
+    Flight findByTodayAndLectId(String today, Long id);
 }

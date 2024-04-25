@@ -101,13 +101,19 @@ public class LectureController {
         Lecture lecture = this.lectureRepository.findById(id).get();
         model.addAttribute("lecture", lecture);
         Users user = this.UserRepository.findByName(principal.getName());
+        
 
-        Flight flight = this.flightRepository.findByToday(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        // 단순히 날짜만 같은거 가져오면 안됨. 강의 id도 같아야함. -> 여기
+        // Flight flight = this.flightRepository.findByToday(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        Flight flight = this.flightRepository.findByTodayAndLectId(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), lecture.getId());
 
         if (flight == null){
             flightService.createFlight(lecture.getId(), lecture.getName(), lecture.getBuilding(),
                     lecture.getRoom(), lecture.getLectureDay(), lecture.getStartTime(), lecture.getEndTime(), principal);
-            flight = this.flightRepository.findByToday(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            
+            // 수정해야함.
+            // flight = this.flightRepository.findByToday(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            flight = this.flightRepository.findByTodayAndLectId(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), lecture.getId());
         }
         String prof_name = flight.getPilot().getName();
         model.addAttribute("flight", flight);

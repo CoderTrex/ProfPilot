@@ -41,6 +41,7 @@
                         var title = flightId.split("/")[5];
                         console.log(title);
                         fileElement.textContent = title; // 수정된 부분
+                        console.log(fileElement.textContent);
                     </script>
                     <button th:href="@{|/upload/delete/${flight.id}/${file}|}">delete</button>
                 </li>

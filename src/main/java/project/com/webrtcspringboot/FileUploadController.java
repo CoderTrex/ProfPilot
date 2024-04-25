@@ -1,6 +1,5 @@
 package project.com.webrtcspringboot;
 
-
 import java.io.IOException;
 import java.util.stream.Collectors;
 
@@ -55,12 +54,13 @@ public class FileUploadController {
 	}
 
 	@PostMapping("/{flightId}")
-	public void handleFileUpload(@PathVariable("flightId") Long flightId,
+	public String handleFileUpload(@PathVariable("flightId") Long flightId,
 								   @RequestParam("file") MultipartFile file,
 								   RedirectAttributes redirectAttributes) {
 		Flight flight = FlightRepository.findById(flightId).orElseThrow(() -> new IllegalArgumentException("Invalid flight Id:" + flightId));
 		String prof_name = flight.getPilot().getName();
 		storageService.store(file, flightId, prof_name);
+		return "redirect:/lecture/start?id=" + flightId;
 	}
 
 	@ExceptionHandler(StorageFileNotFoundException.class)
