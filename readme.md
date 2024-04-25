@@ -12,6 +12,8 @@
 - Oracle OpenJDK version 21.0.2
 - Spring Boot 3.2.4
 - WebRTC
+- flask
+- mysql
 
 ### 시작하기
 
