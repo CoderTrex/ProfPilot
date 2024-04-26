@@ -15,7 +15,9 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     @Query("SELECT a FROM Attendance a WHERE a.lectName = ?1 AND a.user = ?2")
     ArrayList<Attendance> findByLectNameAndUserId(String lectName, Users user);
 
-
     @Query("SELECT a FROM Attendance a WHERE a.date = ?1 AND a.flight = ?2")
     ArrayList<Attendance> findByTodayAndFlight(String today, Flight flight);
+
+    @Query("SELECT a FROM Attendance a WHERE a.lectName = ?1 AND a.flight = ?2 AND a.user = ?3")
+    Attendance findByLectNameAndFlightAndUser(String lectName, Flight flight, Users user);
 }

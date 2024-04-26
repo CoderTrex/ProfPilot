@@ -1,15 +1,24 @@
 import math, pymysql, time, json, datetime
+from flask_cors import CORS
 from flask import Flask, jsonify, request
 
-app = Flask(__name__)
 
 class MainServer:
     def __init__(self):
         self.conn = pymysql.connect(host='localhost', user='root', password='1234', db='webrtc')
         self.app = Flask(__name__)
+        CORS(self.app)
         self.app.add_url_rule('/lecture_check_in', 'lecture_check_in', self.lecture_check_in, methods=['POST'])
         self.app.add_url_rule('/lecture_attendance_create', 'lecture_attendance_create', self.lecture_attendance_create, methods=['POST'])
+        self.app.add_url_rule('/get_location', 'get_location', self.get_location, methods=['POST'])
         self.list_day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+
+    # @app.route('/get_location', methods=['POST'])
+    # def get_location(self):
+    #     data = request.get_json()
+    #     a = data.get('latitude')
+    #     b = data.get('longitude')
+    #     print("latitude: ", a, "longitude: ", b)
 
     def lecture_attendance_create(self):
         data = request.get_json()
@@ -17,6 +26,7 @@ class MainServer:
         lecture_id = data.get('lecture_id')
         flight_id = data.get('flight_id')
 
+        print("lecture_name: ", lecture_name, "lecture_id: ", lecture_id, "flight_id: ", flight_id)
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM lecture_users where lectures_id = %s", (lecture_id,))
         result = cursor.fetchall()
@@ -24,11 +34,11 @@ class MainServer:
         current_date = datetime.datetime.now().strftime('%Y-%m-%d')
 
         for user in result:
+            print("print debug: ", user)
             cursor.execute("INSERT INTO attendance (date, lect_name, status, flight_id, user_id) VALUES (%s, %s, %s, %s, %s)",\
                                         (current_date, lecture_name, '결석', flight_id, user[1]))
             self.conn.commit()
         return jsonify({'result': 'success'})
-
 
     def measure(self, lat1, lon1, lat2, lon2):
             R = 6378.137  # Radius of earth in KM
@@ -69,13 +79,14 @@ class MainServer:
         self.conn.commit()
 
     def lecture_check_in(self):
-        student_id = request.args.get('student_id')
-        lecture_name = request.args.get('lecture_name')
-        lecture_id = request.args.get('lecture_id')
-        lecture_building = request.args.get('lecture_building')
-        student_latitude = request.args.get('latitude')
-        student_longitude = request.args.get('longitude')
-        
+        data = request.get_json()
+        student_id = data.get('student_id')
+        lecture_name = data.get('lecture_name')
+        lecture_id = data.get('lecture_id')
+        lecture_building = data.get('lecture_building')
+        student_latitude = data.get('student_latitude')
+        student_longitude = data.get('student_longitude')
+        print("student_id: ", student_id, "lecture_name: ", lecture_name, "lecture_id: ", lecture_id, "lecture_building: ", lecture_building, "student_latitude: ", student_latitude, "student_longitude: ", student_longitude)
         # 수업 정보 가져오기
         target_time, now_time, int_lecture_day, now_hour,\
             now_minute, start_hour, start_minute, lecture_day = self.lecture_cal(lecture_name)
@@ -94,6 +105,7 @@ class MainServer:
             if (now_time >= target_time - 10 and now_time <= target_time + 10):
                 distance = self.measure(lecture_latitude, lecture_longitude, float(student_latitude), float(student_longitude))
                 if (distance <= lecture_allowed_distance):
+                    print("distance: ", distance, "lecture_allowed_distance: ", lecture_allowed_distance)
                     self.insert_attendance(lecture_name, '출석', lecture_id, student_id)
                     return jsonify({'result': 'success', 'entrance' : 'okay', 'late': 'no', 'distance': 'okay'})
                 else:
@@ -101,6 +113,7 @@ class MainServer:
             if (now_time >= target_time + 10 and now_time <= target_time + 30):
                 distance = self.measure(lecture_latitude, lecture_longitude, float(student_latitude), float(student_longitude))
                 if (distance <= lecture_allowed_distance):
+                    print("distance: ", distance, "lecture_allowed_distance: ", lecture_allowed_distance)
                     self.insert_attendance(lecture_name, '지각', lecture_id, student_id)
                     return jsonify({'result': 'success', 'entrance': 'okay', 'late': 'yes', 'distance': 'okay'})
                 else:

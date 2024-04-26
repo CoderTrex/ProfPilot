@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import project.com.webrtcspringboot.Model.Lecture.Lecture;
 import project.com.webrtcspringboot.Model.flight.FlightRepository;
 import project.com.webrtcspringboot.Model.User.Users;
 import project.com.webrtcspringboot.Model.flight.Flight;
@@ -32,11 +33,6 @@ public class FileUploadController {
 
 	@GetMapping("/")
 	public String listUploadedFiles(Model model) throws IOException {
-
-//		model.addAttribute("files", storageService.loadAll().map(
-//				path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-//						"serveFile", path.getFileName().toString()).build().toUri().toString())
-//				.collect(Collectors.toList()));
 		return "uploadForm";
 	}
 
@@ -58,9 +54,10 @@ public class FileUploadController {
 								   @RequestParam("file") MultipartFile file,
 								   RedirectAttributes redirectAttributes) {
 		Flight flight = FlightRepository.findById(flightId).orElseThrow(() -> new IllegalArgumentException("Invalid flight Id:" + flightId));
+		Lecture lecture = flight.getLecture();
 		String prof_name = flight.getPilot().getName();
 		storageService.store(file, flightId, prof_name);
-		return "redirect:/lecture/start?id=" + flightId;
+		return "redirect:/lecture/enter_flight?id=" + lecture.getId();
 	}
 
 	@ExceptionHandler(StorageFileNotFoundException.class)

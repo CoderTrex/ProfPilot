@@ -26,4 +26,7 @@ public class LectureForm {
 
     @NotEmpty(message = "종료 시간을 입력해주세요.")
     private String lectureEndTime;
+
+    @NotEmpty(message = "강의의 비밀번호를 입력해주세요.")
+    private String lecturePassword;
 }

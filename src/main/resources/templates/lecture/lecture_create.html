@@ -22,6 +22,7 @@
             <select id="university" class="form-control">
                 <option value="">대학 선택</option>
                 <option value="1">경희대학교</option>
+                <option value="2">공룡대학교</option>
             </select>
             <select id="building" class="form-control" disabled>
                 <option value="">건물 선택</option>
@@ -102,6 +103,11 @@
         <div class="mb-3">
             <label for="lectureEndTime" class="form-label">종료 시간</label>
             <input type="time" th:field="*{lectureEndTime}" class="form-control" step="300">
+        </div>
+        <br>
+        <div class="mb-3">
+            <label for="password" class="form-label">강의 비밀번호</label>
+            <input type="password" th:field="*{lecturePassword}" class="form-control">
         </div>
         <input type="submit" value="저장하기" class="btn btn-primary my-2">
     </form>

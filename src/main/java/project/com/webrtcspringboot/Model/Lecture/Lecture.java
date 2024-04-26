@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import project.com.webrtcspringboot.Model.User.Users;
+
+import java.util.ArrayList;
 import java.util.List;
 import project.com.webrtcspringboot.Model.flight.Flight;
 
@@ -36,17 +38,20 @@ public class Lecture {
     @Column(nullable = false)
     private String endTime;
 
+    @Column(nullable = false)
+    private String lecturePassword;
+
     @ManyToOne
     @JsonManagedReference
     private Users professor;
 
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JsonManagedReference
-    private List<Users> users;
+    private List<Users> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.REMOVE)
     @JsonBackReference
-    private List<Flight> flights;
+    private List<Flight> flights = new ArrayList<>();
     public Lecture() {
     }
 }

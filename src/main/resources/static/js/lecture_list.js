@@ -31,6 +31,7 @@ $(function() {
                         popupContent += '<p id="search-lecture-day">' + day + '</p>';
                         popupContent += '<p id="search-lecture-startTime">' + startTime + '</p>';
                         popupContent += '<p id="search-lecture-endTime">' + endTime + '</p>';
+                        popupContent += '<input id="search-lecture-password" type="password" class="form-control">';
                         popupContent += '<button class="search-lecture-add btn btn-primary" data-lecture-id="' + lectureId + '">Add</button>';
                         popupContent += '</div><br></div>';
                     }
@@ -42,9 +43,9 @@ $(function() {
 
                     // Add 버튼 클릭 이벤트 처리
                     $(".search-lecture-add").click(function() {
-
                         var lectureId = $(this).data("lecture-id");
-                        addLecture(lectureId);
+                        var password = $(this).siblings(".form-control").val(); // 해당 Add 버튼 옆의 password 값을 가져옴
+                        addLecture(lectureId, password); // addLecture 함수 호출 시 password 값도 함께 전달
                     });
                 } else {
                     // 검색 결과가 없을 경우에 대한 처리
@@ -56,20 +57,30 @@ $(function() {
 
 
      // Add 버튼 클릭 시 강의 추가 요청 보내기
-function addLecture(lectureId) {
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-    $.ajax({
-        url: "/lecture/add/" + lectureId,
-        type: "POST",
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader(header, token);
-        },
-        success: function(data) {
-            console.log(data);
-            closeModal();
-            location.reload();
-        }
-    });
-}
+    function addLecture(lectureId, password) {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            url: "/lecture/add/" + lectureId,
+            type: "POST",
+            data: {password: password}, 
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function(data) {
+                var obj = JSON.parse(data);
+                var flag = obj.success
+                if (flag == true) {
+                    alert("Lecture added successfully.");
+                    closeModal();
+                    location.reload();
+                } else {
+                    alert("Failed to add lecture. Please check the password.");
+                }
+            
+                closeModal();
+                location.reload();
+            }
+        });
+    }
 });

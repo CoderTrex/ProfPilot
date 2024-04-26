@@ -54,17 +54,22 @@
 
     <br><br>
     <div class="delete-lecture">
-        <button class="btn btn-danger" onclick="openModal()" th:if="${userRole != 'prof'}" >Delete Lecture</button>
+        <button class="btn btn-danger" onclick="openModal()">Delete Lecture</button>
         <div id="lecture-popup" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
                 <p>정말 삭제하시겠습니까?</p>
                 <!-- @GetMapping("/delete/{name}") -->
-                <a th:href="@{/lecture/delete/{name}(name=${lecture.id})}">
+                <a th:href="@{/lecture/delete/{name}(name=${lecture.id})}" th:if="${user.role != 'prof'}">
                     <button class="btn btn-danger">삭제</button>
+                </a>
+                <a th:href="@{/lecture/drop/{name}(name=${lecture.id})}" th:if="${user.role == 'prof'}">
+                    <button class="btn btn-danger">삭제(강의 삭제)</button>
                 </a>
             </div>
         </div>
     </div>
+    <br><br>
+
 </body>
 </html>

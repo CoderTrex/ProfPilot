@@ -10,8 +10,11 @@
         <table class="table">
             <tr class="text-center" th:each="lecture, loop : ${lectureList}">
                 <div class="lecture_board">
-                    <td th:if="${user.role == 'prof'}"><a th:href="@{/lecture/start(id=${lecture.id})}" th:text="${lecture.name}"></a></td>
-                    <td th:if="${user.role == 'student'}"><a th:href="@{/lecture/flight(id=${lecture.id})}" th:text="${lecture.name}"></a></td>
+                    <td th:if="${user.role == 'prof'}"><a th:text="${lecture.name}"></a></td>
+                    <td th:if="${user.role == 'prof'}"><a th:href="@{/lecture/make_flight(id=${lecture.id})}" th:text="수업시작"></a></td>
+                    <td th:if="${user.role == 'prof'}"><a th:href="@{/lecture/enter_flight/professor(id=${lecture.id})}" th:text="강의입장"></a></td>
+                    <td th:if="${user.role == 'student'}"><a th:text="${lecture.name}"></a></td>
+                    <td th:if="${user.role == 'student'}"><a th:href="@{/lecture/check_in_flight(id=${lecture.id})}" th:text="강의입장"></a></td>
                     <td th:text="${lecture.LectureDay}"></td>
                     <td th:text="${lecture.startTime}"></td>
                     <td th:text="${lecture.endTime}"></td>

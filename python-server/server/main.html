@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<button onclick="getLocation()">현재위치</button>
+
+<script>
+    $(document).ready(function() {
+                $('#getLocationBtn').click(function() {
+                    getLocation();
+                });
+            });
+
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(sendPositionToServer);
+                } else {
+                    alert("Geolocation is not supported by this browser.");
+                }
+            }
+
+            function sendPositionToServer(position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:5000/send_location",
+                    // url: "http://localhost:1219/aa",
+                    data: JSON.stringify({ "latitude": latitude, "longitude": longitude }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(response) {
+                        alert("서버로 위치 정보를 전송했습니다.");
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("서버로 위치 정보 전송 중 오류가 발생했습니다.");
+                    }
+                });
+            }
+</script>
+</body>
+</html>

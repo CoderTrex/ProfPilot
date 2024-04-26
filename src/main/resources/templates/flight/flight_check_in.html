@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+    <button onclick="getLocation()">현재위치</button>
+    <a th:href="@{|/lecture/boarding|}">강의 입장</a>
+    <script th:inline="javascript">
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendLocationToServer);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function sendLocationToServer(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var id = '[[${flight.id}]]';
+            param = {
+                id: id,
+                latitude: latitude,
+                longitude: longitude
+            };
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                url: 'http://localhost:8080/lecture/check_in_flight',
+                data: param,
+                type: 'POST',
+                beforeSend: function(xhr) {
+                    if (token && header)
+                        xhr.setRequestHeader(header, token);
+                },
+                success: function(response) {
+                    console.log('Location sent successfully.');
+                },
+                error: function(error) {
+                    console.error('Failed to send location:', error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
