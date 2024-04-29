@@ -10,15 +10,7 @@ class MainServer:
         CORS(self.app)
         self.app.add_url_rule('/lecture_check_in', 'lecture_check_in', self.lecture_check_in, methods=['POST'])
         self.app.add_url_rule('/lecture_attendance_create', 'lecture_attendance_create', self.lecture_attendance_create, methods=['POST'])
-        self.app.add_url_rule('/get_location', 'get_location', self.get_location, methods=['POST'])
-        self.list_day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-
-    # @app.route('/get_location', methods=['POST'])
-    # def get_location(self):
-    #     data = request.get_json()
-    #     a = data.get('latitude')
-    #     b = data.get('longitude')
-    #     print("latitude: ", a, "longitude: ", b)
+        self.list_day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] 
 
     def lecture_attendance_create(self):
         data = request.get_json()
@@ -26,15 +18,13 @@ class MainServer:
         lecture_id = data.get('lecture_id')
         flight_id = data.get('flight_id')
 
-        print("lecture_name: ", lecture_name, "lecture_id: ", lecture_id, "flight_id: ", flight_id)
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM lecture_users where lectures_id = %s", (lecture_id,))
+        cursor.execute("SELECT * FROM lecture_users lu LEFT JOIN users us ON lu.users_id = us.id WHERE lu.lectures_id = %s AND us.role != 'prof'", (lecture_id,))
         result = cursor.fetchall()
 
         current_date = datetime.datetime.now().strftime('%Y-%m-%d')
 
         for user in result:
-            print("print debug: ", user)
             cursor.execute("INSERT INTO attendance (date, lect_name, status, flight_id, user_id) VALUES (%s, %s, %s, %s, %s)",\
                                         (current_date, lecture_name, '결석', flight_id, user[1]))
             self.conn.commit()
@@ -54,7 +44,8 @@ class MainServer:
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM lecture WHERE name = %s", (lecture_name,))
         result = cursor.fetchall()
-        start_time = result[0][6]
+        print("result: ", result)
+        start_time = result[0][3]
         lecture_day = result[0][4]
 
         db_lecture_day = lecture_day.split(',')
@@ -107,21 +98,20 @@ class MainServer:
                 if (distance <= lecture_allowed_distance):
                     print("distance: ", distance, "lecture_allowed_distance: ", lecture_allowed_distance)
                     self.insert_attendance(lecture_name, '출석', lecture_id, student_id)
-                    return jsonify({'result': 'success', 'entrance' : 'okay', 'late': 'no', 'distance': 'okay'})
+                    return jsonify({'result': 'success', 'entrance' : 'okay', 'late': 'no', 'distance': 'okay', "case" : "attendance"})
                 else:
-                    return jsonify({'result': 'fail', 'entrance': "no", 'late': "no", 'distance': round(distance - lecture_allowed_distance, 2)})
+                    return jsonify({'result': 'fail', 'entrance': "no", 'late': "no", 'distance': round(distance - lecture_allowed_distance, 2), "case" : "distance fail, time okay"})
             if (now_time >= target_time + 10 and now_time <= target_time + 30):
                 distance = self.measure(lecture_latitude, lecture_longitude, float(student_latitude), float(student_longitude))
                 if (distance <= lecture_allowed_distance):
-                    print("distance: ", distance, "lecture_allowed_distance: ", lecture_allowed_distance)
                     self.insert_attendance(lecture_name, '지각', lecture_id, student_id)
-                    return jsonify({'result': 'success', 'entrance': 'okay', 'late': 'yes', 'distance': 'okay'})
+                    return jsonify({'result': 'success', 'entrance': 'okay', 'late': 'yes', 'distance': 'okay', "case" : "late"})
                 else:
-                    return jsonify({'result': 'fail', 'entrance': 'no', 'late': 'yes', 'distance': round(distance - lecture_allowed_distance, 2)})
+                    return jsonify({'result': 'fail', 'entrance': 'no', 'late': 'yes', 'distance': round(distance - lecture_allowed_distance, 2), "case" : "distance fail, time late"})
             else:    
-                return jsonify({'result': 'fail', 'entrance': 'no', 'late': 'yes', 'distance': 'no'})
+                return jsonify({'result': 'fail', 'entrance': 'no', 'late': 'yes', 'distance': 'no', "case" : "late more than 30 min or came early"})
         else:
-            return jsonify({'result': 'fail', 'entrance': 'no', 'late': 'no', 'distance': 'no'})
+            return jsonify({'result': 'fail', 'entrance': 'no', 'late': 'no', 'distance': 'no', "case" : "not lecture day"})
 
     def run(self):
         self.app.run(debug=True, threaded=True, port=5000)

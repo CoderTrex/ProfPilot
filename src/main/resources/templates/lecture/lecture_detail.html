@@ -36,7 +36,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th style="width:5%">출석</th>
+                <th style="width:5%">일자</th>
                 <th style="width:10%">출석룰</th>
                 <th style="width:10%">학습자료</th>
                 
@@ -44,7 +44,9 @@
         </thead>
         <tbody>
             <tr class="text-center" th:each="flight : ${flightList}">
-                <td><button class="btn btn-primary">출석</button>
+                <td>
+                <a th:href="@{/flight/attendance/detail(id=${flight.id}, date=${flight.today})}" th:text="${flight.today}"></a>
+                </td>
                 <td th:each="file : ${flight.files}">
                     <a th:href="@{/download/{fileName}(fileName=${file})}" th:text="${file}"></a>
                 </td>

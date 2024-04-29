@@ -2,7 +2,6 @@ package project.com.webrtcspringboot.Model.Lecture;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.bridge.IMessage;
 import org.springframework.ui.Model;
 import org.springframework.http.MediaType;
 import org.springframework.http.HttpEntity;
@@ -20,7 +19,7 @@ import project.com.webrtcspringboot.Model.flight.Flight;
 import project.com.webrtcspringboot.Model.flight.FlightService;
 import project.com.webrtcspringboot.Model.flight.FlightRepository;
 import project.com.webrtcspringboot.Model.attendance.Attendance;
-import project.com.webrtcspringboot.Model.attendance.attendanceService;
+import project.com.webrtcspringboot.Model.attendance.AttendanceService;
 import project.com.webrtcspringboot.Model.attendance.AttendanceRepository;
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -46,7 +45,7 @@ public class LectureController {
     private final StorageService storageService;
     private final ObjectMapper objectMapper;
     private final AttendanceRepository AttendanceRepository;
-    private final attendanceService attendanceService;
+    private final AttendanceService attendanceService;
     @GetMapping("/list")
     public String list(Model model, Principal principal) {
         String username = principal.getName();
@@ -79,7 +78,7 @@ public class LectureController {
         model.addAttribute("user", user);
         Lecture lecture = this.lectureRepository.findById(id).get();
         model.addAttribute("lecture", lecture);
-        ArrayList<Flight> flightList = this.flightRepository.findByLectId(id);
+        List<Flight> flightList = this.flightRepository.findByLectId(id);
         model.addAttribute("flightList", flightList);
         return "lecture/lecture_detail";
     }
@@ -150,6 +149,7 @@ public class LectureController {
                 String paramJson = objectMapper.writeValueAsString(param);
                 HttpEntity<String> entity = new HttpEntity<>(paramJson, headers);
                 String response = restTemplate.postForObject(url, entity, String.class);
+
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

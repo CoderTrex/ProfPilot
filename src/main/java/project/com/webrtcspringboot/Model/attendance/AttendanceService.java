@@ -7,7 +7,7 @@ import project.com.webrtcspringboot.Model.flight.Flight;
 
 @RequiredArgsConstructor
 @Service
-public class attendanceService {
+public class AttendanceService {
     private final AttendanceRepository attendanceRepository;
 
     public Attendance isStudentAttended(String lectureName, Flight flight, Users user) {
