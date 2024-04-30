@@ -36,7 +36,7 @@ public class MainController {
 
     @GetMapping("/login_or_signup")
     public String login_or_signup() {
-        return "login_or_signup";
+        return "user/login_or_signup";
     }
 
     @GetMapping("/lobby.html")

@@ -37,15 +37,6 @@
             <ul>
                 <li th:each="file : ${files}">
                     <a th:href="${file}" id="filename" th:text="${file}"></a>
-                    <script>
-                        var fileElement = document.getElementById("filename");
-                        var href = fileElement.getAttribute("href");
-                        var flightId = href.split("?")[0];
-                        var title = flightId.split("/")[5];
-                        console.log(title);
-                        fileElement.textContent = title; // 수정된 부분
-                        console.log(fileElement.textContent);
-                    </script>
                     <button th:href="@{|/upload/delete/${flight.id}/${file}|}">delete</button>
                 </li>
             </ul>

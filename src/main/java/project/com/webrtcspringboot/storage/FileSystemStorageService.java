@@ -1,13 +1,11 @@
 package project.com.webrtcspringboot.storage;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -17,7 +15,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
-import project.com.webrtcspringboot.Model.flight.FlightRepository;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -41,7 +38,10 @@ public class FileSystemStorageService implements StorageService {
 				throw new StorageException("Failed to store empty file.");
 			}
 			Path destinationFolder = Paths.get(this.rootLocation.toString(), prof_name, id.toString());
-			Path destinationFile = destinationFolder.resolve(Paths.get(Objects.requireNonNull(file.getOriginalFilename())))
+//			Path destinationFile = destinationFolder.resolve(Paths.get(Objects.requireNonNull(file.getOriginalFilename())))
+//					.normalize().toAbsolutePath();
+			Path destinationFile = destinationFolder.resolve(Paths.get(
+							new String(Objects.requireNonNull(file.getOriginalFilename()).getBytes(), StandardCharsets.UTF_8)))
 					.normalize().toAbsolutePath();
 			if (!Files.exists(destinationFile)) {
 				Files.createDirectories(destinationFile);
@@ -74,6 +74,23 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	@Override
+	public Stream<Path> loadAll2(String prof_name) {
+		try {
+			Path destinationFolder = Paths.get(this.rootLocation.toString(), prof_name);
+			if (!Files.exists(destinationFolder)) {
+				return Stream.empty();
+			}
+			return Files.walk(destinationFolder, 1)
+					.filter(path -> !path.equals(destinationFolder))
+					.map(destinationFolder::relativize);
+		}
+		catch (IOException e) {
+			throw new StorageException("Failed to read stored files", e);
+		}
+
+	}
+
+	@Override
 	public Path load(String filename) {
 		return rootLocation.resolve(filename);
 	}
@@ -82,23 +99,59 @@ public class FileSystemStorageService implements StorageService {
 	public Resource loadAsResource(String filename) {
 		try {
 			Path file = load(filename);
-
 			Resource resource = new UrlResource(file.toUri());
-//			System.out.println("resource: " + resource);
 			if (resource.exists() || resource.isReadable()) {
-//				System.out.println("resource: 222" + resource);
 				return resource;
 			}
 			else {
-				throw new StorageFileNotFoundException(
-						"Could not read file: " + filename);
-
+				throw new StorageFileNotFoundException("Could not read file: " + filename);
 			}
 		}
 		catch (MalformedURLException e) {
 			throw new StorageFileNotFoundException("Could not read file: " + filename, e);
 		}
 	}
+
+
+	private Long calculateFolderSize(Path folder) throws IOException {
+		final long[] size = {0}; // 배열을 사용하여 내부에서 값을 변경할 수 있도록 함
+		Files.walkFileTree(folder, new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+				size[0] += attrs.size(); // 파일 크기를 합산
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+				// 파일에 접근할 수 없을 때의 예외 처리
+				System.err.println("Failed to access file: " + file + " - " + exc);
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+				if (exc != null) {
+					// 디렉토리에 접근할 수 없을 때의 예외 처리
+					System.err.println("Failed to access directory: " + dir + " - " + exc);
+				}
+				return FileVisitResult.CONTINUE;
+			}
+		});
+		return size[0]; // 계산된 전체 폴더 크기 반환
+	}
+
+	@Override
+	public Long sizeStorageByUser(String prof_name) {
+		try {
+			Path destinationFolder = Paths.get(this.rootLocation.toString(), prof_name);
+			return calculateFolderSize(destinationFolder);
+		}
+		catch (IOException e) {
+			throw new StorageException("Failed to read stored files", e);
+		}
+	}
+
 
 	@Override
 	public void deleteAll() {

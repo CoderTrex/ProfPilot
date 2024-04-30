@@ -11,19 +11,26 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import project.com.webrtcspringboot.Model.User.email.EmailController;
 import project.com.webrtcspringboot.Model.User.email.GenerateRandomString;
+import project.com.webrtcspringboot.Model.flight.Flight;
+import project.com.webrtcspringboot.storage.StorageService;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
+    private final Map<String, Pair<String, String>> emailMap = new HashMap<>();
     private final UserService userService;
     private final UserRepository userRepository;
-    private final Map<String, Pair<String, String>> emailMap = new HashMap<>();
+    private final StorageService storageService;
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -74,6 +81,7 @@ public class UserController {
     public String profile(Model model, Principal principal) {
         Users user = this.userService.findByName(principal.getName());
         model.addAttribute("user", user);
+        model.addAttribute("storageUsage", this.storageService.sizeStorageByUser(user.getName()) / (1024 * 1024));
         return "user/profile";
     }
 
@@ -116,5 +124,50 @@ public class UserController {
         String name = user.getName();
         this.userService.requestProfAuth(email, name);
         return "success";
+    }
+
+
+    @GetMapping("/storage/detail")
+    public String storageDetail(Model model, Principal principal) {
+        Users user = this.userService.findByName(principal.getName());
+        String username = user.getName();
+        model.addAttribute("user", user);
+        model.addAttribute("storageUsage", this.storageService.sizeStorageByUser(user.getName()) / (1024 * 1024));
+
+
+
+
+        // 부모 폴더1 / 파일1, 파일2, 파일3 ...
+        // 부모 폴더2 / 파일1, 파일2, 파일3, 파일4, 파일5 ...
+        // 부모 폴더3 / 파일1, 파일2 ...
+
+//        Map<String, Stream<Path>> hierarchy = new HashMap<>();
+//        Stream<Path> paths = this.storageService.loadAll2(user.getName());
+//        for (Path path : paths.toArray(Path[]::new)) {
+//            String pathStr = path.toString();
+//            Long Pathid = Long.parseLong(pathStr);
+//            Stream<Path> paths2 = this.storageService.loadAll(Pathid, user.getName());
+//            for (Path path2 : paths2.toArray(Path[]::new)) {
+//                hierarchy.put(pathStr, paths2);
+//            }
+//        }
+
+        Map<String, Stream<Path>> hierarchy = new HashMap<>();
+
+        // Get all parent directories
+        Stream<Path> parentDirectories = this.storageService.loadAll2(username);
+
+        // Iterate over each parent directory
+        parentDirectories.forEach(parentDir -> {
+            // Get files in the parent directory
+            String parentDirStr = parentDir.toString();
+            Long parentDirId = Long.parseLong(parentDirStr);
+            Stream<Path> files = this.storageService.loadAll(parentDirId, username);
+            // Put the parent directory and its files into the hierarchy map
+            hierarchy.put(parentDir.toString(), files);
+        });
+
+        model.addAttribute("hierarchy", hierarchy);
+        return "user/storage_detail";
     }
 }

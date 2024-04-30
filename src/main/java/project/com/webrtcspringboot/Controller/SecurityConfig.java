@@ -27,9 +27,11 @@ public class SecurityConfig {
                         ).permitAll().anyRequest().authenticated()
                 )
                 .csrf((csrf) -> csrf
-
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))
                 )
+//                .csrf((csrf) -> csrf.disable()
+//                        .ignoringRequestMatchers(new AntPathRequestMatcher("https://api.tosspayments.com/v1/payments/**"))
+//                )
                 .headers((headers) -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN

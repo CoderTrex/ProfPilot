@@ -20,7 +20,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Controller
-public class WidgetController {
+@RequestMapping("/toss")
+public class TossPayments {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -45,21 +46,21 @@ public class WidgetController {
         obj.put("amount", amount);
         obj.put("paymentKey", paymentKey);
 
-        // TODO: 개발자센터에 로그인해서 내 결제위젯 연동 키 > 시크릿 키를 입력하세요. 시크릿 키는 외부에 공개되면 안돼요.
+        // TODO: 개발자센터에 로그인해서 내 결제창 연동 키 > 시크릿 키를 입력하세요. 시크릿 키는 외부에 공개되면 안돼요.
         // @docs https://docs.tosspayments.com/reference/using-api/api-keys
-        // String widgetSecretKey = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6:";
-       String widgetSecretKey = "test_sk_kYG57Eba3GNZ55DPOBbl8pWDOxmA";
+//        String widgetSecretKey = "test_sk_zXLkKEypNArWmo50nX3lmeaxYG5R";
+         String widgetSecretKey = "test_sk_kYG57Eba3GNZ55DPOBbl8pWDOxmA";
 
         // 토스페이먼츠 API는 시크릿 키를 사용자 ID로 사용하고, 비밀번호는 사용하지 않습니다.
         // 비밀번호가 없다는 것을 알리기 위해 시크릿 키 뒤에 콜론을 추가합니다.
         // @docs https://docs.tosspayments.com/reference/using-api/authorization#%EC%9D%B8%EC%A6%9D
         Base64.Encoder encoder = Base64.getEncoder();
-         byte[] encodedBytes = encoder.encode((widgetSecretKey + ":").getBytes(StandardCharsets.UTF_8));
-        String authorizations = "Basic " + new String(encodedBytes);
+        byte[] encodedBytes = encoder.encode((widgetSecretKey + ":").getBytes("UTF-8"));
+        String authorizations = "Basic " + new String(encodedBytes, 0, encodedBytes.length);
 
         // 결제 승인 API를 호출하세요.
         // 결제를 승인하면 결제수단에서 금액이 차감돼요.
-        // @docs https://docs.tosspayments.com/guides/payment-widget/integration#3-결제-승인하기
+        // @docs https://docs.tosspayments.com/guides/payment/integration#3-결제-승인하기
         URL url = new URL("https://api.tosspayments.com/v1/payments/confirm");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Authorization", authorizations);
@@ -72,7 +73,7 @@ public class WidgetController {
         outputStream.write(obj.toString().getBytes("UTF-8"));
 
         int code = connection.getResponseCode();
-        boolean isSuccess = code == 200;
+        boolean isSuccess = code == 200 ? true : false;
 
         InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
 
@@ -93,12 +94,12 @@ public class WidgetController {
      */
     @RequestMapping(value = "/success", method = RequestMethod.GET)
     public String paymentRequest(HttpServletRequest request, Model model) throws Exception {
-        return "/success";
+        return "toss/success";
     }
 
-    @RequestMapping(value = "/toss", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(HttpServletRequest request, Model model) throws Exception {
-        return "/checkout";
+        return "toss/checkout";
     }
 
     /**
@@ -116,6 +117,6 @@ public class WidgetController {
         model.addAttribute("code", failCode);
         model.addAttribute("message", failMessage);
 
-        return "/fail";
+        return "toss/fail";
     }
 }

@@ -176,6 +176,7 @@ public class LectureController {
                 .collect(Collectors.toList()));
         return  "flight/flight_detail";
     }
+    
     @GetMapping("/enter_flight/student")
     public String enter_flight2(@RequestParam("id") Long id, Model model, Principal principal) {
         Lecture lecture = this.lectureRepository.findById(id).get();
@@ -192,6 +193,7 @@ public class LectureController {
                 .collect(Collectors.toList()));
         return "flight/flight_detail";
     }
+
     @GetMapping("/check_in_flight")
     public String check_in_flight(@RequestParam("id") Long id, Model model, Principal principal) {
         Users user = this.UserRepository.findByName(principal.getName());

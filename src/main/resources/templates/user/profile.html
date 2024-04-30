@@ -85,6 +85,12 @@
                     </script>
                 </div>
             </div>
+            <div>
+                <label for="storage_usage" class="form-label fw-bold">저장소 사용량</label>
+                <span th:text="${storageUsage}"></span>
+                <span>MB / 2000MB</span>
+                <a th:href="@{/user/storage/detail}" class="btn btn-primary">자세히</a>
+            </div>
             <div class="mb-3">
                 <button class="btn btn-primary" id="reset_password">비밀번호 재설정</button>
                 <!-- 비밀번호 재설정 모달 -->
@@ -160,12 +166,6 @@
                     });
                 });
             </script>
-
-            <div class="결제">
-                <button class="btn btn-primary" id="payment">결제</button>
-                <!-- 결제 모달 -->
-                <div class="modal fade
-            </div>
         </div>
     </div>
 </body>

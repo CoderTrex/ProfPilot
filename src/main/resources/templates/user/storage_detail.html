@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage Detail</title>
+</head>
+<body>
+    <h2>Files</h2>
+<!--<div>-->
+<!--    <ul>-->
+<!--        <li th:each="file : ${hierarchy}">-->
+<!--            <a th:href="${file}" id="filename" th:text="${file}"></a>-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--</div>-->
+
+
+    <div>
+        <ul>
+            <li th:each="directory : ${hierarchy}">
+                <span th:text="${directory.key}"></span>
+                <ul>
+                    <li th:each="file : ${directory.value}">
+                        <a th:href="${file}" th:text="${file}"></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>
