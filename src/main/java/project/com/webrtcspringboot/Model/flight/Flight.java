@@ -7,8 +7,6 @@ package project.com.webrtcspringboot.Model.flight;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.aspectj.apache.bcel.classfile.Module;
-import org.springframework.boot.autoconfigure.web.WebProperties;
 import project.com.webrtcspringboot.Model.Lecture.Lecture;
 import project.com.webrtcspringboot.Model.User.Users;
 import project.com.webrtcspringboot.Model.attendance.Attendance;
@@ -24,6 +22,9 @@ public class Flight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String identify;
 
     @Column(nullable = false)
     private String name;

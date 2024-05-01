@@ -32,6 +32,20 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	@Override
+	public void deleteFile(String prof_name, Long flightId, String filename) {
+		try {
+			Path destinationFolder = Paths.get(this.rootLocation.toString(), prof_name, flightId.toString());
+			Path destinationFile = destinationFolder.resolve(Paths.get(filename)).normalize().toAbsolutePath();
+			if (Files.exists(destinationFile)) {
+				Files.delete(destinationFile);
+			}
+		}
+		catch (IOException e) {
+			throw new StorageException("Failed to delete file.", e);
+		}
+	}
+
+	@Override
 	public void store(MultipartFile file, Long id, String prof_name) {
 		try {
 			if (file.isEmpty()) {
@@ -158,6 +172,8 @@ public class FileSystemStorageService implements StorageService {
 		FileSystemUtils.deleteRecursively(rootLocation.toFile());
 	}
 
+
+//	public void delete()
 	@Override
 	public void init() {
 		try {

@@ -23,6 +23,7 @@ public class FlightService {
         Users user = this.UserRepository.findByName(principal.getName());
         Lecture lecture = this.lectureRepository.findById(lectureId).orElseThrow();
         Flight flight = new Flight();
+        flight.setIdentify(lectureId + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
         flight.setName(lectureName);
         flight.setBuilding(lectureBuilding);
         flight.setRoom(lectureRoom);

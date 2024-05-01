@@ -21,7 +21,8 @@ public interface StorageService {
 
 	void deleteAll();
 
+	void deleteFile(String prof_name, Long flightId, String filename);
+
 	Long sizeStorageByUser(String prof_name);
 
-//	Stream<Path> loadAllByUser(String prof_name);
 }

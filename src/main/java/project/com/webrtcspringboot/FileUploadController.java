@@ -66,11 +66,24 @@ public class FileUploadController {
 		String prof_name = flight.getPilot().getName();
 		Users user = userService.findByName(prof_name);
 		long size = this.storageService.sizeStorageByUser(user.getName()) / (1024 * 1024);
-		if (size > 2 * 1024 * 1024) {
+		long totalSize = size + file.getSize() / (1024 * 1024);
+		if (totalSize > 2048) {
 			redirectAttributes.addFlashAttribute("message", "You have exceeded the storage limit of 2GB");
+			return "redirect:/storage/upgrade_plans/" + size;
+		} else {
+			storageService.store(file, flightId, prof_name);
 			return "redirect:/lecture/enter_flight/professor?id=" + lecture.getId();
 		}
-		storageService.store(file, flightId, prof_name);
+	}
+
+//	th:href="@{|/upload/delete/${user.name}/${flight.id}/${file}|}"
+	@GetMapping("/delete/{prof_name}/{flightId}/{filename:.+}")
+	public String deleteFile(@PathVariable("prof_name") String prof_name,
+							 @PathVariable("flightId") Long flightId,
+							 @PathVariable("filename") String filename) {
+		Flight flight = FlightRepository.findById(flightId).orElseThrow(() -> new IllegalArgumentException("Invalid flight Id:" + flightId));
+		Lecture lecture = flight.getLecture();
+		storageService.deleteFile(prof_name, flightId, filename);
 		return "redirect:/lecture/enter_flight/professor?id=" + lecture.getId();
 	}
 

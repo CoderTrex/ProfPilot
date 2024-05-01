@@ -5,8 +5,8 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Room</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <!-- <link rel='stylesheet' type='text/css' media='screen' href='/styles/main.css'> -->
-    <!-- <link rel='stylesheet' type='text/css' media='screen' href='/styles/lobby.css'> -->
+     <link rel='stylesheet' type='text/css' media='screen' href='/styles/main.css'>
+     <link rel='stylesheet' type='text/css' media='screen' href='/styles/lobby.css'>
 </head>
 <body>
     <header id="nav">
@@ -45,7 +45,7 @@
                  </div>
                 <div class="form__field__wrapper">
                     <label>Room Name</label>
-                    <input type="text" name="room"  placeholder="${flight.name}" />
+                    <input type="text" name="room" th:value="${flight_id}" readonly/>
                 </div>
                  <div class="form__field__wrapper">
                      <button type="submit">Go to Room

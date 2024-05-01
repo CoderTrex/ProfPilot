@@ -21,6 +21,8 @@ import project.com.webrtcspringboot.Model.flight.FlightRepository;
 import project.com.webrtcspringboot.Model.attendance.Attendance;
 import project.com.webrtcspringboot.Model.attendance.AttendanceService;
 import project.com.webrtcspringboot.Model.attendance.AttendanceRepository;
+
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -82,7 +84,7 @@ public class LectureController {
         model.addAttribute("flightList", flightList);
         return "lecture/lecture_detail";
     }
-    @GetMapping("/room.html")
+    @GetMapping("boarding/room.html")
     public String room(@RequestParam("room") String roomName, Model model) {
         model.addAttribute("roomName", roomName);
         return "webrtc/room";
@@ -239,8 +241,12 @@ public class LectureController {
             return "redirect:/";
         }
     }
-    @RequestMapping("/boarding")
-    public String boarding(Model model, Principal principal) {
+    @RequestMapping("/boarding/{id}")
+    public String boarding(@PathVariable("id") Long id, Model model, Principal principal) {
+        Flight flight = this.flightRepository.findById(id).get();
+        String flight_name = new String(flight.getName().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
+        model.addAttribute("flight_name", flight_name);
+        model.addAttribute("flight_id", flight.getIdentify());
         return "webrtc/lobby";
     }
 }

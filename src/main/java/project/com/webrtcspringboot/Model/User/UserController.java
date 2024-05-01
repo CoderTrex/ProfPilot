@@ -134,36 +134,13 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("storageUsage", this.storageService.sizeStorageByUser(user.getName()) / (1024 * 1024));
 
-
-
-
-        // 부모 폴더1 / 파일1, 파일2, 파일3 ...
-        // 부모 폴더2 / 파일1, 파일2, 파일3, 파일4, 파일5 ...
-        // 부모 폴더3 / 파일1, 파일2 ...
-
-//        Map<String, Stream<Path>> hierarchy = new HashMap<>();
-//        Stream<Path> paths = this.storageService.loadAll2(user.getName());
-//        for (Path path : paths.toArray(Path[]::new)) {
-//            String pathStr = path.toString();
-//            Long Pathid = Long.parseLong(pathStr);
-//            Stream<Path> paths2 = this.storageService.loadAll(Pathid, user.getName());
-//            for (Path path2 : paths2.toArray(Path[]::new)) {
-//                hierarchy.put(pathStr, paths2);
-//            }
-//        }
-
         Map<String, Stream<Path>> hierarchy = new HashMap<>();
-
         // Get all parent directories
         Stream<Path> parentDirectories = this.storageService.loadAll2(username);
-
-        // Iterate over each parent directory
         parentDirectories.forEach(parentDir -> {
-            // Get files in the parent directory
             String parentDirStr = parentDir.toString();
             Long parentDirId = Long.parseLong(parentDirStr);
             Stream<Path> files = this.storageService.loadAll(parentDirId, username);
-            // Put the parent directory and its files into the hierarchy map
             hierarchy.put(parentDir.toString(), files);
         });
 

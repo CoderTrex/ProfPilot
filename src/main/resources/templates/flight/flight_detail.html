@@ -37,10 +37,19 @@
             <ul>
                 <li th:each="file : ${files}">
                     <a th:href="${file}" id="filename" th:text="${file}"></a>
-                    <button th:href="@{|/upload/delete/${flight.id}/${file}|}">delete</button>
+                    <button id="deleteButton">삭제</button>
                 </li>
             </ul>
         </div>
-        <a th:href="@{|/lecture/boarding|}">강의 입장</a>
+        <a th:href="@{|/lecture/boarding/${flight.id}}">강의 입장</a>
     </div>
+    <script th:inline="javascript">
+        document.getElementById("deleteButton").addEventListener("click", function() {
+            var userName = /*[[${user.name}]]*/ '';
+            var flightId = /*[[${flight.id}]]*/ ''
+            var file     = /*[[${file}]]*/ '';
+            var url = '/upload/delete/' + userName + '/' + flightId + '/' + file;
+            window.location.href = url;
+        });
+    </script>
 </html>
