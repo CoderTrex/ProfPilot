@@ -60,7 +60,7 @@ public class FileUploadController {
 		String prof_name = prof.getName();
 		Users user = userService.findByName(prof.getName());
 		long storage_size = (this.storageService.sizeStorageByUser(user.getName()) / (1024 * 1024));
-		long file_size = + (file.getSize() / (1024 * 1024));
+		long file_size = +(file.getSize() / (1024 * 1024));
 		long limit = 2048;
 
 		String user_status = user.getStatus();

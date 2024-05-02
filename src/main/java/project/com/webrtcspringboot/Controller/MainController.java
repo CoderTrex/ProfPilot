@@ -28,7 +28,7 @@ public class MainController {
         if (principal == null) {
             return "redirect:/login_or_signup";
         }
-        Users user = this.userService.findByName(principal.getName());
+        Users user = this.userService.findByEmail(principal.getName());
         model.addAttribute("lectureList", this.lectureRepository.findAllByUserId(user.getId()));
         model.addAttribute("user", user);
         return "main";

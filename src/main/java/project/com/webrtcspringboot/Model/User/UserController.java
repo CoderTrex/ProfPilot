@@ -75,7 +75,7 @@ public class UserController {
 
     @GetMapping("/profile")
     public String profile(Model model, Principal principal) {
-        Users user = this.userService.findByName(principal.getName());
+        Users user = this.userService.findByEmail(principal.getName());
         model.addAttribute("user", user);
         model.addAttribute("storageUsage", this.storageService.sizeStorageByUser(user.getName()) / (1024 * 1024));
 
@@ -123,7 +123,7 @@ public class UserController {
 //    request_prof_auth',
     @PostMapping("/request_prof_auth")
     public @ResponseBody String requestProfAuth(Principal principal) {
-        Users user = this.userService.findByName(principal.getName());
+        Users user = this.userService.findByEmail(principal.getName());
         String email = user.getEmail();
         String name = user.getName();
         this.userService.requestProfAuth(email, name);
@@ -132,7 +132,7 @@ public class UserController {
 
     @GetMapping("/storage/detail")
     public String storageDetail(Model model, Principal principal) {
-        Users user = this.userService.findByName(principal.getName());
+        Users user = this.userService.findByEmail(principal.getName());
         String username = user.getName();
         model.addAttribute("user", user);
         model.addAttribute("storageUsage", this.storageService.sizeStorageByUser(user.getName()) / (1024 * 1024));
@@ -154,7 +154,7 @@ public class UserController {
 //    <a th:href="@{/user/plan/upgrade}" class="btn btn-primary">요금제 변경</a>
     @GetMapping("/plan/upgrade")
     public String planUpgrade(Model model, Principal principal) {
-        Users user = this.userService.findByName(principal.getName());
+        Users user = this.userService.findByEmail(principal.getName());
         model.addAttribute("user", user);
         return "user/plan_upgrade";
     }

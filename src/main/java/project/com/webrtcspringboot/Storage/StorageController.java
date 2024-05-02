@@ -38,7 +38,7 @@ public class StorageController {
     @RequestMapping("/purchase/{version}")
     public String purchase(@PathVariable int version, Model model, Principal principal) {
         model.addAttribute("version", version);
-        Users user = this.userService.findByName(principal.getName());
+        Users user = this.userService.findByEmail(principal.getName());
         if (version == 1) {
             model.addAttribute("amount", 10000);
             model.addAttribute("orderName", "Storage Service: 20GB");
@@ -60,7 +60,7 @@ public class StorageController {
     public ResponseEntity<String> updateStorage(@RequestBody Map<String, String> requestBody, Principal principal) {
         String userStatus = requestBody.get("user_status");
         try {
-            Users user = this.userService.findByName(principal.getName());
+            Users user = this.userService.findByEmail(principal.getName());
             if (user != null) {
                 user.setStatus(userStatus);
                 this.userService.save(user);

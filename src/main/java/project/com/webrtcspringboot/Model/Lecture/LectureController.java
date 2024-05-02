@@ -51,7 +51,7 @@ public class LectureController {
     @GetMapping("/list")
     public String list(Model model, Principal principal) {
         String username = principal.getName();
-        Users user = this.UserRepository.findByName(username);
+        Users user = this.UserRepository.findByEmail(username);
         Long userId = user.getId();
         List<Lecture> lectureList = this.lectureRepository.findAllByUserId(userId);
         model.addAttribute("userRole", user.getRole());
@@ -76,7 +76,7 @@ public class LectureController {
     }
     @GetMapping("/enter")
     public String enter(@RequestParam("id") Long id, @RequestParam("lectureName") String lectureName, Model model, Principal principal) {
-        Users user = this.UserRepository.findByName(principal.getName());
+        Users user = this.UserRepository.findByEmail(principal.getName());
         model.addAttribute("user", user);
         Lecture lecture = this.lectureRepository.findById(id).get();
         model.addAttribute("lecture", lecture);
@@ -117,7 +117,7 @@ public class LectureController {
     public String flight(@RequestParam("id") Long id, Model model, Principal principal) throws JsonProcessingException {
         Lecture lecture = this.lectureRepository.findById(id).get();
         model.addAttribute("lecture", lecture);
-        Users user = this.UserRepository.findByName(principal.getName());
+        Users user = this.UserRepository.findByEmail(principal.getName());
         Flight flight = this.flightRepository.findByTodayAndLectId(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), lecture.getId());
 
         if (flight == null){
@@ -161,7 +161,7 @@ public class LectureController {
     }
     @GetMapping("/enter_flight/professor")
     public String enter_flight1(@RequestParam("id") Long id, Model model, Principal principal) {
-        Users user = this.UserRepository.findByName(principal.getName());
+        Users user = this.UserRepository.findByEmail(principal.getName());
         if (user.getRole().equals("student")) {
             return "redirect:/lecture/list";
         }
@@ -183,7 +183,7 @@ public class LectureController {
     public String enter_flight2(@RequestParam("id") Long id, Model model, Principal principal) {
         Lecture lecture = this.lectureRepository.findById(id).get();
         model.addAttribute("lecture", lecture);
-        Users user = this.UserRepository.findByName(principal.getName());
+        Users user = this.UserRepository.findByEmail(principal.getName());
         Flight flight = this.flightRepository.findByTodayAndLectId(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), lecture.getId());
         String prof_name = flight.getPilot().getName();
         model.addAttribute("flight", flight);
@@ -198,7 +198,7 @@ public class LectureController {
 
     @GetMapping("/check_in_flight")
     public String check_in_flight(@RequestParam("id") Long id, Model model, Principal principal) {
-        Users user = this.UserRepository.findByName(principal.getName());
+        Users user = this.UserRepository.findByEmail(principal.getName());
         Lecture lecture = this.lectureRepository.findById(id).get();
         Flight flight = flightRepository.findByTodayAndLectId(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), lecture.getId());
         model.addAttribute("flight", flight);
@@ -207,7 +207,7 @@ public class LectureController {
     }
     @PostMapping("/check_in_flight")
     public String check_in_flight(@RequestParam("id") Long id, @RequestParam("latitude") String latitude, @RequestParam("longitude") String longitude, Principal principal) {
-        Users user = this.UserRepository.findByName(principal.getName());
+        Users user = this.UserRepository.findByEmail(principal.getName());
         Flight flight = this.flightRepository.findById(id).get();
         Lecture lecture = this.lectureRepository.findById(flight.getLecture().getId()).get();
         Attendance attendance = this.attendanceService.isStudentAttended(lecture.getName(), flight, user);

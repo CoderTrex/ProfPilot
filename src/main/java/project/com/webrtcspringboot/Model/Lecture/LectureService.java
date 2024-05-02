@@ -29,7 +29,7 @@ public class LectureService {
         lecture.setStartTime(lectureStartTime);
         lecture.setEndTime(lectureEndTime);
         lecture.setLecturePassword(lecturePassword);
-        Users user = this.userRepository.findByName(principal.getName());
+        Users user = this.userRepository.findByEmail(principal.getName());
         lecture.setProfessor(user);
         this.lectureRepository.save(lecture);
         return lecture.getId();
@@ -38,7 +38,7 @@ public class LectureService {
     public void addUser(Long lectureId, Principal principal) {
         Optional<Lecture> lecture = this.lectureRepository.findById(lectureId);
         if (lecture.isPresent()) {
-            Users user = this.userRepository.findByName(principal.getName());
+            Users user = this.userRepository.findByEmail(principal.getName());
             if (lecture.get().getUsers().contains(user)) {
                 return;
             }
@@ -54,7 +54,7 @@ public class LectureService {
     public void addProf(Long lectureId, Principal principal) {
         Optional<Lecture> lecture = this.lectureRepository.findById(lectureId);
         if (lecture.isPresent()) {
-            Users user = this.userRepository.findByName(principal.getName());
+            Users user = this.userRepository.findByEmail(principal.getName());
             lecture.get().getUsers().add(user);
             this.lectureRepository.save(lecture.get());
         } else {
@@ -65,7 +65,7 @@ public class LectureService {
 
     public void deleteUser(Long id, Principal principal) {
         Optional<Lecture> lecture = Optional.ofNullable(this.lectureRepository.findById(id).orElse(null));
-        Users user = this.userRepository.findByName(principal.getName());
+        Users user = this.userRepository.findByEmail(principal.getName());
         if (lecture.isPresent()) {
             if (lecture.get().getUsers().contains(user)) {
                 lecture.get().getUsers().remove(user);
