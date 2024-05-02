@@ -14,6 +14,9 @@ public class UserCreateForm {
     @NotEmpty(message = "name is required")
     private String name;
 
+//    @NotEmpty
+//    private String realName;
+
     @Email
     private String email;
 

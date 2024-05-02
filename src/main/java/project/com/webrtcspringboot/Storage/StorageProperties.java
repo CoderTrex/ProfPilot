@@ -1,4 +1,4 @@
-package project.com.webrtcspringboot.storage;
+package project.com.webrtcspringboot.Storage;
 
 import lombok.Getter;
 import lombok.Setter;

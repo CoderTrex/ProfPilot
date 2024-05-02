@@ -88,11 +88,13 @@
             <div>
                 <label for="storage_usage" class="form-label fw-bold">저장소 사용량</label>
                 <span th:text="${storageUsage}"></span>
-                <span>MB / 2000MB</span>
+                <span>MB / </span>
+                <span th:text="${storageLimit}"></span>
+                <span>GB</span>
                 <a th:href="@{/user/storage/detail}" class="btn btn-primary">자세히</a>
             </div>
             <div id="upgrade_plan">
-                <a th:href="@{/user/plan/upgrade}" class="btn btn-primary">요금제 변경</a>
+                <a th:href="@{/storage/upgrade}" class="btn btn-primary">요금제 변경</a>
             </div>
             <div class="mb-3">
                 <button class="btn btn-primary" id="reset_password">비밀번호 재설정</button>

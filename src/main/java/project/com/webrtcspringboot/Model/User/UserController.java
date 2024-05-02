@@ -1,7 +1,6 @@
 package project.com.webrtcspringboot.Model.User;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.util.Pair;
@@ -11,14 +10,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import project.com.webrtcspringboot.Model.User.email.EmailController;
 import project.com.webrtcspringboot.Model.User.email.GenerateRandomString;
-import project.com.webrtcspringboot.Model.flight.Flight;
-import project.com.webrtcspringboot.storage.StorageService;
+import project.com.webrtcspringboot.Storage.StorageService;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -82,6 +78,14 @@ public class UserController {
         Users user = this.userService.findByName(principal.getName());
         model.addAttribute("user", user);
         model.addAttribute("storageUsage", this.storageService.sizeStorageByUser(user.getName()) / (1024 * 1024));
+
+        if (user.getStatus().equals("Premium")) {
+            model.addAttribute("storageLimit", 20);
+        } else if (user.getStatus().equals("superPremium")) {
+            model.addAttribute("storageLimit", 50);
+        } else {
+            model.addAttribute("storageLimit", 2);
+        }
         return "user/profile";
     }
 
@@ -126,7 +130,6 @@ public class UserController {
         return "success";
     }
 
-
     @GetMapping("/storage/detail")
     public String storageDetail(Model model, Principal principal) {
         Users user = this.userService.findByName(principal.getName());
@@ -147,4 +150,13 @@ public class UserController {
         model.addAttribute("hierarchy", hierarchy);
         return "user/storage_detail";
     }
+
+//    <a th:href="@{/user/plan/upgrade}" class="btn btn-primary">요금제 변경</a>
+    @GetMapping("/plan/upgrade")
+    public String planUpgrade(Model model, Principal principal) {
+        Users user = this.userService.findByName(principal.getName());
+        model.addAttribute("user", user);
+        return "user/plan_upgrade";
+    }
 }
+

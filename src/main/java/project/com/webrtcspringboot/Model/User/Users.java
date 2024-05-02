@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Controller;
 import project.com.webrtcspringboot.Model.Lecture.Lecture;
 import project.com.webrtcspringboot.Model.attendance.Attendance;
 import project.com.webrtcspringboot.Model.flight.Flight;
@@ -22,9 +23,15 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String identifier;
+
     @Email
     @Column(unique = true)
     private String email;
+
+//    @Column(nullable = false)
+//    private String realName;
 
     @Column(nullable = false)
     private String name;

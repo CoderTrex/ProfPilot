@@ -1,4 +1,4 @@
-package project.com.webrtcspringboot.storage;
+package project.com.webrtcspringboot.Storage;
 
 import java.io.IOException;
 import java.io.InputStream;

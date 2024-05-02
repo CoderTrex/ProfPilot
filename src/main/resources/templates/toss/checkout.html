@@ -54,11 +54,11 @@
     <h4 style="text-align: left; margin-top: 40px">결제내역</h4>
     <div class="p-grid typography--p">
         <div class="p-grid-col text--left">결제금액</div>
-        <div class="p-grid-col text--right">15,000원</div>
+        <div class="p-grid-col text--right"><span th:text="${amount}"></span>원</div>
     </div>
     <div class="p-grid typography--p" style="margin-top: 10px">
         <div class="p-grid-col text--left">주문상품 정보</div>
-        <div class="p-grid-col text--right">토스 티셔츠 외 2건</div>
+        <div class="p-grid-col text--right"><span th:text="${orderName}"></span></div>
     </div>
 
     <!-- 결제하기 버튼 -->
@@ -143,10 +143,10 @@
     function initPaymentData(selectedMethod, selectedOption) {
       const generateRandomString = () => window.btoa(Math.random()).slice(0, 20);
       const paymentData = {
-        amount: 15000,
+        amount: '[[${amount}]]',
         orderId: generateRandomString(),
-        orderName: "토스 티셔츠 외 2건",
-        customerName: "박토스",
+        orderName: '[[${orderName}]]',
+        customerName: '[[${customerName}]]',
         successUrl: window.location.origin + "/toss/success",
         failUrl: window.location.origin + "/toss/fail",
         flowMode: selectedMethod === "tossPayments" ? "DEFAULT" : "DIRECT", // 카드사・간편결제사 결제창은 'DIRECT'로 설정

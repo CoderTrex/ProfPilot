@@ -54,20 +54,29 @@
     <div id="userCapacity">
         <p>기본 용량: 2GB (단위: decimal)</p>
         <!-- 사용량은 타임리프 변수로부터 받아와 표시 -->
-        <span th:text="'현재 사용 중인 용량: ' + ${size} + 'MB (단위: decimal)'"></span>
+        <span th:text="'현재 사용 중인 용량: ' + ${storage_size} + 'MB'"></span>
     </div>
 
     <!-- 용량 초과 시에 보여줄 구매 추천 메시지 -->
     <div id="recommendation">
-        <p>현재 사용 중인 용량이 2GB를 초과하였습니다.</p>
-        <p>추가 용량을 구매하시겠습니까?</p>
+        <div th:if="${version == 1}">
+            <div th:if="${storage_size > 2048}">
+                <p>현재 사용 중인 용량이 2GB를 초과하였습니다.</p>
+            </div>
+            <div th:if="${storage_size + file_size > 2048}">
+                <p>해당 파일은 업로드 할 수 없습니다. 용량을 추가로 구매해주세요.</p>
+                <span th:text="'파일 용량: ' + ${file_size} + 'MB'"></span>
+            </div>
+        </div>
+
         <!-- 구매 정보 안내 -->
         <br>
         <p>Plan1. 매달 $10를 지불하면 추가 20GB의 용량을 사용할 수 있습니다.</p>
-         <a href="/storage/purchase/1" id="purchaseButton">Plan1. 구매하기</a>
+        <a href="/storage/purchase/1" id="purchaseButton1">Plan1. 구매하기</a>
+
         <br>
         <p>Plan2. 매달 $20를 지불하면 추가 50GB의 용량을 사용할 수 있습니다.</p>
-         <a href="/storage/purchase/1" id="purchaseButton">Plan2. 구매하기</a>
+        <a href="/storage/purchase/2" id="purchaseButton2">Plan2. 구매하기</a>
         <br>
     </div>
 </div>

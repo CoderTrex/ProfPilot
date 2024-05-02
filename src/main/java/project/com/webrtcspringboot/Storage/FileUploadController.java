@@ -1,21 +1,16 @@
-package project.com.webrtcspringboot;
+package project.com.webrtcspringboot.Storage;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import project.com.webrtcspringboot.Model.Lecture.Lecture;
@@ -23,8 +18,6 @@ import project.com.webrtcspringboot.Model.User.UserService;
 import project.com.webrtcspringboot.Model.flight.FlightRepository;
 import project.com.webrtcspringboot.Model.User.Users;
 import project.com.webrtcspringboot.Model.flight.Flight;
-import project.com.webrtcspringboot.storage.StorageFileNotFoundException;
-import project.com.webrtcspringboot.storage.StorageService;
 
 
 @RequiredArgsConstructor
@@ -63,13 +56,28 @@ public class FileUploadController {
 								   RedirectAttributes redirectAttributes) {
 		Flight flight = FlightRepository.findById(flightId).orElseThrow(() -> new IllegalArgumentException("Invalid flight Id:" + flightId));
 		Lecture lecture = flight.getLecture();
-		String prof_name = flight.getPilot().getName();
-		Users user = userService.findByName(prof_name);
-		long size = this.storageService.sizeStorageByUser(user.getName()) / (1024 * 1024);
-		long totalSize = size + file.getSize() / (1024 * 1024);
-		if (totalSize > 2048) {
-			redirectAttributes.addFlashAttribute("message", "You have exceeded the storage limit of 2GB");
-			return "redirect:/storage/upgrade_plans/" + size;
+		Users prof = flight.getPilot();
+		String prof_name = prof.getName();
+		Users user = userService.findByName(prof.getName());
+		long storage_size = (this.storageService.sizeStorageByUser(user.getName()) / (1024 * 1024));
+		long file_size = + (file.getSize() / (1024 * 1024));
+		long limit = 2048;
+
+		String user_status = user.getStatus();
+		if (user_status.equals("Premium")) {
+			// 20GB limit = 20480MB
+			limit = 20480;
+		}
+		if (user_status.equals("superPremium")) {
+			// 50GB limit = 51200MB
+			limit = 51200;
+		}
+		if (storage_size + file_size > limit) {
+			redirectAttributes.addFlashAttribute("message", "You have exceeded the storage limit of " + limit + "MB.");
+			if (storage_size > limit)
+				return "redirect:/storage/upgrade_plans/" + storage_size + "/" + file_size;
+			else
+				return "redirect:/storage/upgrade_plans/" + storage_size + "/" + file_size;
 		} else {
 			storageService.store(file, flightId, prof_name);
 			return "redirect:/lecture/enter_flight/professor?id=" + lecture.getId();

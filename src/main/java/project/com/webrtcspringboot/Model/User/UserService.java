@@ -1,6 +1,7 @@
 package project.com.webrtcspringboot.Model.User;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import project.com.webrtcspringboot.Model.Lecture.Lecture;
@@ -21,16 +22,30 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
+    public void save(Users user) {
+        this.userRepository.save(user);
+    }
+
+    public Users findById(Long id) {
+        return this.userRepository.findById(id).orElse(null);
+    }
+
     public Users findByName(String name) {
         return this.userRepository.findByName(name);
     }
+
+    public Users findByEmail(String email) {
+        return this.userRepository.findByEmail(email);
+    }
     public void signup(String username, String email, String password) {
+        GenerateRandomString generateRandomString = new GenerateRandomString();
         Users user = new Users();
         user.setName(username);
         user.setEmail(email);
+        user.setIdentifier(generateRandomString.getRandomPassword2(10) + username);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole("student");
-        user.setStatus("activate");
+        user.setStatus("normal");
         this.userRepository.save(user);
     }
 
@@ -57,7 +72,6 @@ public class UserService {
         }
     }
 
-//    this.userService.requestProfAuth(email);  해당 이메일을 서비스의 공식계정 이메일에 요청하는 이메일을 보내게 한다.
     public void requestProfAuth(String email, String name) {
         EmailController.sendEmailProfAuth(email, name);
     }

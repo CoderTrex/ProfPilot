@@ -1,4 +1,4 @@
-package project.com.webrtcspringboot.Controller;
+package project.com.webrtcspringboot.Controller.security;
 
 
 import org.springframework.context.annotation.Bean;
@@ -21,9 +21,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(
-                                new AntPathRequestMatcher("/upload/**"),
-                                new AntPathRequestMatcher("/**"),
-                                new AntPathRequestMatcher("/user/send_code_email/**")
+                                new AntPathRequestMatcher("/**")
                         ).permitAll().anyRequest().authenticated()
                 )
                 .csrf((csrf) -> csrf

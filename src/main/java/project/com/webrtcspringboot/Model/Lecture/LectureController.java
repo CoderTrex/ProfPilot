@@ -11,8 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
-import project.com.webrtcspringboot.FileUploadController;
-import project.com.webrtcspringboot.storage.StorageService;
+import project.com.webrtcspringboot.Storage.FileUploadController;
+import project.com.webrtcspringboot.Storage.StorageService;
 import project.com.webrtcspringboot.Model.User.Users;
 import project.com.webrtcspringboot.Model.User.UserRepository;
 import project.com.webrtcspringboot.Model.flight.Flight;
@@ -207,7 +207,6 @@ public class LectureController {
     }
     @PostMapping("/check_in_flight")
     public String check_in_flight(@RequestParam("id") Long id, @RequestParam("latitude") String latitude, @RequestParam("longitude") String longitude, Principal principal) {
-        System.out.println("check_in_flight");
         Users user = this.UserRepository.findByName(principal.getName());
         Flight flight = this.flightRepository.findById(id).get();
         Lecture lecture = this.lectureRepository.findById(flight.getLecture().getId()).get();
@@ -221,9 +220,6 @@ public class LectureController {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             Map<String, String> param = new HashMap<>();
-            System.out.println("student_id: " + user.getId().toString() + " lecture_name: " + lecture.getName() + " lecture_id: " + lecture.getId().toString() + " lecture_building: " + lecture.getBuilding() + " student_latitude: " + latitude + " student_longitude: " + longitude);
-
-
             param.put("student_id", user.getId().toString());
             param.put("lecture_name", lecture.getName());
             param.put("lecture_id", lecture.getId().toString());

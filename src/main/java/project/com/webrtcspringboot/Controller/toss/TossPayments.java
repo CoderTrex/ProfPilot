@@ -1,4 +1,4 @@
-package project.com.webrtcspringboot.Controller;
+package project.com.webrtcspringboot.Controller.toss;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.json.simple.JSONObject;
@@ -27,7 +27,6 @@ public class TossPayments {
 
     @RequestMapping(value = "/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
-
         JSONParser parser = new JSONParser();
         String orderId;
         String amount;
@@ -81,7 +80,6 @@ public class TossPayments {
         Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
         responseStream.close();
-
         return ResponseEntity.status(code).body(jsonObject);
     }
 
@@ -97,7 +95,7 @@ public class TossPayments {
         return "toss/success";
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     public String index(HttpServletRequest request, Model model) throws Exception {
         return "toss/checkout";
     }

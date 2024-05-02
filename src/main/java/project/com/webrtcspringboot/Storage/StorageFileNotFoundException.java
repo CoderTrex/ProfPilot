@@ -1,4 +1,4 @@
-package project.com.webrtcspringboot.storage;
+package project.com.webrtcspringboot.Storage;
 
 
 public class StorageFileNotFoundException extends StorageException {

@@ -27,7 +27,6 @@ public class AttendanceController {
 
     @PostMapping("/prof/click/{status}/{id}/{Flight}")
     public String profClickAttend(@PathVariable("status") String status, @PathVariable("attendanceId") Long id, @PathVariable("flightId") Flight flight, Principal principal, Model model) {
-        System.out.println("출석처리 시작");
         Users user = userRepository.findByName(principal.getName());
         if (!Objects.equals(user.getRole(), "prof")) {
             return "redirect:/";
@@ -40,7 +39,6 @@ public class AttendanceController {
         Attendance attendance = this.attendanceRepository.findById(id).orElseThrow();
         attendance.setStatus(status);
         this.attendanceRepository.save(attendance);
-        System.out.println("출석처리 완료:" + attendance.getUser().getName() + " " +  attendance.getStatus());
         return "flight/flight_attendance_detail";
     }
 

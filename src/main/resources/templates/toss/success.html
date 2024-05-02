@@ -4,8 +4,11 @@
     <meta charset="utf-8" />
     <link rel="icon" href="https://static.toss.im/icons/png/4x/icon-toss-logo.png" />
     <link rel="stylesheet" type="text/css" href="/styles/toss.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>토스페이먼츠 샘플 프로젝트</title>
 </head>
 
@@ -51,10 +54,15 @@
       };
       console.log(requestData);
 
+      var token = $("meta[name='_csrf']").attr("content");
+      var header = $("meta[name='_csrf_header']").attr("content");
+      console.log(token);
+      console.log(header);
       const response = await fetch("/toss/confirm", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-CSRF-TOKEN": token,
         },
         body: JSON.stringify(requestData),
       });
@@ -67,14 +75,50 @@
         window.location.href = `/toss/fail?message=${json.message}&code=${json.code}`;
       }
 
+      // 결제 성공시 orderName에 따른 유저의 클라우드 용량을 증가시키는 비즈니스 로직 구현.
+      var done = json.status;
+      var status = "normal"
+      if (done == "DONE") {
+        var orderName = json.orderName;
+        if (orderName.includes("Storage Service")) {
+          if (orderName.includes("20GB")){
+            status = "Premium";
+            console.log("20GB");
+          }
+          else if (orderName.includes("50GB")) {
+            status = "superPremium";
+            console.log("50GB");
+          }
+          var capacity = json.capacity;
+          var token = $("meta[name='_csrf']").attr("content");
+          var header = $("meta[name='_csrf_header']").attr("content");
+          var data = {
+            user_status: status,
+          };
+          console.log(data.user_status);
+          $.ajax({
+            type: 'POST',
+            url: '/storage/update',
+            contentType: 'application/json',
+            headers: {
+              'X-CSRF-TOKEN': token
+            },
+            data: JSON.stringify(data),
+          }).done(function (data) {
+            console.log(data);
+          }).fail(function (error) {
+            console.log(error);
+          });
+        }
+      }
+
       // TODO: 결제 성공 비즈니스 로직을 구현하세요.
-      // console.log(json);
       return json;
     }
     confirm().then(function (data) {
       document.getElementById("response").innerHTML = `<pre>${JSON.stringify(data, null, 4)}</pre>`;
     });
-
+    
     const paymentKeyElement = document.getElementById("paymentKey");
     const orderIdElement = document.getElementById("orderId");
     const amountElement = document.getElementById("amount");
