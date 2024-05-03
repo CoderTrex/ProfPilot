@@ -21,10 +21,11 @@ class MainServer:
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM lecture_users lu LEFT JOIN users us ON lu.users_id = us.id WHERE lu.lectures_id = %s AND us.role != 'prof'", (lecture_id,))
         result = cursor.fetchall()
-
+        print("result: ", result)
+        
         current_date = datetime.datetime.now().strftime('%Y-%m-%d')
-
         for user in result:
+            print("user: ", user)
             cursor.execute("INSERT INTO attendance (date, lect_name, status, flight_id, user_id) VALUES (%s, %s, %s, %s, %s)",\
                                         (current_date, lecture_name, '결석', flight_id, user[1]))
             self.conn.commit()
@@ -45,7 +46,7 @@ class MainServer:
         cursor.execute("SELECT * FROM lecture WHERE name = %s", (lecture_name,))
         result = cursor.fetchall()
         print("result: ", result)
-        start_time = result[0][3]
+        start_time = result[0][7]
         lecture_day = result[0][4]
 
         db_lecture_day = lecture_day.split(',')
@@ -64,10 +65,12 @@ class MainServer:
         now_time = now_hour * 60 + now_minute
         return target_time, now_time, int_lecture_day, now_hour, now_minute, start_hour, start_minute, lecture_day
 
-    def insert_attendance(self, lecture_name, status, flight_id, user_id):
+    def update_attendance(self, lecture_name, status, flight_id, user_id):
         cursor = self.conn.cursor()
-        cursor.execute("INSERT INTO attendance (date, lect_name, status, flight_id, user_id) VALUES (NOW(), %s, %s, %s, %s)", (lecture_name, status, flight_id, user_id))
+        sql_query = "UPDATE attendance SET status = %s WHERE lect_name = %s AND flight_id = %s AND user_id = %s"
+        cursor.execute(sql_query, (status, lecture_name, flight_id, user_id))
         self.conn.commit()
+
 
     def lecture_check_in(self):
         data = request.get_json()
@@ -77,12 +80,11 @@ class MainServer:
         lecture_building = data.get('lecture_building')
         student_latitude = data.get('student_latitude')
         student_longitude = data.get('student_longitude')
-        print("student_id: ", student_id, "lecture_name: ", lecture_name, "lecture_id: ", lecture_id, "lecture_building: ", lecture_building, "student_latitude: ", student_latitude, "student_longitude: ", student_longitude)
         # 수업 정보 가져오기
         target_time, now_time, int_lecture_day, now_hour,\
             now_minute, start_hour, start_minute, lecture_day = self.lecture_cal(lecture_name)
 
-
+        print("target_time: ", target_time, "now_time: ", now_time, "int_lecture_day: ", int_lecture_day, "now_hour: ", now_hour, "now_minute: ", now_minute, "start_hour: ", start_hour, "start_minute: ", start_minute, "lecture_day: ", lecture_day)
         # 빌딩 정보 가져오기
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM building WHERE building_name = %s", (lecture_building,))
@@ -97,14 +99,14 @@ class MainServer:
                 distance = self.measure(lecture_latitude, lecture_longitude, float(student_latitude), float(student_longitude))
                 if (distance <= lecture_allowed_distance):
                     print("distance: ", distance, "lecture_allowed_distance: ", lecture_allowed_distance)
-                    self.insert_attendance(lecture_name, '출석', lecture_id, student_id)
+                    self.update_attendance(lecture_name, '출석', lecture_id, student_id)
                     return jsonify({'result': 'success', 'entrance' : 'okay', 'late': 'no', 'distance': 'okay', "case" : "attendance"})
                 else:
                     return jsonify({'result': 'fail', 'entrance': "no", 'late': "no", 'distance': round(distance - lecture_allowed_distance, 2), "case" : "distance fail, time okay"})
             if (now_time >= target_time + 10 and now_time <= target_time + 30):
                 distance = self.measure(lecture_latitude, lecture_longitude, float(student_latitude), float(student_longitude))
                 if (distance <= lecture_allowed_distance):
-                    self.insert_attendance(lecture_name, '지각', lecture_id, student_id)
+                    self.update_attendance(lecture_name, '지각', lecture_id, student_id)
                     return jsonify({'result': 'success', 'entrance': 'okay', 'late': 'yes', 'distance': 'okay', "case" : "late"})
                 else:
                     return jsonify({'result': 'fail', 'entrance': 'no', 'late': 'yes', 'distance': round(distance - lecture_allowed_distance, 2), "case" : "distance fail, time late"})

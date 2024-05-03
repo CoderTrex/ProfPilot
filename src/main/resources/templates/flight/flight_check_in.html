@@ -9,7 +9,7 @@
 </head>
 <body>
     <button onclick="getLocation()">현재위치</button>
-    <a th:href="@{|/lecture/boarding|}">강의 입장</a>
+    <a th:href="@{|/lecture/boarding/${flight.id}|}">강의 입장</a>
     <script th:inline="javascript">
         function getLocation() {
             if (navigator.geolocation) {

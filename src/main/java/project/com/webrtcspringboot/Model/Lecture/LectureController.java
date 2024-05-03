@@ -165,6 +165,7 @@ public class LectureController {
         if (user.getRole().equals("student")) {
             return "redirect:/lecture/list";
         }
+        System.out.println("user: " + user.getName());
         Lecture lecture = this.lectureRepository.findById(id).get();
         model.addAttribute("lecture", lecture);
         Flight flight = this.flightRepository.findByTodayAndLectId(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), lecture.getId());
@@ -206,11 +207,12 @@ public class LectureController {
         return "flight/flight_check_in";
     }
     @PostMapping("/check_in_flight")
-    public String check_in_flight(@RequestParam("id") Long id, @RequestParam("latitude") String latitude, @RequestParam("longitude") String longitude, Principal principal) {
+    public String check_in_flight(@RequestParam("id") Long id, @RequestParam("latitude") String latitude, @RequestParam("longitude") String longitude, Principal principal, Model model) {
         Users user = this.UserRepository.findByEmail(principal.getName());
         Flight flight = this.flightRepository.findById(id).get();
         Lecture lecture = this.lectureRepository.findById(flight.getLecture().getId()).get();
         Attendance attendance = this.attendanceService.isStudentAttended(lecture.getName(), flight, user);
+        model.addAttribute("flight", flight);
         if (attendance.getStatus().equals("출석")) {
             return "flight/flight_detail";
         }

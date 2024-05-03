@@ -20,7 +20,7 @@ public class FlightService {
     public void createFlight(Long lectureId, String lectureName, String lectureBuilding,
                              String lectureRoom, String lectureDay, String lectureStartTime,
                              String lectureEndTime, Principal principal) {
-        Users user = this.UserRepository.findByName(principal.getName());
+        Users user = this.UserRepository.findByEmail(principal.getName());
         Lecture lecture = this.lectureRepository.findById(lectureId).orElseThrow();
         Flight flight = new Flight();
         flight.setIdentify(lectureId + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
