@@ -1,15 +1,16 @@
-import math, pymysql, time, json, datetime
+import math, pymysql, time, datetime
 from flask_cors import CORS
 from flask import Flask, jsonify, request
 
+app = Flask(__name__)
 
 class MainServer:
     def __init__(self):
-        self.conn = pymysql.connect(host='localhost', user='root', password='1234', db='webrtc')
-        self.app = Flask(__name__)
-        CORS(self.app)
-        self.app.add_url_rule('/lecture_check_in', 'lecture_check_in', self.lecture_check_in, methods=['POST'])
-        self.app.add_url_rule('/lecture_attendance_create', 'lecture_attendance_create', self.lecture_attendance_create, methods=['POST'])
+        self.conn = pymysql.connect(host='mysql-container', user='root', password='1234', db='webrtc')
+        # self.conn = pymysql.connect(host='localhost', user='root', password='1234', db='webrtc')
+        CORS(app)
+        app.add_url_rule('/lecture_check_in', 'lecture_check_in', self.lecture_check_in, methods=['POST'])
+        app.add_url_rule('/lecture_attendance_create', 'lecture_attendance_create', self.lecture_attendance_create, methods=['POST'])
         self.list_day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] 
 
     def lecture_attendance_create(self):
@@ -116,7 +117,7 @@ class MainServer:
             return jsonify({'result': 'fail', 'entrance': 'no', 'late': 'no', 'distance': 'no', "case" : "not lecture day"})
 
     def run(self):
-        self.app.run(debug=True, threaded=True, port=5000)
+        app.run(debug=True, threaded=True, port=5000)
 
 if __name__ == '__main__':
     main_server = MainServer()

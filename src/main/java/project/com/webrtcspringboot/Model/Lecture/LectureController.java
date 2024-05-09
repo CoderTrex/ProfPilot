@@ -34,6 +34,8 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import static java.lang.Thread.sleep;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -113,6 +115,7 @@ public class LectureController {
         this.lectureRepository.delete(this.lectureRepository.findById(id).get());
         return "redirect:/lecture/list";
     }
+//    http://localhost:8080/lecture/make_flight?id=1
     @GetMapping("/make_flight") // 교수님이 강의 시작 버튼을 누르면 호출되는 함수
     public String flight(@RequestParam("id") Long id, Model model, Principal principal) throws JsonProcessingException {
         Lecture lecture = this.lectureRepository.findById(id).get();
@@ -140,7 +143,10 @@ public class LectureController {
         }
         else {
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://localhost:5000/lecture_attendance_create";
+//            String url = "http://127.0.0.1:5000/lecture_attendance_create";
+//            String url = "http://localhost:5000/lecture_attendance_create";
+            String url = "http://flask-container:5000/lecture_attendance_create";
+            // internal docker network를 사용할 때는 localhost가 아닌
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             Map<String, String> param = new HashMap<>();
@@ -151,9 +157,14 @@ public class LectureController {
                 String paramJson = objectMapper.writeValueAsString(param);
                 HttpEntity<String> entity = new HttpEntity<>(paramJson, headers);
                 String response = restTemplate.postForObject(url, entity, String.class);
-
+                System.out.println("-------------");
+                System.out.println("-------------");
+                System.out.println(response);
+                System.out.println("-------------");
+                System.out.println("-------------");
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
+                return "flight/flight_detail";
             }
             return "flight/flight_detail";
         }

@@ -46,6 +46,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(password));
         user.setRole("student");
         user.setStatus("normal");
+        user.setPurchaseDate("none");
         this.userRepository.save(user);
     }
 

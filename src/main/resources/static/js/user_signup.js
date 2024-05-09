@@ -14,7 +14,13 @@ $(document).ready(function() {
                     xhr.setRequestHeader(header, token);
             },
             success: function(data) {
-                alert("이메일 전송 완료");
+                if (data == "fail") {
+                    alert("이미 가입된 이메일입니다.");
+                    return;
+                }
+                else if (data == "success") {
+                    alert("이메일 전송 완료");
+                }
             },
             error: function() {
                 alert("이메일 전송 실패");

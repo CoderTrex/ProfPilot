@@ -30,9 +30,6 @@ public class Users {
     @Column(unique = true)
     private String email;
 
-//    @Column(nullable = false)
-//    private String realName;
-
     @Column(nullable = false)
     private String name;
 
@@ -44,6 +41,9 @@ public class Users {
 
     @Column(nullable = false)
     private String status;
+
+    @Column(nullable = false)
+    private String purchaseDate;
 
     @OneToMany(mappedBy = "pilot", cascade = CascadeType.REMOVE)
     @JsonBackReference

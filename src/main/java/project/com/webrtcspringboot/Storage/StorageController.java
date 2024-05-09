@@ -63,6 +63,7 @@ public class StorageController {
             Users user = this.userService.findByEmail(principal.getName());
             if (user != null) {
                 user.setStatus(userStatus);
+                user.setPurchaseDate(java.time.LocalDate.now().toString());
                 this.userService.save(user);
                 return ResponseEntity.ok("User status updated successfully");
             } else {

@@ -91,11 +91,16 @@ public class UserController {
 
     @PostMapping("/send_code_email/{email}")
     public @ResponseBody String sendCodeEmail(@RequestParam("email") String email) {
-        GenerateRandomString generateRandomString = new GenerateRandomString();
-        String verificationCode = generateRandomString.getRandomPassword2(10);
-        emailMap.put(email, Pair.of(verificationCode, "verify"));
-        EmailController.sendEmailVerifyCode(email, verificationCode);
-        return "success";
+        Users user = this.userService.findByEmail(email);
+        if (user != null) {
+            return "fail";
+        } else {
+            GenerateRandomString generateRandomString = new GenerateRandomString();
+            String verificationCode = generateRandomString.getRandomPassword2(10);
+            emailMap.put(email, Pair.of(verificationCode, "verify"));
+            EmailController.sendEmailVerifyCode(email, verificationCode);
+            return "success";
+        }
     }
 
     @PostMapping("/check_verify_code")
@@ -151,7 +156,6 @@ public class UserController {
         return "user/storage_detail";
     }
 
-//    <a th:href="@{/user/plan/upgrade}" class="btn btn-primary">요금제 변경</a>
     @GetMapping("/plan/upgrade")
     public String planUpgrade(Model model, Principal principal) {
         Users user = this.userService.findByEmail(principal.getName());
