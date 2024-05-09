@@ -143,9 +143,8 @@ public class LectureController {
         }
         else {
             RestTemplate restTemplate = new RestTemplate();
-//            String url = "http://127.0.0.1:5000/lecture_attendance_create";
-//            String url = "http://localhost:5000/lecture_attendance_create";
-            String url = "http://flask-container:5000/lecture_attendance_create";
+            String url = "http://127.0.0.1:5000/lecture_attendance_create";
+//            String url = "http://flask-container:5000/lecture_attendance_create";
             // internal docker network를 사용할 때는 localhost가 아닌
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -157,11 +156,6 @@ public class LectureController {
                 String paramJson = objectMapper.writeValueAsString(param);
                 HttpEntity<String> entity = new HttpEntity<>(paramJson, headers);
                 String response = restTemplate.postForObject(url, entity, String.class);
-                System.out.println("-------------");
-                System.out.println("-------------");
-                System.out.println(response);
-                System.out.println("-------------");
-                System.out.println("-------------");
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
                 return "flight/flight_detail";
@@ -213,8 +207,11 @@ public class LectureController {
         Users user = this.UserRepository.findByEmail(principal.getName());
         Lecture lecture = this.lectureRepository.findById(id).get();
         Flight flight = flightRepository.findByTodayAndLectId(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), lecture.getId());
+        Attendance attendance = this.attendanceService.findAttendanceByUserIdAndDate(user, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+
         model.addAttribute("flight", flight);
         model.addAttribute("user", user);
+        model.addAttribute("attendance", attendance);
         return "flight/flight_check_in";
     }
     @PostMapping("/check_in_flight")

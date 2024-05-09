@@ -10,7 +10,6 @@ class MainServer:
         CORS(self.app)
         
         print("MainServer mysql connect start")
-        # self.conn = pymysql.connect(host='mysql-container', user='root', password='1234', db='webrtc')
         self.conn = pymysql.connect(host='localhost', user='root', password='1234', db='webrtc')
         print("MainServer mysql connect end")
 
@@ -18,17 +17,16 @@ class MainServer:
         self.app.add_url_rule('/lecture_check_in', 'lecture_check_in', self.lecture_check_in, methods=['POST'])
         self.app.add_url_rule('/lecture_attendance_create', 'lecture_attendance_create', self.lecture_attendance_create, methods=['POST'])
         self.app.add_url_rule('/', 'check_connection', self.check_connection, methods=['GET'])
-        self.app.add_url_rule('/today_lecture_list', 'today_lecture_list', self.today_lecture_list, methods=['POST'])
         print("MainServer add_url_rule end")
 
         print("MainServer param init start")
         self.list_day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] 
         print("MainServer param init end")
-    
+
     def check_connection(self):
         print("check_connection")
         return jsonify({'result': 'success'})
-
+    
     def lecture_attendance_create(self):
         data = request.get_json()
         lecture_name = data.get('lecture_name')
@@ -58,10 +56,11 @@ class MainServer:
             print("meter distance: ", d * 1000)
             return d * 1000  # gps to meters result
 
-    def lecture_cal(self, lecture_id):
+    def lecture_cal(self, lecture_name):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM lecture WHERE id = %s", (lecture_id,))
+        cursor.execute("SELECT * FROM lecture WHERE name = %s", (lecture_name,))
         result = cursor.fetchall()
+        print("result: ", result)
         start_time = result[0][7]
         lecture_day = result[0][4]
 
@@ -87,27 +86,6 @@ class MainServer:
         cursor.execute(sql_query, (status, lecture_name, flight_id, user_id))
         self.conn.commit()
 
-    def today_lecture_list(self):
-        data = request.get_json()
-        professor_id = data.get('professor_id')
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM lecture WHERE professor_id = %s", (professor_id,))
-        result = cursor.fetchall()
-
-        this_time_lecture = []
-        print("result: ", result)
-        for rs in result:
-            lecture_day = rs[4]
-            db_lecture_day = lecture_day.split(',')
-            int_lecture_day = []
-            for day in db_lecture_day:
-                for i in range(7):
-                    if day == self.list_day[i]:
-                        int_lecture_day.append(i)
-            if (time.localtime().tm_wday in int_lecture_day):
-                this_time_lecture.append(rs[0])
-        
-        return jsonify({'result': 'success', 'this_time_lecture': this_time_lecture})
 
     def lecture_check_in(self):
         data = request.get_json()
@@ -119,7 +97,7 @@ class MainServer:
         student_longitude = data.get('student_longitude')
         # 수업 정보 가져오기
         target_time, now_time, int_lecture_day, now_hour,\
-            now_minute, start_hour, start_minute, lecture_day = self.lecture_cal(lecture_id)
+            now_minute, start_hour, start_minute, lecture_day = self.lecture_cal(lecture_name)
 
         print("target_time: ", target_time, "now_time: ", now_time, "int_lecture_day: ", int_lecture_day, "now_hour: ", now_hour, "now_minute: ", now_minute, "start_hour: ", start_hour, "start_minute: ", start_minute, "lecture_day: ", lecture_day)
         # 빌딩 정보 가져오기
@@ -153,7 +131,7 @@ class MainServer:
             return jsonify({'result': 'fail', 'entrance': 'no', 'late': 'no', 'distance': 'no', "case" : "not lecture day"})
 
     def run(self):
-        self.app.run(debug=True, threaded=True, host='0.0.0.0')
+        self.app.run(debug=True, threaded=True, port=5000)
 
 if __name__ == '__main__':
     main_server = MainServer()

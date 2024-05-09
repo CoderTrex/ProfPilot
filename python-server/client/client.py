@@ -44,7 +44,22 @@ def lecture_attendance_create():
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
 
+def lecture_start_list():
+    url = "http://localhost:5000/today_lecture_list"
+    data = {
+        'professor_id': '1'
+    }
+    try:
+        response = requests.get(url, json=data)
+        response.raise_for_status()
+        result = response.json()
+        return result
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+        
+
 if __name__ == '__main__':
     # print(get_content_api())
     # print(attendance_check_api())
-    print(lecture_attendance_create())
+    # print(lecture_attendance_create())
+    print(lecture_start_list())

@@ -1,22 +1,33 @@
 package project.com.webrtcspringboot.Controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+import project.com.webrtcspringboot.Model.DTO.FlaskTodayLecture;
+import project.com.webrtcspringboot.Model.Lecture.Lecture;
 import project.com.webrtcspringboot.Model.Lecture.LectureRepository;
-import project.com.webrtcspringboot.Model.Lecture.LectureService;
 import project.com.webrtcspringboot.Model.User.UserService;
 import project.com.webrtcspringboot.Model.User.Users;
-
+import java.util.ArrayList;
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
 public class MainController {
     private final LectureRepository lectureRepository;
     private final UserService userService;
+    private final ObjectMapper objectMapper;
 
     @GetMapping("/")
     public String root() {
@@ -29,9 +40,36 @@ public class MainController {
             return "redirect:/login_or_signup";
         }
         Users user = this.userService.findByEmail(principal.getName());
+        if (user.getRole().equals("prof")) {
+            String date = "";
+            RestTemplate restTemplate = new RestTemplate();
+            String url = "http://localhost:5000/today_lecture_list";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            Map<String, String> param = new HashMap<>();
+            param.put("professor_id", user.getId().toString());
+            try {
+                String paramJson = objectMapper.writeValueAsString(param);
+                HttpEntity<String> entity = new HttpEntity<>(paramJson, headers);
+                String jsonResponse = restTemplate.postForObject(url, entity, String.class);
+                ObjectMapper objectMapper = new ObjectMapper();
+                FlaskTodayLecture response = objectMapper.readValue(jsonResponse, FlaskTodayLecture.class);
+                List<Long> lectureIdList = response.getThisTimeLecture();
+                List<Lecture> today_lectureList = new ArrayList<>();
+                for (Long lg : lectureIdList) {
+                    Lecture lecture = this.lectureRepository.findByLongId(lg);
+                    today_lectureList.add(lecture);
+                    date = lecture.getLectureDay();
+                }
+                model.addAttribute("today_lectureList", today_lectureList);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            model.addAttribute("not_today_lectureList", this.lectureRepository.findAllByUserIdAndDate(user.getId(), date));
+        }
         model.addAttribute("lectureList", this.lectureRepository.findAllByUserId(user.getId()));
         model.addAttribute("user", user);
-        return "main";
+        return "test";
     }
 
     @GetMapping("/login_or_signup")

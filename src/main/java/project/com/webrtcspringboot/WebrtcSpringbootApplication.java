@@ -12,5 +12,4 @@ public class WebrtcSpringbootApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WebrtcSpringbootApplication.class, args);
 	}
-
 }

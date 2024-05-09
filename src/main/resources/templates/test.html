@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html layout:decorate="~{utils/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
 <body>
-
-<div layout:fragment="content" class="container my-3"  th:if="${user.role == 'prof'}">
+<div th:fragment="today-lecture" class="container my-3">
     <table class="table">
         <tr class="text-center" th:each="lecture, loop : ${today_lectureList}">
             <div class="lecture_board">
@@ -16,6 +19,8 @@
         </tr>
         </tbody>
     </table>
+</div>
+<div th:fragment="not-today-lecture" class="container my-3">
     <table class="table">
         <tr class="text-center" th:each="lecture, loop : ${not_today_lectureList}">
             <div class="lecture_board">
@@ -27,11 +32,8 @@
             </div>
         </tr>
     </table>
-    <script type="text/javascript" src="/js/lecture_list.js"></script>
 </div>
-
-
-<div layout:fragment="content" class="container my-3" th:if="${user.role == 'student'}">
+<div th:fragment="today-lecture-student" class="container my-3">
     <table class="table">
         <tbody>
         <tr class="text-center" th:each="lecture, loop : ${lectureList}">
@@ -47,5 +49,21 @@
     </table>
     <script type="text/javascript" src="/js/lecture_list.js"></script>
 </div>
+
+<div layout:fragment="content" class="container my-3">
+    <div th:if="${user.role == 'prof'}">
+        <h2>오늘 수업</h2>
+        <div th:replace="~{test :: today-lecture}"></div>
+        <br>
+    </div>
+    <div th:if="${user.role == 'prof'}">
+        <div th:replace="~{test :: not-today-lecture}"></div>
+    </div>
+    <div th:if="${user.role == 'student'}">
+        <div th:replace="~{test :: today-lecture-student}"></div>
+    </div>
+    <script type="text/javascript" src="/js/lecture_list.js"></script>
+</div>
+
 </body>
 </html>
