@@ -60,10 +60,12 @@ public class LectureController {
         model.addAttribute("lectureList", lectureList);
         return "lecture/lecture_list";
     }
+
     @GetMapping("/create")
     public String create(LectureForm lectureForm) {
         return "lecture/lecture_create";
     }
+
     @PostMapping("/create")
     public String create(@Valid LectureForm lectureForm, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
@@ -76,6 +78,7 @@ public class LectureController {
         this.lectureService.addProf(lectureId, principal);
         return "redirect:/lecture/list";
     }
+
     @GetMapping("/enter")
     public String enter(@RequestParam("id") Long id, @RequestParam("lectureName") String lectureName, Model model, Principal principal) {
         Users user = this.UserRepository.findByEmail(principal.getName());
@@ -86,15 +89,18 @@ public class LectureController {
         model.addAttribute("flightList", flightList);
         return "lecture/lecture_detail";
     }
+
     @GetMapping("boarding/room.html")
     public String room(@RequestParam("room") String roomName, Model model) {
         model.addAttribute("roomName", roomName);
         return "webrtc/room";
     }
+
     @GetMapping("/list/search/{lectureName}")
     public @ResponseBody List<Lecture> search(@PathVariable String lectureName) {
         return this.lectureRepository.findByKeyword(lectureName);
     }
+
     @PostMapping("/add/{lectureId}")
     public @ResponseBody String add(@PathVariable Long lectureId, @RequestParam("password") String password, Principal principal) {
         Lecture lecture = this.lectureRepository.findById(lectureId).get();
@@ -104,18 +110,20 @@ public class LectureController {
         this.lectureService.addUser(lectureId, principal);
         return "{\"success\": true}";
     }
+
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id, Principal principal) {
         this.lectureService.deleteUser(id, principal);
         return "redirect:/lecture/list";
     }
+
     @GetMapping("/drop/{id}")
     public String drop(@PathVariable Long id, Principal principal) {
         this.lectureService.deleteAllUsers(id);
         this.lectureRepository.delete(this.lectureRepository.findById(id).get());
         return "redirect:/lecture/list";
     }
-//    http://localhost:8080/lecture/make_flight?id=1
+
     @GetMapping("/make_flight") // 교수님이 강의 시작 버튼을 누르면 호출되는 함수
     public String flight(@RequestParam("id") Long id, Model model, Principal principal) throws JsonProcessingException {
         Lecture lecture = this.lectureRepository.findById(id).get();
@@ -143,8 +151,7 @@ public class LectureController {
         }
         else {
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://127.0.0.1:5000/lecture_attendance_create";
-//            String url = "http://flask-container:5000/lecture_attendance_create";
+            String url = "http://flask-container:5000/lecture_attendance_create";
             // internal docker network를 사용할 때는 localhost가 아닌
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -164,6 +171,7 @@ public class LectureController {
         }
 
     }
+
     @GetMapping("/enter_flight/professor")
     public String enter_flight1(@RequestParam("id") Long id, Model model, Principal principal) {
         Users user = this.UserRepository.findByEmail(principal.getName());
@@ -214,6 +222,7 @@ public class LectureController {
         model.addAttribute("attendance", attendance);
         return "flight/flight_check_in";
     }
+
     @PostMapping("/check_in_flight")
     public String check_in_flight(@RequestParam("id") Long id, @RequestParam("latitude") String latitude, @RequestParam("longitude") String longitude, Principal principal, Model model) {
         Users user = this.UserRepository.findByEmail(principal.getName());
@@ -226,7 +235,7 @@ public class LectureController {
         }
         else {
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://localhost:5000/lecture_check_in";
+            String url = "http://flask-container:5000/lecture_check_in";
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             Map<String, String> param = new HashMap<>();
@@ -236,6 +245,7 @@ public class LectureController {
             param.put("lecture_building", lecture.getBuilding());
             param.put("student_latitude", latitude);
             param.put("student_longitude", longitude);
+            param.put("flight_id", flight.getId().toString());
             try {
                 String paramJson = objectMapper.writeValueAsString(param);
                 HttpEntity<String> entity = new HttpEntity<>(paramJson, headers);
@@ -247,6 +257,7 @@ public class LectureController {
             return "redirect:/";
         }
     }
+
     @RequestMapping("/boarding/{id}")
     public String boarding(@PathVariable("id") Long id, Model model, Principal principal) {
         Flight flight = this.flightRepository.findById(id).get();

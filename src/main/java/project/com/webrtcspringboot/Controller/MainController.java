@@ -43,7 +43,7 @@ public class MainController {
         if (user.getRole().equals("prof")) {
             String date = "";
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://localhost:5000/today_lecture_list";
+            String url = "http://flask-container:5000/today_lecture_list";
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             Map<String, String> param = new HashMap<>();
@@ -69,7 +69,7 @@ public class MainController {
         }
         model.addAttribute("lectureList", this.lectureRepository.findAllByUserId(user.getId()));
         model.addAttribute("user", user);
-        return "test";
+        return "main";
     }
 
     @GetMapping("/login_or_signup")
