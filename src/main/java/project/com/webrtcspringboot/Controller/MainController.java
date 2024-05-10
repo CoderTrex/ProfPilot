@@ -40,34 +40,40 @@ public class MainController {
             return "redirect:/login_or_signup";
         }
         Users user = this.userService.findByEmail(principal.getName());
+        String date = "";
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://flask-container:5000/today_lecture_list";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        Map<String, String> param = new HashMap<>();
         if (user.getRole().equals("prof")) {
-            String date = "";
-            RestTemplate restTemplate = new RestTemplate();
-            String url = "http://flask-container:5000/today_lecture_list";
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            Map<String, String> param = new HashMap<>();
+            param.put("user_or_prof", "prof");
+            param.put("user_id", "null");
             param.put("professor_id", user.getId().toString());
-            try {
-                String paramJson = objectMapper.writeValueAsString(param);
-                HttpEntity<String> entity = new HttpEntity<>(paramJson, headers);
-                String jsonResponse = restTemplate.postForObject(url, entity, String.class);
-                ObjectMapper objectMapper = new ObjectMapper();
-                FlaskTodayLecture response = objectMapper.readValue(jsonResponse, FlaskTodayLecture.class);
-                List<Long> lectureIdList = response.getThisTimeLecture();
-                List<Lecture> today_lectureList = new ArrayList<>();
-                for (Long lg : lectureIdList) {
-                    Lecture lecture = this.lectureRepository.findByLongId(lg);
-                    today_lectureList.add(lecture);
-                    date = lecture.getLectureDay();
-                }
-                model.addAttribute("today_lectureList", today_lectureList);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            model.addAttribute("not_today_lectureList", this.lectureRepository.findAllByUserIdAndDate(user.getId(), date));
         }
-        model.addAttribute("lectureList", this.lectureRepository.findAllByUserId(user.getId()));
+        else {
+            param.put("user_or_prof", "user");
+            param.put("user_id", user.getId().toString());
+            param.put("professor_id", "null");
+        }
+        try {
+            String paramJson = objectMapper.writeValueAsString(param);
+            HttpEntity<String> entity = new HttpEntity<>(paramJson, headers);
+            String jsonResponse = restTemplate.postForObject(url, entity, String.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+            FlaskTodayLecture response = objectMapper.readValue(jsonResponse, FlaskTodayLecture.class);
+            List<Long> lectureIdList = response.getThisTimeLecture();
+            List<Lecture> today_lectureList = new ArrayList<>();
+            for (Long lg : lectureIdList) {
+                Lecture lecture = this.lectureRepository.findByLongId(lg);
+                today_lectureList.add(lecture);
+                date = lecture.getLectureDay();
+            }
+            model.addAttribute("today_lectureList", today_lectureList);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        model.addAttribute("not_today_lectureList", this.lectureRepository.findAllByUserIdAndDate(user.getId(), date));
         model.addAttribute("user", user);
         return "main";
     }

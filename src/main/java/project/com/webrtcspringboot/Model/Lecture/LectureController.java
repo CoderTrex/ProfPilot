@@ -250,7 +250,6 @@ public class LectureController {
                 String paramJson = objectMapper.writeValueAsString(param);
                 HttpEntity<String> entity = new HttpEntity<>(paramJson, headers);
                 String response = restTemplate.postForObject(url, entity, String.class);
-                System.out.println(response);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

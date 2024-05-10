@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<div th:fragment="today-lecture" class="container my-3">
+<div th:fragment="today-lecture1" class="container my-3">
     <table class="table">
         <tr class="text-center" th:each="lecture, loop : ${today_lectureList}">
             <div class="lecture_board">
@@ -19,7 +19,32 @@
         </tbody>
     </table>
 </div>
-<div th:fragment="not-today-lecture" class="container my-3">
+<div th:fragment="not-today-lecture1" class="container my-3">
+    <table class="table">
+        <tr class="text-center" th:each="lecture, loop : ${not_today_lectureList}">
+            <div class="lecture_board">
+                <td><a th:text="${lecture.name}"></a></td>
+                <td th:text="${lecture.LectureDay}"></td>
+                <td th:text="${lecture.startTime}"></td>
+                <td th:text="${lecture.endTime}"></td>
+            </div>
+        </tr>
+    </table>
+</div><div th:fragment="today-lecture2" class="container my-3">
+    <table class="table">
+        <tr class="text-center" th:each="lecture, loop : ${today_lectureList}">
+            <div class="lecture_board">
+                <td><a th:text="${lecture.name}"></a></td>
+                <td><a th:href="@{/lecture/check_in_flight(id=${lecture.id})}" th:text="강의입장"></a></td>
+                <td th:text="${lecture.LectureDay}"></td>
+                <td th:text="${lecture.startTime}"></td>
+                <td th:text="${lecture.endTime}"></td>
+            </div>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:fragment="not-today-lecture2" class="container my-3">
     <table class="table">
         <tr class="text-center" th:each="lecture, loop : ${not_today_lectureList}">
             <div class="lecture_board">
@@ -31,35 +56,25 @@
         </tr>
     </table>
 </div>
-<div th:fragment="today-lecture-student" class="container my-3">
-    <table class="table">
-        <tbody>
-        <tr class="text-center" th:each="lecture, loop : ${lectureList}">
-            <div class="lecture_board">
-                <td><a th:text="${lecture.name}"></a></td>
-                <td><a th:href="@{/lecture/check_in_flight(id=${lecture.id})}" th:text="강의입장"></a></td>
-                <td th:text="${lecture.LectureDay}"></td>
-                <td th:text="${lecture.startTime}"></td>
-                <td th:text="${lecture.endTime}"></td>
-            </div>
-        </tr>
-        </tbody>
-    </table>
-    <script type="text/javascript" src="/js/lecture_list.js"></script>
-</div>
 
 <div layout:fragment="content" class="container my-3">
     <div th:if="${user.role == 'prof'}">
         <h2>오늘 수업</h2>
-        <div th:replace="~{main :: today-lecture}"></div>
+        <div th:replace="~{main :: today-lecture1}"></div>
         <br>
     </div>
     <div th:if="${user.role == 'prof'}">
         <h2>수업 목록</h2>
-        <div th:replace="~{main :: not-today-lecture}"></div>
+        <div th:replace="~{main :: not-today-lecture2}"></div>
     </div>
     <div th:if="${user.role == 'student'}">
-        <div th:replace="~{main :: today-lecture-student}"></div>
+        <h2>오늘 수업</h2>
+        <div th:replace="~{main :: today-lecture2}"></div>
+        <br>
+    </div>
+    <div th:if="${user.role == 'student'}">
+        <h2>수업 목록</h2>
+        <div th:replace="~{main :: not-today-lecture2}"></div>
     </div>
     <script type="text/javascript" src="/js/lecture_list.js"></script>
 </div>

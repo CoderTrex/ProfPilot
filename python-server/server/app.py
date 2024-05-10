@@ -92,23 +92,45 @@ class MainServer:
     def today_lecture_list(self):
         conn = pymysql.connect(host='mysql-container', user='root', password='1234', db='webrtc')
         data = request.get_json()
+        user_or_prof = data.get('user_or_prof')
         professor_id = data.get('professor_id')
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM lecture WHERE professor_id = %s", (professor_id,))
-        result = cursor.fetchall()
-        
-        this_time_lecture = []
-        for rs in result:
-            lecture_day = rs[4]
-            db_lecture_day = lecture_day.split(',')
-            int_lecture_day = []
-            for day in db_lecture_day:
-                for i in range(7):
-                    if day == self.list_day[i]:
-                        int_lecture_day.append(i)
-            if (time.localtime().tm_wday in int_lecture_day):
-                this_time_lecture.append(rs[0])
-        return jsonify({'result': 'success', 'this_time_lecture': this_time_lecture})
+        user_id = data.get('user_id')
+
+        if user_or_prof == 'prof':
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM lecture WHERE professor_id = %s", (professor_id,))
+            result = cursor.fetchall()            
+            this_time_lecture = []
+            for rs in result:
+                lecture_day = rs[4]
+                db_lecture_day = lecture_day.split(',')
+                int_lecture_day = []
+                for day in db_lecture_day:
+                    for i in range(7):
+                        if day == self.list_day[i]:
+                            int_lecture_day.append(i)
+                if (time.localtime().tm_wday in int_lecture_day):
+                    this_time_lecture.append(rs[0])
+            return jsonify({'result': 'success', 'this_time_lecture': this_time_lecture})
+
+        elif user_or_prof == 'user':
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM lecture_users WHERE users_id = %s", (user_id,))
+            result = cursor.fetchall()
+            this_time_lecture = []
+            for rs in result:
+                cursor.execute("SELECT * FROM lecture WHERE id = %s", (rs[1],))
+                result = cursor.fetchall()
+                lecture_day = result[4]
+                db_lecture_day = lecture_day.split(',')
+                int_lecture_day = []
+                for day in db_lecture_day:
+                    for i in range(7):
+                        if day == self.list_day[i]:
+                            int_lecture_day.append(i)
+                if (time.localtime().tm_wday in int_lecture_day):
+                    this_time_lecture.append(rs[1])
+            return jsonify({'result': 'success', 'this_time_lecture': this_time_lecture})
 
     def lecture_check_in(self):
         data = request.get_json()
