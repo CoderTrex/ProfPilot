@@ -42,7 +42,7 @@ public class MainController {
         Users user = this.userService.findByEmail(principal.getName());
         String date = "";
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://flask-container:5000/today_lecture_list";
+        String url = "http://flask-container:5000/get_today_lecture";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         Map<String, String> param = new HashMap<>();

@@ -55,25 +55,64 @@ let joinRoomInit = async () => {
 }
 
 let joinStream = async () => {
-    document.getElementById('join-btn').style.display = 'none'
-    document.getElementsByClassName('stream__actions')[0].style.display = 'flex'
+    document.getElementById('join-btn').style.display = 'none';
+    document.getElementsByClassName('stream__actions')[0].style.display = 'flex';
 
-    localTracks = await AgoraRTC.createMicrophoneAndCameraTracks({}, {encoderConfig:{
-        width:{min:640, ideal:1920, max:1920},
-        height:{min:480, ideal:1080, max:1080}
-    }})
+    let hasCamera = false;
+    let hasMicrophone = false;
+
+    try {
+        let cameraTracks = await AgoraRTC.createCameraVideoTrack();
+        hasCamera = true;
+        cameraTracks.close(); // 카메라 트랙 생성 후 바로 닫아줍니다.
+    } catch (error) {
+        console.error('Failed to access camera:', error);
+    }
+
+    try {
+        let microphoneTracks = await AgoraRTC.createMicrophoneAudioTrack();
+        hasMicrophone = true;
+        microphoneTracks.close(); // 마이크 트랙 생성 후 바로 닫아줍니다.
+    } catch (error) {
+        console.error('Failed to access microphone:', error);
+    }
+
+    if (hasCamera && hasMicrophone) {
+        let player = `<div class="video__container" id="user-container-${uid}">
+                        <div class="video-player" id="user-${uid}"></div>
+                     </div>`;
+        console.log("player: ", player);
+        document.getElementById('streams__container').insertAdjacentHTML('beforeend', player);
+        document.getElementById(`user-container-${uid}`).addEventListener('click', expandVideoFrame);
+
+        try {
+            localTracks = await AgoraRTC.createMicrophoneAndCameraTracks({}, {
+                encoderConfig: {
+                    width: { min: 640, ideal: 1920, max: 1920 },
+                    height: { min: 480, ideal: 1080, max: 1080 }
+                }
+            });
+
+            localTracks[1].play(`user-${uid}`);
+            await client.publish([localTracks[0], localTracks[1]]);
+        } catch (error) {
+            console.error('Failed to create tracks:', error);
+        }
+    } else {
+        console.error('No access to camera or microphone!');
+        let player = `<div class="video__container" id="user-container-${uid}">
+                        <div class="video-player" id="user-${uid}"></div>
+                     </div>`;
+        document.getElementById('streams__container').insertAdjacentHTML('beforeend', player);
+        document.getElementById(`user-container-${uid}`).addEventListener('click', expandVideoFrame);
+
+        localTracks = await AgoraRTC.createMicrophoneAudioTrack();
+        localTracks[0].play(`user-${uid}`);
+        await client.publish([localTracks[0]]);
+    }
+};
 
 
-    let player = `<div class="video__container" id="user-container-${uid}">
-                    <div class="video-player" id="user-${uid}"></div>
-                 </div>`
-
-    document.getElementById('streams__container').insertAdjacentHTML('beforeend', player)
-    document.getElementById(`user-container-${uid}`).addEventListener('click', expandVideoFrame)
-
-    localTracks[1].play(`user-${uid}`)
-    await client.publish([localTracks[0], localTracks[1]])
-}
 
 let switchToCamera = async () => {
     let player = `<div class="video__container" id="user-container-${uid}">
@@ -192,7 +231,9 @@ let toggleScreen = async (e) => {
         userIdInDisplayFrame = `user-container-${uid}`
         localScreenTracks.play(`user-${uid}`)
 
-        await client.unpublish([localTracks[1]])
+        if (localTracks[1]) {
+            await client.unpublish([localTracks[1]])
+        }
         await client.publish([localScreenTracks])
 
         let videoFrames = document.getElementsByClassName('video__container')
@@ -209,7 +250,6 @@ let toggleScreen = async (e) => {
         cameraButton.style.display = 'block'
         document.getElementById(`user-container-${uid}`).remove()
         await client.unpublish([localScreenTracks])
-
         switchToCamera()
     }
 }

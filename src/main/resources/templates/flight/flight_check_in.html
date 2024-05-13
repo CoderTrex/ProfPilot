@@ -11,6 +11,7 @@
     <div class="attendance-notice">
         <span>출석 여부: </span>
         <span th:text="${attendance.status}"></span>
+        <span th:text="${attendanceResult}"></span>
     </div>
     <div th:if="${attendance.status == '결석'}">
         <button onclick="getLocation()">출석하기</button>
@@ -43,7 +44,11 @@
                             xhr.setRequestHeader(header, token);
                     },
                     success: function(response) {
+                        console.log("response: ", response);
                         console.log('Location sent successfully.');
+                        var id = '[[${flight.id}]]';
+                        var attendanceResult = response.attendanceResult;
+                        window.location.href = 'http://localhost:8080/lecture/check_in_flight?id=' + id + '&attendanceResult=' + attendanceResult;
                     },
                     error: function(error) {
                         console.error('Failed to send location:', error);
@@ -52,9 +57,7 @@
             }
         </script>
     </div>
-    <div th:if="${attendance.status != '결석'}">
         <a th:href="@{|/lecture/boarding/${flight.id}|}">강의 입장</a>
-    </div>
     <div>
         <a th:href="@{|/lecture/flight/${flight.id}|}">강의 목록</a>
     </div>

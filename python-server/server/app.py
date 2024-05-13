@@ -14,10 +14,11 @@ class MainServer:
         print("MainServer mysql connect end")
 
         print("MainServer add_url_rule start")
+        self.app.add_url_rule('/test', 'test', self.test, methods=['POST'])
         self.app.add_url_rule('/lecture_check_in', 'lecture_check_in', self.lecture_check_in, methods=['POST'])
         self.app.add_url_rule('/lecture_attendance_create', 'lecture_attendance_create', self.lecture_attendance_create, methods=['POST'])
         self.app.add_url_rule('/', 'check_connection', self.check_connection, methods=['GET'])
-        self.app.add_url_rule('/today_lecture_list', 'today_lecture_list', self.today_lecture_list, methods=['POST'])
+        self.app.add_url_rule('/get_today_lecture', 'get_today_lecture', self.get_today_lecture, methods=['POST'])
         print("MainServer add_url_rule end")
 
         print("MainServer param init start")
@@ -26,6 +27,9 @@ class MainServer:
 
         print("MainServer init end")
     
+    def test(self):
+        return jsonify({'result': 'success'})
+
     def check_connection(self):
         print("check_connection")
         return jsonify({'result': 'success'})
@@ -49,13 +53,13 @@ class MainServer:
         return jsonify({'result': 'success'})
 
     def measure(self, lat1, lon1, lat2, lon2):
-            R = 6378.137  # Radius of earth in KM
-            dLat = math.radians(lat2) - math.radians(lat1)
-            dLon = math.radians(lon2) - math.radians(lon1)
-            a = math.sin(dLat/2) * math.sin(dLat/2) + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dLon/2) * math.sin(dLon/2)
-            c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-            d = R * c
-            return d * 1000  # gps to meters result
+        R = 6378.137  # Radius of earth in KM
+        dLat = math.radians(lat2) - math.radians(lat1)
+        dLon = math.radians(lon2) - math.radians(lon1)
+        a = math.sin(dLat/2) * math.sin(dLat/2) + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dLon/2) * math.sin(dLon/2)
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+        d = R * c
+        return d * 1000  # gps to meters result
 
     def lecture_cal(self, lecture_id):
         conn = pymysql.connect(host='mysql-container', user='root', password='1234', db='webrtc')
@@ -89,48 +93,54 @@ class MainServer:
         cursor.execute(sql_query, (status, lecture_name, flight_id, user_id))
         conn.commit()
 
-    def today_lecture_list(self):
-        conn = pymysql.connect(host='mysql-container', user='root', password='1234', db='webrtc')
-        data = request.get_json()
-        user_or_prof = data.get('user_or_prof')
-        professor_id = data.get('professor_id')
-        user_id = data.get('user_id')
-
-        if user_or_prof == 'prof':
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM lecture WHERE professor_id = %s", (professor_id,))
-            result = cursor.fetchall()            
-            this_time_lecture = []
-            for rs in result:
-                lecture_day = rs[4]
-                db_lecture_day = lecture_day.split(',')
-                int_lecture_day = []
-                for day in db_lecture_day:
-                    for i in range(7):
-                        if day == self.list_day[i]:
-                            int_lecture_day.append(i)
-                if (time.localtime().tm_wday in int_lecture_day):
-                    this_time_lecture.append(rs[0])
-            return jsonify({'result': 'success', 'this_time_lecture': this_time_lecture})
-
-        elif user_or_prof == 'user':
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM lecture_users WHERE users_id = %s", (user_id,))
-            result = cursor.fetchall()
-            this_time_lecture = []
-            for rs in result:
-                cursor.execute("SELECT * FROM lecture WHERE id = %s", (rs[1],))
+    def get_today_lecture(self):
+        try :
+            conn = pymysql.connect(host='mysql-container', user='root', password='1234', db='webrtc')
+            data = request.get_json()
+            user_or_prof = data.get('user_or_prof')
+            professor_id = data.get('professor_id')
+            user_id = data.get('user_id')
+            if user_or_prof == 'prof':
+                cursor = conn.cursor()
+                cursor.execute("SELECT * FROM lecture WHERE professor_id = %s", (professor_id,))
+                result = cursor.fetchall()            
+                this_time_lecture = []
+                for rs in result:
+                    lecture_day = rs[4]
+                    db_lecture_day = lecture_day.split(',')
+                    print("db_lecture_day : ", db_lecture_day)
+                    int_lecture_day = []
+                    for day in db_lecture_day:
+                        for i in range(7):
+                            if day == self.list_day[i]:
+                                int_lecture_day.append(i)
+                    if (time.localtime().tm_wday in int_lecture_day):
+                        this_time_lecture.append(rs[0])
+                return jsonify({'result': 'success', 'this_time_lecture': this_time_lecture})
+            else:
+                cursor = conn.cursor()
+                cursor.execute("SELECT * FROM lecture_users WHERE users_id = %s", (user_id,))
                 result = cursor.fetchall()
-                lecture_day = result[4]
-                db_lecture_day = lecture_day.split(',')
-                int_lecture_day = []
-                for day in db_lecture_day:
-                    for i in range(7):
-                        if day == self.list_day[i]:
-                            int_lecture_day.append(i)
-                if (time.localtime().tm_wday in int_lecture_day):
-                    this_time_lecture.append(rs[1])
-            return jsonify({'result': 'success', 'this_time_lecture': this_time_lecture})
+                print("result : ", result)
+                this_time_lecture = []
+                for rs in result:
+                    cursor.execute("SELECT * FROM lecture WHERE id = %s", (rs[0],))
+                    _res = cursor.fetchall()
+                    lecture_day = _res[0][4]
+                    db_lecture_day = lecture_day.split(',')
+                    print("db_lecture_day : ", db_lecture_day)
+                    int_lecture_day = []
+                    for day in db_lecture_day:
+                        for i in range(7):
+                            if day == self.list_day[i]:
+                                int_lecture_day.append(i)
+                    if (time.localtime().tm_wday in int_lecture_day):
+                        this_time_lecture.append(rs[0])
+                return jsonify({'result': 'success', 'this_time_lecture': this_time_lecture})
+        except Exception as e:
+            print("hello error : ", e)
+            return jsonify({'result': 'fail', 'this_time_lecture': []})
+
 
     def lecture_check_in(self):
         data = request.get_json()
@@ -155,25 +165,24 @@ class MainServer:
     
         # 수업 시작 앞뒤로 10분 & 수업 요일 & GPS 거리 체크
         if (time.localtime().tm_wday in int_lecture_day):
-            print("target_time : ", target_time, "now_time : ", now_time)
             if (now_time >= target_time - 10 and now_time <= target_time + 10):
                 distance = self.measure(lecture_latitude, lecture_longitude, float(student_latitude), float(student_longitude))
                 if (distance <= lecture_allowed_distance):
                     self.update_attendance(lecture_name, '출석', flight_id, student_id)
-                    return jsonify({'result': 'success', 'entrance' : 'okay', 'late': 'no', 'distance': 'okay', "case" : "attendance", "target_time" : target_time, "now_time" : now_time})
+                    return jsonify({'result': 'success',    'entrance' : 'okay',    'late': 'no', 'distance': 'okay',                                           "case" : "attendance",                              "target_time" : target_time, "now_time" : now_time})
                 else:
-                    return jsonify({'result': 'fail', 'entrance': "no", 'late': "no", 'distance': round(distance - lecture_allowed_distance, 2), "case" : "distance fail, time okay", "target_time" : target_time, "now_time" : now_time})
+                    return jsonify({'result': 'fail',       'entrance': "no",       'late': "no", 'distance': round(distance - lecture_allowed_distance, 2),    "case" : "distance fail, time okay",                "target_time" : target_time, "now_time" : now_time})
             if (now_time >= target_time + 10 and now_time <= target_time + 30):
                 distance = self.measure(lecture_latitude, lecture_longitude, float(student_latitude), float(student_longitude))
                 if (distance <= lecture_allowed_distance):
                     self.update_attendance(lecture_name, '지각', flight_id, student_id)
-                    return jsonify({'result': 'success', 'entrance': 'okay', 'late': 'yes', 'distance': 'okay', "case" : "late", "target_time" : target_time, "now_time" : now_time})
+                    return jsonify({'result': 'success',    'entrance': 'okay',     'late': 'yes', 'distance': 'okay',                                          "case" : "late",                                    "target_time" : target_time, "now_time" : now_time})
                 else:
-                    return jsonify({'result': 'fail', 'entrance': 'no', 'late': 'yes', 'distance': round(distance - lecture_allowed_distance, 2), "case" : "distance fail, time late", "target_time" : target_time, "now_time" : now_time})
+                    return jsonify({'result': 'fail',       'entrance': 'no',       'late': 'yes', 'distance': round(distance - lecture_allowed_distance, 2),   "case" : "distance fail, time late",                "target_time" : target_time, "now_time" : now_time})
             else:    
-                return jsonify({'result': 'fail', 'entrance': 'no', 'late': 'yes', 'distance': 'no', "case" : "late more than 30 min or came early", "target_time" : target_time, "now_time" : now_time})
+                    return jsonify({'result': 'fail',       'entrance': 'no',       'late': 'yes', 'distance': 'no',                                            "case" : "late more than 30 min or came early",     "target_time" : target_time, "now_time" : now_time})
         else:
-            return jsonify({'result': 'fail', 'entrance': 'no', 'late': 'no', 'distance': 'no', "case" : "not lecture day", "target_time" : target_time, "now_time" : now_time})
+                    return jsonify({'result': 'fail',       'entrance': 'no',       'late': 'no',  'distance': 'no',                                            "case" : "not lecture day",                         "target_time" : target_time, "now_time" : now_time})
 
     def run(self):
         self.app.run(debug=True, threaded=True, host='0.0.0.0')

@@ -11,8 +11,8 @@ import project.com.webrtcspringboot.Model.flight.Flight;
 public class AttendanceService {
     private final AttendanceRepository attendanceRepository;
 
-    public Attendance findAttendanceByUserIdAndDate(Users user, String date) {
-        return this.attendanceRepository.findByUserAndToday(user, date);
+    public Attendance findAttendanceByUserAndDateAndFlight(Users user, String date, Flight flight) {
+        return this.attendanceRepository.findByUserAndTodayAndFlight(user, date, flight);
     }
 
     public Attendance isStudentAttended(String lectureName, Flight flight, Users user) {

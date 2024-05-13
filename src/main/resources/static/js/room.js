@@ -52,7 +52,6 @@ let expandVideoFrame = (e) => {
       videoFrames[i].style.width = '100px'
     }
   }
-
 }
 
 for(let i = 0; videoFrames.length > i; i++){

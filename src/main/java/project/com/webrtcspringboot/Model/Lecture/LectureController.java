@@ -11,6 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import project.com.webrtcspringboot.Model.DTO.AttendanceCheckResult;
 import project.com.webrtcspringboot.Storage.FileUploadController;
 import project.com.webrtcspringboot.Storage.StorageService;
 import project.com.webrtcspringboot.Model.User.Users;
@@ -211,29 +213,33 @@ public class LectureController {
     }
 
     @GetMapping("/check_in_flight")
-    public String check_in_flight(@RequestParam("id") Long id, Model model, Principal principal) {
+    public String check_in_flight(@RequestParam("id") Long id,  @RequestParam(value = "attendanceResult") String attendanceResult, Model model, Principal principal) {
         Users user = this.UserRepository.findByEmail(principal.getName());
         Lecture lecture = this.lectureRepository.findById(id).get();
         Flight flight = flightRepository.findByTodayAndLectId(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), lecture.getId());
-        Attendance attendance = this.attendanceService.findAttendanceByUserIdAndDate(user, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-
+        if (flight == null) {
+            return "flight/flight_is_not_exist";
+        }
+        Attendance attendance = this.attendanceService.findAttendanceByUserAndDateAndFlight(user, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), flight);
         model.addAttribute("flight", flight);
         model.addAttribute("user", user);
         model.addAttribute("attendance", attendance);
+        model.addAttribute("attendanceResult", attendanceResult);
         return "flight/flight_check_in";
     }
 
     @PostMapping("/check_in_flight")
-    public String check_in_flight(@RequestParam("id") Long id, @RequestParam("latitude") String latitude, @RequestParam("longitude") String longitude, Principal principal, Model model) {
+    @ResponseBody
+    public Map<String, String> check_in_flight(@RequestParam("id") Long id, @RequestParam("latitude") String latitude, @RequestParam("longitude") String longitude, Principal principal) {
+        Map<String, String> response = new HashMap<>();
         Users user = this.UserRepository.findByEmail(principal.getName());
         Flight flight = this.flightRepository.findById(id).get();
         Lecture lecture = this.lectureRepository.findById(flight.getLecture().getId()).get();
         Attendance attendance = this.attendanceService.isStudentAttended(lecture.getName(), flight, user);
-        model.addAttribute("flight", flight);
+        String attendanceResult = "Not Reported";
         if (attendance.getStatus().equals("출석")) {
-            return "flight/flight_detail";
-        }
-        else {
+            response.put("redirect", "flight/flight_detail");
+        } else {
             RestTemplate restTemplate = new RestTemplate();
             String url = "http://flask-container:5000/lecture_check_in";
             HttpHeaders headers = new HttpHeaders();
@@ -249,12 +255,16 @@ public class LectureController {
             try {
                 String paramJson = objectMapper.writeValueAsString(param);
                 HttpEntity<String> entity = new HttpEntity<>(paramJson, headers);
-                String response = restTemplate.postForObject(url, entity, String.class);
+                String responseJson = restTemplate.postForObject(url, entity, String.class);
+                ObjectMapper objectMapper = new ObjectMapper();
+                AttendanceCheckResult attendanceCheckResult = objectMapper.readValue(responseJson, AttendanceCheckResult.class);
+                attendanceResult = attendanceCheckResult.getCaseResult();
+                response.put("attendanceResult", attendanceResult);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            return "redirect:/";
         }
+        return response;
     }
 
     @RequestMapping("/boarding/{id}")

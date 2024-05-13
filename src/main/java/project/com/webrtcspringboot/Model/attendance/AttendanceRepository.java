@@ -11,7 +11,8 @@ import java.util.ArrayList;
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     Attendance findByUserId(Long id);
     Attendance findByLectName(String name);
-
+    @Query("SELECT a FROM Attendance a WHERE a.user = ?1 AND a.date = ?2 AND a.flight = ?3")
+    Attendance findByUserAndTodayAndFlight(Users user, String date, Flight flight);
 
     @Query("SELECT a FROM Attendance a WHERE a.lectName = ?1 AND a.user = ?2")
     ArrayList<Attendance> findByLectNameAndUserId(String lectName, Users user);
