@@ -1,0 +1,224 @@
+
+
+api document: 
+This project is University attendance system.
+This project's concept is base on airport. student called passenger and teacher called pliot and the class called flight.
+
+
+
+====================================================================================================
+=================================== [Passenger] : user service =====================================
+====================================================================================================
+
+--------------------------------------------------------------------------------------------
+(signup)
+url : /api/passenger/signup
+method : POST
+description : this api is for passenger signup
+request : {
+    "email" : "example@example.com",
+    "password" : "Password1234",
+    "name" : "jeongeunseong",
+    "University" : "kyunghee"
+    "UniversityID" : "2015101234"
+}
+response : {
+    '200': {
+        "message" : "signup success"
+    }
+    '400': {
+        "message" : "signup fail"
+    }
+}
+
+--------------------------------------------------------------------------------------------
+(signin)
+url : /api/passenger/signin
+method : POST
+description : this api is for passenger signin
+request : {
+    "email" : "example@example.com",
+    "password" : "Password1234"
+}
+response : {
+    '200': {
+        "message" : "signin success"
+    }
+    '400': {
+        "message" : "signin fail"
+    }
+}
+
+--------------------------------------------------------------------------------------------
+(get user info)
+url : /api/passenger/info
+method : GET
+description : this api is for get a user info
+request : {
+    "userID" : "1"
+}
+response : {
+    '200': {
+        user : {
+            "email" : "example@example.com",
+            "name" : "jeongeunseong",
+            "University" : "kyunghee"
+            "UniversityID" : "2015101234"
+            ...
+        }
+    }
+    '400': {
+        "message" : "get user info fail"
+    }
+}
+
+--------------------------------------------------------------------------------------------
+(update user info)
+url : /api/passenger/info
+method : PUT
+description : this api is for update a user info
+request : {
+    "userID" : "1",
+    "email" : "example@example.com",
+    "name" : "jeongeunseong",
+    "University" : "kyunghee"
+    "UniversityID" : "2015101234"
+    ...
+}
+response : {
+    '200': {
+        "message" : "update user info success"
+    }
+    '400': {
+        "message" : "update user info fail"
+    }
+}
+
+--------------------------------------------------------------------------------------------
+(forgot password)
+url : /api/passenger/forgot/password
+method : POST
+description : this api is for forgot password
+request : {
+    "name" : "jeongeunseong",
+    "email" : "example@example.com"
+}
+response : {
+    '200': {
+        "message" : "password reset success"
+    }
+    '400': {
+        "message" : "password reset fail"
+    }
+}
+
+
+
+====================================================================================================
+================ [site] : consist of web page -> get site conponent. ===============================
+====================================================================================================
+
+--------------------------------------------------------------------------------------------
+(get today flight)
+url : /api/site/flight
+method : GET
+description : this api is for get today flight that passenger already registered (for individual)
+request : {
+    "userID" : "1"
+}
+response : {
+    '200': {
+        flight_list {
+            flight1 : {
+                "flightID" : "1",
+                "flightName" : "AI",
+                "flightTime" : "2018-11-11 12:00:00",
+                ...
+            }
+            flight2 : {
+                ...
+            }
+        }
+    }
+    '400': {
+        "message" : "get today flight fail"
+    }
+}
+
+--------------------------------------------------------------------------------------------
+(get all flight)
+url : /api/site/flight/all
+method : GET
+description : this api is for get all flight that passenger already registered (for individual)
+request : {
+    "userID" : "1"
+}
+response : {
+    '200': {
+        flight_list {
+            flight1 : {
+                "flightID" : "1",
+                "flightName" : "AI",
+                "flightTime" : "2018-11-11 12:00:00",
+                ...
+            }
+            flight2 : {
+                ...
+            }
+        }
+    }
+    '400': {
+        "message" : "get all flight fail"
+    }
+}
+
+--------------------------------------------------------------------------------------------
+(get flight detail)
+url : /api/site/flight/detail
+method : GET
+description : this api is for get flight detail
+request : {
+    "flightID" : "1"
+}
+response : {
+    '200': {
+        flight : {
+            "flightID" : "1",
+            "flightName" : "AI",
+            "flightTime" : "2018-11-11 12:00:00",
+            ...
+        }
+    }
+    '400': {
+        "message" : "get flight detail fail"
+    }
+}
+
+--------------------------------------------------------------------------------------------
+(search flight)
+url : /api/site/flight/search
+method : GET
+description : this api is for search flight to register
+request : {
+    "flightName" : "AI"
+}
+response : {
+    '200': {
+        flight_list {
+            flight1 : {
+                "flightID" : "1",
+                "flightName" : "AI",
+                "flightTime" : "2018-11-11 12:00:00",
+                ...
+            }
+            flight2 : {
+                ...
+            }
+        }
+    }
+    '400': {
+        "message" : "search flight fail"
+    }
+}
+
+--------------------------------------------------------------------------------------------
