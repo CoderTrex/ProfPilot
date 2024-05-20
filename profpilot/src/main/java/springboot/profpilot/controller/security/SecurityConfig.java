@@ -16,12 +16,14 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/signup", "/user/login", "/user/logout").permitAll()
+                        .requestMatchers("/user/signup", "/user/login", "/user/logout",
+                                "/user/signup/email/verify").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->
                         formLogin.loginPage("/user/login")
                                 .defaultSuccessUrl("/")
+                                .usernameParameter("email")
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))

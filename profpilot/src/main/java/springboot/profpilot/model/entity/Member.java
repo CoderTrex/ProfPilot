@@ -1,4 +1,4 @@
-package springboot.profpilot.model;
+package springboot.profpilot.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Passenger {
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,15 +17,17 @@ public class Passenger {
     @Column(unique = true)
     private String email;
 
+    private String university;
     private String name;
+    private Long studentId;
     private String major;
     private String phone;
     private String backup_email;
     private String password;
     private String role;
     private String status;
-    private Long grade;
     private String create_at;
+    private String agree_at;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JsonBackReference

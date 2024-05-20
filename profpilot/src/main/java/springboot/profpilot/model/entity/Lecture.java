@@ -1,4 +1,4 @@
-package springboot.profpilot.model;
+package springboot.profpilot.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -28,7 +28,7 @@ public class Lecture {
     private String materials;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    private List<Passenger> passengers;
+    private List<Member> Students;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Attendance> attendances;
@@ -40,6 +40,6 @@ public class Lecture {
     private List<Flight> flights;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    private Pilot professor;
+    private Member Professor;
 }
 

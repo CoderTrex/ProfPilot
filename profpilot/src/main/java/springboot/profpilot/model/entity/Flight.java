@@ -1,41 +1,45 @@
-package springboot.profpilot.model;
+package springboot.profpilot.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.List;
 
+@Entity
 @Getter
 @Setter
-@Entity
-public class Pilot {
+public class Flight {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String email;
-
     private String name;
-    private String major;
-    private String phone;
-    private String backup_email;
-    private String password;
-    private String role;
+    private Long identifier;
+    private String date;
+    private String time;
+    private Long session;
+    private String building;
+    private String room;
+    private String start_time;
+    private String end_time;
     private String status;
-    private String purchase_grade;
-    private String purchase_grade_duration;
-    private String cloud;
-    private String create_at;
+    private Long student_count;
+    private Long attend_student_count;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Lecture lecture;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Member Professor;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<Lecture> lectures;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JsonBackReference
-    private List<Flight> flights;
+    private List<Member> Students;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JsonBackReference

@@ -1,24 +1,27 @@
-package springboot.profpilot.model;
-
+package springboot.profpilot.model.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Getter
 @Setter
 @Entity
-public class Cloud {
-
+public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long storageVolume;
-    private Long allowedStorageVolume;
-    private String location;
+    private String content;
+    private String format;
+    private String sendTime;
+    private Long senderId;
+    private String senderRole;
+    private Long receiverId;
+    private String receiverRole;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
-    private Pilot pilot;
+    private Member member;
 }

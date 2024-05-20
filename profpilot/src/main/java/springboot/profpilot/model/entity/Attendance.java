@@ -1,4 +1,4 @@
-package springboot.profpilot.model;
+package springboot.profpilot.model.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -19,7 +19,7 @@ public class Attendance {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
-    private Passenger passenger;
+    private Member Student;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
@@ -28,10 +28,6 @@ public class Attendance {
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     private Lecture lecture;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonBackReference
-    private Pilot pilot;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference

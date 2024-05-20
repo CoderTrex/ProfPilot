@@ -7,29 +7,36 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import springboot.profpilot.repository.PassengerRepository;
-import springboot.profpilot.service.PassengerService;
-import springboot.profpilot.service.PilotService;
+import org.springframework.web.bind.annotation.*;
+import springboot.profpilot.model.entity.Member;
+import springboot.profpilot.model.instance.EmailVerfiy;
+import springboot.profpilot.service.entity.MemberService;
+import springboot.profpilot.service.instance.EmailVerfiyService;
+
+import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
-    private final PassengerService passengerService;
-    private final PilotService pilotService;
+
+    private final MemberService memberService;
+    private final EmailVerfiyService emailVerfiyService;
+
 
     @Getter
     @Setter
     class SignupForm {
+        @NotEmpty(message = "대학교를 입력해주세요.")
+        private String university;
         @NotEmpty(message = "이메일을 입력해주세요.")
         private String email;
+        @NotEmpty(message = "이메일 도메인을 입력해주세요.")
+        private String emailDomain;
         @NotEmpty(message = "이름을 입력해주세요.")
         private String name;
         @NotEmpty(message = "학번을 입력해주세요.")
-        private String studentId;
+        private Long studentId;
         @NotEmpty(message = "전공을 입력해주세요.")
         private String major;
         @NotEmpty(message = "비밀번호를 입력해주세요.")
@@ -47,13 +54,43 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "user/signup";
         }
-        if (signupForm.getRole().equals("professor")) {
-            pilotService.save(signupForm.getEmail(), signupForm.getName(), signupForm.getStudentId(), signupForm.getMajor(), signupForm.getPassword());
-        } else {
-            passengerService.save(signupForm.getEmail(), signupForm.getName(), signupForm.getStudentId(), signupForm.getMajor(), signupForm.getPassword());
+        memberService.save(signupForm.getUniversity(), signupForm.getEmail(), signupForm.getEmailDomain(),
+                signupForm.getName(), signupForm.getStudentId(),
+                signupForm.getMajor(), signupForm.getPassword(), signupForm.getRole());
+        return "redirect:/user/login";
+    }
+
+    @PostMapping("/signup/email/verify")
+    public @ResponseBody String verifyEmail(@RequestParam("email") String email) {
+        EmailVerfiy emailVerfiy = emailVerfiyService.findByEmail(email);
+        if (emailVerfiy != null) {
+            String sendTime = emailVerfiy.getTime();
+            if (emailVerfiy.isVerified()) {
+                return "already";
+            }
+            // 5분이내에 실행한 기록이 있다면 다시 보낼 수 없다.
+            else if (LocalDateTime.now().isBefore(LocalDateTime.parse(sendTime).plusMinutes(5))) {
+                return "wait";
+            }
         }
 
-        return "redirect:/user/login";
+        String response = memberService.verifyEmail(email);
+        if (response.equals("success")) {
+            return "success";
+        } else {
+            return "fail";
+        }
+    }
+
+    @GetMapping("/signup/email/verify")
+    public @ResponseBody String verifyEmail(@RequestParam("email") String email, @RequestParam("code") String code) {
+        String response = memberService.checkEmailVerifyCode(email, code);
+
+        if (response.equals("success")) {
+            return "success";
+        } else {
+            return "fail";
+        }
     }
 
     @GetMapping("/login")

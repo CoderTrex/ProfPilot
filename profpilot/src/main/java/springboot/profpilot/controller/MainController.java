@@ -11,7 +11,7 @@ public class MainController {
 
     @GetMapping("/")
     public String main(Principal principal) {
-        if (principal != null) {
+        if (principal == null) {
             return "redirect:/user/login";
         }
         return "redirect:/main/main_page";
