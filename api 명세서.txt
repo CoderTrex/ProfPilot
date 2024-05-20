@@ -43,7 +43,7 @@ lecture is made up of flight and passenger can register the lecture.
 | delete file           |   not implemented                     |   none            |   none            |
 --------------------------------------------------------------------------------------------------------|
 
-
+"email" : "example@example.com",
 
 
 ====================================================================================================
@@ -61,6 +61,7 @@ lecture is made up of flight and passenger can register the lecture.
         "name" : "jeongeunseong",
         "University" : "kyunghee"
         "UniversityID" : "2015101234"
+        "major" : "computer science"
     }
     response : {
         '200': {
@@ -68,6 +69,45 @@ lecture is made up of flight and passenger can register the lecture.
         }
         '400': {
             "message" : "signup fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (send verify email for signup)
+    url : /api/user/signup/verify
+    method : POST
+    description : this api is for send verify email for signup
+    request : {
+        "email" : "example@example.com"
+    }
+    response : {
+        '200': {
+            "message" : "send verify email success"
+        }
+        '400': {
+            "message" : "send verify email fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (verify email for signup)
+    url : /api/user/signup/verify
+    method : GET
+    description : this api is for verify email for signup
+    request : {
+        "email" : "example@example.com",
+        "verifyCode" : "1234"
+    }
+    response : {
+        '200': {
+            "message" : "verify email success"
+        }
+        '400': {
+            "message" : "verify email fail"
         }
     }
     --------------------------------------------------------------------------------------------
@@ -129,7 +169,7 @@ lecture is made up of flight and passenger can register the lecture.
         "name" : "jeongeunseong",
         "University" : "kyunghee"
         "UniversityID" : "2015101234"
-        ...
+        "major" : "computer science"
     }
     response : {
         '200': {
@@ -158,6 +198,31 @@ lecture is made up of flight and passenger can register the lecture.
         '400': {
             "message" : "password reset fail"
         }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    [professor service]
+    {
+        --------------------------------------------------------------------------------------------
+        (verify professor)
+        url : /api/user/professor/verify
+        method : POST
+        description : this api is for verify professor request
+        request : {
+            "userID" : "1",
+            "professorID" : "1"
+        }
+        response : {
+            '200': {
+                "message" : "verify professor request success"
+            }
+            '400': {
+                "message" : "verify professor request fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
     }
     --------------------------------------------------------------------------------------------
 }
@@ -375,6 +440,31 @@ lecture is made up of flight and passenger can register the lecture.
             }
         }
         --------------------------------------------------------------------------------------------
+
+
+        [professor service] 
+        {
+            --------------------------------------------------------------------------------------------
+            (make lecture) [only for professor]
+            url : /api/site/lecture/professor/make
+            method : POST
+            description : this api is for make lecture
+            request : {
+                "userID" : "1",
+                "lectureName" : "AI",
+                "lectureTime" : "2018-11-11 12:00:00",
+                ...
+            }
+            response : {
+                '200': {
+                    "message" : "make lecture success"
+                }
+                '400': {
+                    "message" : "make lecture fail"
+                }
+            }
+            --------------------------------------------------------------------------------------------
+        }
     }
 
 
@@ -616,4 +706,168 @@ lecture is made up of flight and passenger can register the lecture.
 
 
 ====================================================================================================
-===== 
+===== [attendance] : attendance service ============================================================
+====================================================================================================
+{
+    --------------------------------------------------------------------------------------------
+    (get all attendance by lecture)
+    url : /api/attendance/all
+    method : GET
+    description : this api is for get all attendance by lecture (for individual)
+    request : {
+        "userID" : "1",
+        "lectureID" : "1"
+    }
+    response : {
+        '200': {
+            attendance_list {
+                attendance1 : {
+                    "attendanceID" : "1",
+                    "attendanceTime" : "2018-11-11 12:00:00",
+                    "userID" : "1",
+                    ...
+                }
+                attendance2 : {
+                    ...
+                }
+            }
+        }
+        '400': {
+            "message" : "get all attendance fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (get attendance by flight)
+    url : /api/attendance/flight
+    method : GET
+    description : this api is for get attendance by flight (for individual)
+    request : {
+        "userID" : "1",
+        "flightID" : "1"
+    }
+    response : {
+        '200': {
+            attendance : {
+                "attendanceID" : "1",
+                "attendanceTime" : "2018-11-11 12:00:00",
+                "userID" : "1",
+                ...
+            }
+        }
+        '400': {
+            "message" : "get attendance by flight fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (attendance check)
+    url : /api/attendance/check
+    method : POST
+    description : this api is for attendance check
+    request : {
+        "userID" : "1",
+        "lectureID" : "1",
+        "flightID" : "1"
+    }
+    response : {
+        '200': {
+            "message" : "attendance check success"
+            "attendance-status" : "late"
+            "attendance-time" : "2018-11-11 12:00:00"
+        }
+        '400': {
+            "message" : "attendance check fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (modify attendance) [only for professor]
+    url : /api/attendance/professor/modify
+    method : PUT
+    description : this api is for modify attendance
+    request : {
+        "userID" : "1",
+        "lectureID" : "1",
+        "flightID" : "1",
+        "attendanceID" : "1",
+        "change-status" : "absent"
+    }
+    response : {
+        '200': {
+            "message" : "modify attendance success"
+        }
+        '400': {
+            "message" : "modify attendance fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (get attendance detail by flight) [only for professor]
+    url : /api/attendance/professor/detail
+    method : GET
+    description : this api is for get attendance detail by flight
+    request : {
+        "userID" : "1",
+        "userStatus" : "professor",
+        "lectureID" : "1",
+        "flightID" : "1"
+    }
+    response : {
+        '200': {
+            attendance_list {
+                attendance1 : {
+                    "attendanceID" : "1",
+                    "attendanceTime" : "2018-11-11 12:00:00",
+                    "userID" : "1",
+                    ...
+                }
+                attendance2 : {
+                    ...
+                }
+            }
+        }
+        '400': {
+            "message" : "get attendance detail by flight fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+
+}
+
+====================================================================================================
+===== [util] : util service ========================================================================
+====================================================================================================
+{
+    --------------------------------------------------------------------------------------------
+    (send email)
+    url : /api/util/email
+    method : POST
+    description : this api is for send email
+    request : {
+        "email" : "example@example.com"
+    }
+    response : {
+        '200': {
+            "message" : "send email success"
+        }
+        '400': {
+            "message" : "send email fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+}
