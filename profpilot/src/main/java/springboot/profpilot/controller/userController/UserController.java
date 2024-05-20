@@ -14,6 +14,7 @@ import springboot.profpilot.service.entity.MemberService;
 import springboot.profpilot.service.instance.EmailVerfiyService;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 @RequiredArgsConstructor
@@ -63,14 +64,22 @@ public class UserController {
     @PostMapping("/signup/email/verify")
     public @ResponseBody String verifyEmail(@RequestParam("email") String email) {
         EmailVerfiy emailVerfiy = emailVerfiyService.findByEmail(email);
+
         if (emailVerfiy != null) {
             String sendTime = emailVerfiy.getTime();
             if (emailVerfiy.isVerified()) {
                 return "already";
             }
-            // 5분이내에 실행한 기록이 있다면 다시 보낼 수 없다.
-            else if (LocalDateTime.now().isBefore(LocalDateTime.parse(sendTime).plusMinutes(5))) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime sendTimeParsed = LocalDateTime.parse(sendTime, formatter);
+            LocalDateTime now = LocalDateTime.now();
+            String nowString = now.format(formatter);
+            LocalDateTime nowParsed = LocalDateTime.parse(nowString, formatter);
+            if (nowParsed.isBefore(sendTimeParsed.plusMinutes(5))) {
                 return "wait";
+            }
+            else {
+                emailVerfiyService.deleteByEmail(email);
             }
         }
 
