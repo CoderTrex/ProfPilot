@@ -3,222 +3,871 @@
 api document: 
 This project is University attendance system.
 This project's concept is base on airport. student called passenger and teacher called pliot and the class called flight.
+lecture is made up of flight and passenger can register the lecture.
 
+
+|-------------------------------------------------------------------------------------------------------|
+| api name              |   implementation or not implemented   |   created date    |   updated date    |
+|-------------------------------------------------------------------------------------------------------|
+| ===== [User] : user service ==========================================================================|
+|-------------------------------------------------------------------------------------------------------|
+| signup                |   not implemented                     |   none            |   none            |
+| signin                |   not implemented                     |   none            |   none            |
+| get user info         |   not implemented                     |   none            |   none            |
+| update user info      |   not implemented                     |   none            |   none            |
+| forgot password       |   not implemented                     |   none            |   none            |
+|-------------------------------------------------------------------------------------------------------|
+| ===== [site] : consist of web page -> get site conponent. ============================================|
+|-------------------------------------------------------------------------------------------------------|
+| get today flight      |   not implemented                     |   none            |   none            |
+| get all flight        |   not implemented                     |   none            |   none            |
+| get flight detail     |   not implemented                     |   none            |   none            |
+--------------------------------------------------------------------------------------------------------|
+| get all lecture       |   not implemented                     |   none            |   none            |
+| search lecture        |   not implemented                     |   none            |   none            |
+| register lecture      |   not implemented                     |   none            |   none            |
+| cancel lecture        |   not implemented                     |   none            |   none            |
+| get lecture detail    |   not implemented                     |   none            |   none            |
+--------------------------------------------------------------------------------------------------------|
+| get my info           |   not implemented                     |   none            |   none            |
+| update my info        |   not implemented                     |   none            |   none            |
+| membership page       |   not implemented                     |   none            |   none            |
+| show my cloud         |   not implemented                     |   none            |   none            |
+--------------------------------------------------------------------------------------------------------|
+| purchase membership   |   not implemented                     |   none            |   none            |
+| drop membership       |   not implemented                     |   none            |   none            |
+--------------------------------------------------------------------------------------------------------|
+| show my cloud storage |   not implemented                     |   none            |   none            |
+| upload file           |   not implemented                     |   none            |   none            |
+| download file         |   not implemented                     |   none            |   none            |
+| delete file           |   not implemented                     |   none            |   none            |
+--------------------------------------------------------------------------------------------------------|
+
+"email" : "example@example.com",
 
 
 ====================================================================================================
-=================================== [Passenger] : user service =====================================
+===== [User] : user service ========================================================================
 ====================================================================================================
+{
+    --------------------------------------------------------------------------------------------
+    (signup)
+    url : /api/user/signup
+    method : POST
+    description : this api is for user signup
+    request : {
+        "email" : "example@example.com",
+        "password" : "Password1234",
+        "name" : "jeongeunseong",
+        "University" : "kyunghee"
+        "UniversityID" : "2015101234"
+        "major" : "computer science"
+    }
+    response : {
+        '200': {
+            "message" : "signup success"
+        }
+        '400': {
+            "message" : "signup fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
 
---------------------------------------------------------------------------------------------
-(signup)
-url : /api/passenger/signup
-method : POST
-description : this api is for passenger signup
-request : {
-    "email" : "example@example.com",
-    "password" : "Password1234",
-    "name" : "jeongeunseong",
-    "University" : "kyunghee"
-    "UniversityID" : "2015101234"
-}
-response : {
-    '200': {
-        "message" : "signup success"
+
+    --------------------------------------------------------------------------------------------
+    (send verify email for signup)
+    url : /api/user/signup/verify
+    method : POST
+    description : this api is for send verify email for signup
+    request : {
+        "email" : "example@example.com"
     }
-    '400': {
-        "message" : "signup fail"
+    response : {
+        '200': {
+            "message" : "send verify email success"
+        }
+        '400': {
+            "message" : "send verify email fail"
+        }
     }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (verify email for signup)
+    url : /api/user/signup/verify
+    method : GET
+    description : this api is for verify email for signup
+    request : {
+        "email" : "example@example.com",
+        "verifyCode" : "1234"
+    }
+    response : {
+        '200': {
+            "message" : "verify email success"
+        }
+        '400': {
+            "message" : "verify email fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (signin)
+    url : /api/user/signin
+    method : POST
+    description : this api is for user signin
+    request : {
+        "email" : "example@example.com",
+        "password" : "Password1234"
+    }
+    response : {
+        '200': {
+            "message" : "signin success"
+        }
+        '400': {
+            "message" : "signin fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (get user info)
+    url : /api/user/info
+    method : GET
+    description : this api is for get a user info
+    request : {
+        "userID" : "1"
+    }
+    response : {
+        '200': {
+            user : {
+                "email" : "example@example.com",
+                "name" : "jeongeunseong",
+                "University" : "kyunghee"
+                "UniversityID" : "2015101234"
+                ...
+            }
+        }
+        '400': {
+            "message" : "get user info fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (update user info)
+    url : /api/user/info
+    method : PUT
+    description : this api is for update a user info
+    request : {
+        "userID" : "1",
+        "email" : "example@example.com",
+        "name" : "jeongeunseong",
+        "University" : "kyunghee"
+        "UniversityID" : "2015101234"
+        "major" : "computer science"
+    }
+    response : {
+        '200': {
+            "message" : "update user info success"
+        }
+        '400': {
+            "message" : "update user info fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (forgot password)
+    url : /api/user/forgot/password
+    method : POST
+    description : this api is for forgot password
+    request : {
+        "name" : "jeongeunseong",
+        "email" : "example@example.com"
+    }
+    response : {
+        '200': {
+            "message" : "password reset success"
+        }
+        '400': {
+            "message" : "password reset fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    [professor service]
+    {
+        --------------------------------------------------------------------------------------------
+        (verify professor)
+        url : /api/user/professor/verify
+        method : POST
+        description : this api is for verify professor request
+        request : {
+            "userID" : "1",
+            "professorID" : "1"
+        }
+        response : {
+            '200': {
+                "message" : "verify professor request success"
+            }
+            '400': {
+                "message" : "verify professor request fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
+    }
+    --------------------------------------------------------------------------------------------
 }
 
---------------------------------------------------------------------------------------------
-(signin)
-url : /api/passenger/signin
-method : POST
-description : this api is for passenger signin
-request : {
-    "email" : "example@example.com",
-    "password" : "Password1234"
-}
-response : {
-    '200': {
-        "message" : "signin success"
-    }
-    '400': {
-        "message" : "signin fail"
-    }
-}
+====================================================================================================
+===== [site] : consist of web page -> get site conponent. ==========================================
+====================================================================================================
+{
 
---------------------------------------------------------------------------------------------
-(get user info)
-url : /api/passenger/info
-method : GET
-description : this api is for get a user info
-request : {
-    "userID" : "1"
-}
-response : {
-    '200': {
-        user : {
+    [main page]
+    {
+        --------------------------------------------------------------------------------------------
+        (get today flight)
+        url : /api/site/flight
+        method : GET
+        description : this api is for get today flight that user already registered (for individual)
+        request : {
+            "userID" : "1"
+        }
+        response : {
+            '200': {
+                flight_list {
+                    flight1 : {
+                        "flightID" : "1",
+                        "flightName" : "AI",
+                        "flightTime" : "2018-11-11 12:00:00",
+                        ...
+                    }
+                    flight2 : {
+                        ...
+                    }
+                }
+            }
+            '400': {
+                "message" : "get today flight fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
+
+        --------------------------------------------------------------------------------------------
+        (get all flight)
+        url : /api/site/flight/all
+        method : GET
+        description : this api is for get all flight that user already registered (for individual)
+        request : {
+            "userID" : "1"
+        }
+        response : {
+            '200': {
+                flight_list {
+                    flight1 : {
+                        "flightID" : "1",
+                        "flightName" : "AI",
+                        "flightTime" : "2018-11-11 12:00:00",
+                        ...
+                    }
+                    flight2 : {
+                        ...
+                    }
+                }
+            }
+            '400': {
+                "message" : "get all flight fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
+
+        --------------------------------------------------------------------------------------------
+        (get flight detail)
+        url : /api/site/flight/detail
+        method : GET
+        description : this api is for get flight detail
+        request : {
+            "flightID" : "1"
+        }
+        response : {
+            '200': {
+                flight : {
+                    "flightID" : "1",
+                    "flightName" : "AI",
+                    "flightTime" : "2018-11-11 12:00:00",
+                    ...
+                }
+            }
+            '400': {
+                "message" : "get flight detail fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+    }
+
+
+    [lecture page]
+    {
+        --------------------------------------------------------------------------------------------
+        (get all lecture)
+        url : /api/site/lecture/all
+        method : GET
+        description : this api is for get all lecture that user already registered (for individual)
+        request : {
+            "userID" : "1"
+        }
+        response : {
+            '200': {
+                lecture_list {
+                    lecture1 : {
+                        "lectureID" : "1",
+                        "lectureName" : "AI",
+                        "lectureTime" : "2018-11-11 12:00:00",
+                        ...
+                    }
+                    lecture2 : {
+                        ...
+                    }
+                }
+            }
+            '400': {
+                "message" : "get all lecture fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
+
+        --------------------------------------------------------------------------------------------
+        (search lecture)
+        url : /api/site/lecture/search
+        method : GET
+        description : this api is for search lecture by lecture name
+        request : {
+            "flightName" : "AI"
+        }
+        response : {
+            '200': {
+                flight_list {
+                    flight1 : {
+                        "flightID" : "1",
+                        "flightName" : "AI",
+                        "flightTime" : "2018-11-11 12:00:00",
+                        ...
+                    }
+                    flight2 : {
+                        ...
+                    }
+                }
+            }
+            '400': {
+                "message" : "search flight fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
+
+        --------------------------------------------------------------------------------------------
+        (register lecture)
+        url : /api/site/lecture/register
+        method : POST
+        description : this api is for register lecture
+        request : {
+            "userID" : "1",
+            "flightID" : "1"
+        }
+        response : {
+            '200': {
+                "message" : "register lecture success"
+            }
+            '400': {
+                "message" : "register lecture fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
+
+        --------------------------------------------------------------------------------------------
+        (cancel lecture)
+        url : /api/site/lecture/cancel
+        method : POST
+        description : this api is for cancel lecture
+        request : {
+            "userID" : "1",
+            "flightID" : "1"
+        }
+        response : {
+            '200': {
+                "message" : "cancel lecture success"
+            }
+            '400': {
+                "message" : "cancel lecture fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
+
+        --------------------------------------------------------------------------------------------
+        (get lecture detail)
+        url : /api/site/lecture/detail
+        method : GET
+        description : this api is for get lecture detail (for individual)
+        request : {
+            "userID" : "1"
+            "lectureID" : "1"
+        }
+        response : {
+            '200': {
+                lecture : {
+                    "lectureID" : "1",
+                    "lectureName" : "AI",
+                    "lectureTime" : "2018-11-11 12:00:00",
+                    ...
+                }
+            }
+            '400': {
+                "message" : "get lecture detail fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
+
+        [professor service] 
+        {
+            --------------------------------------------------------------------------------------------
+            (make lecture) [only for professor]
+            url : /api/site/lecture/professor/make
+            method : POST
+            description : this api is for make lecture
+            request : {
+                "userID" : "1",
+                "lectureName" : "AI",
+                "lectureTime" : "2018-11-11 12:00:00",
+                ...
+            }
+            response : {
+                '200': {
+                    "message" : "make lecture success"
+                }
+                '400': {
+                    "message" : "make lecture fail"
+                }
+            }
+            --------------------------------------------------------------------------------------------
+        }
+    }
+
+
+    [my page]
+    {
+        --------------------------------------------------------------------------------------------
+        (get my info)
+        url : /api/site/my/info
+        method : GET
+        description : this api is for get my info
+        request : {
+            "userID" : "1"
+        }
+        response : {
+            '200': {
+                user : {
+                    "email" : "example@example.com",
+                    "name" : "jeongeunseong",
+                    "University" : "kyunghee"
+                    "UniversityID" : "2015101234"
+                    ...
+                }
+            }
+            '400': {
+                "message" : "get my info fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
+
+        --------------------------------------------------------------------------------------------
+        (update my info)
+        url : /api/site/my/info
+        method : PUT
+        description : this api is for update my info
+        request : {
+            "userID" : "1",
             "email" : "example@example.com",
             "name" : "jeongeunseong",
             "University" : "kyunghee"
             "UniversityID" : "2015101234"
             ...
         }
-    }
-    '400': {
-        "message" : "get user info fail"
-    }
-}
-
---------------------------------------------------------------------------------------------
-(update user info)
-url : /api/passenger/info
-method : PUT
-description : this api is for update a user info
-request : {
-    "userID" : "1",
-    "email" : "example@example.com",
-    "name" : "jeongeunseong",
-    "University" : "kyunghee"
-    "UniversityID" : "2015101234"
-    ...
-}
-response : {
-    '200': {
-        "message" : "update user info success"
-    }
-    '400': {
-        "message" : "update user info fail"
-    }
-}
-
---------------------------------------------------------------------------------------------
-(forgot password)
-url : /api/passenger/forgot/password
-method : POST
-description : this api is for forgot password
-request : {
-    "name" : "jeongeunseong",
-    "email" : "example@example.com"
-}
-response : {
-    '200': {
-        "message" : "password reset success"
-    }
-    '400': {
-        "message" : "password reset fail"
-    }
-}
-
-
-
-====================================================================================================
-================ [site] : consist of web page -> get site conponent. ===============================
-====================================================================================================
-
---------------------------------------------------------------------------------------------
-(get today flight)
-url : /api/site/flight
-method : GET
-description : this api is for get today flight that passenger already registered (for individual)
-request : {
-    "userID" : "1"
-}
-response : {
-    '200': {
-        flight_list {
-            flight1 : {
-                "flightID" : "1",
-                "flightName" : "AI",
-                "flightTime" : "2018-11-11 12:00:00",
-                ...
+        response : {
+            '200': {
+                "message" : "update my info success"
             }
-            flight2 : {
-                ...
+            '400': {
+                "message" : "update my info fail"
             }
         }
-    }
-    '400': {
-        "message" : "get today flight fail"
-    }
-}
+        --------------------------------------------------------------------------------------------
 
---------------------------------------------------------------------------------------------
-(get all flight)
-url : /api/site/flight/all
-method : GET
-description : this api is for get all flight that passenger already registered (for individual)
-request : {
-    "userID" : "1"
-}
-response : {
-    '200': {
-        flight_list {
-            flight1 : {
-                "flightID" : "1",
-                "flightName" : "AI",
-                "flightTime" : "2018-11-11 12:00:00",
-                ...
+
+        --------------------------------------------------------------------------------------------
+        (membership page)
+        url : /api/site/my/membership
+        method : GET
+        description : this api is for purchase or drop membership -> get membership info
+        request : {
+            "userID" : "1"
+        }
+        response : {
+            '200': {
+                url: "http://localhost:8080/membership"
             }
-            flight2 : {
-                ...
+            '400': {
+                "message" : "move to membership page fail"
             }
         }
-    }
-    '400': {
-        "message" : "get all flight fail"
-    }
-}
+        --------------------------------------------------------------------------------------------
 
---------------------------------------------------------------------------------------------
-(get flight detail)
-url : /api/site/flight/detail
-method : GET
-description : this api is for get flight detail
-request : {
-    "flightID" : "1"
-}
-response : {
-    '200': {
-        flight : {
+
+        --------------------------------------------------------------------------------------------
+        (show my cloud storage)
+        url : /api/site/my/cloud
+        method : GET
+        description : this api is for show my cloud storage detail
+        request : {
+            "userID" : "1"
+        }
+        response : {
+            '200': {
+                url: "http://localhost:8080/cloud"
+            }
+            '400': {
+                "message" : "move to cloud storage page fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+    }
+
+
+    [membership page]
+    {                                                    
+        --------------------------------------------------------------------------------------------
+        (purchase membership)
+        url : /api/site/membership/purchase
+        method : POST
+        description : this api is for purchase membership
+        request : {
+            "userID" : "1",
+            "membershipID" : "1"
+        }
+        response : {
+            '200': {
+                "message" : "purchase membership success"
+            }
+            '400': {
+                "message" : "purchase membership fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
+
+        --------------------------------------------------------------------------------------------
+        (drop membership)
+        url : /api/site/membership/drop
+        method : POST
+        description : this api is for drop membership
+        request : {
+            "userID" : "1",
+            "membershipID" : "1"
+        }
+        response : {
+            '200': {
+                "message" : "drop membership success"
+            }
+            '400': {
+                "message" : "drop membership fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
+    }
+
+
+    [cloud storage page]
+    {
+        --------------------------------------------------------------------------------------------
+        (show my cloud storage)
+        url : /api/site/cloud
+        method : GET
+        description : this api is for show my cloud storage detail
+        request : {
+            "userID" : "1"
+        }
+        response : {
+            '200': {
+                cloud : {
+                    "userID" : "1",
+                    "cloudSize" : "100MB",
+                    "cloudUsed" : "50MB",
+                    "cloudRemain" : "50MB"
+                    "cloudFile" : {
+                        file1 : {
+                            "fileID" : "1",
+                            "fileName" : "example1",
+                            "fileSize" : "10MB",
+                            "flightID" : "1",
+                            ...
+                        }
+                        file2 : {
+                            ...
+                        }
+                    }
+                }
+            }
+            '400': {
+                "message" : "show my cloud storage fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
+
+        --------------------------------------------------------------------------------------------
+        (upload file)
+        url : /api/site/cloud/upload
+        method : POST
+        description : this api is for upload file
+        request : {
+            "userID" : "1",
+            "isLectureFile" : "true",
+            "lectureID" : "1",
             "flightID" : "1",
-            "flightName" : "AI",
-            "flightTime" : "2018-11-11 12:00:00",
-            ...
+            "file" : "file"
         }
-    }
-    '400': {
-        "message" : "get flight detail fail"
+        response : {
+            '200': {
+                "message" : "upload file success"
+            }
+            '400': {
+                "message" : "upload file fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
+
+        --------------------------------------------------------------------------------------------
+        (download file)
+        url : /api/site/cloud/download
+        method : GET
+        description : this api is for download file
+        request : {
+            "userID" : "1",
+            "fileID" : "1"
+        }
+        response : {
+            '200': {
+                "message" : "download file success"
+            }
+            '400': {
+                "message" : "download file fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
+
+
+        --------------------------------------------------------------------------------------------
+        (delete file)
+        url : /api/site/cloud/delete
+        method : DELETE
+        description : this api is for delete file
+        request : {
+            "userID" : "1",
+            "fileID" : "1"
+        }
+        response : {
+            '200': {
+                "message" : "delete file success"
+            }
+            '400': {
+                "message" : "delete file fail"
+            }
+        }
+        --------------------------------------------------------------------------------------------
     }
 }
 
---------------------------------------------------------------------------------------------
-(search flight)
-url : /api/site/flight/search
-method : GET
-description : this api is for search flight to register
-request : {
-    "flightName" : "AI"
-}
-response : {
-    '200': {
-        flight_list {
-            flight1 : {
-                "flightID" : "1",
-                "flightName" : "AI",
-                "flightTime" : "2018-11-11 12:00:00",
-                ...
+
+====================================================================================================
+===== [attendance] : attendance service ============================================================
+====================================================================================================
+{
+    --------------------------------------------------------------------------------------------
+    (get all attendance by lecture)
+    url : /api/attendance/all
+    method : GET
+    description : this api is for get all attendance by lecture (for individual)
+    request : {
+        "userID" : "1",
+        "lectureID" : "1"
+    }
+    response : {
+        '200': {
+            attendance_list {
+                attendance1 : {
+                    "attendanceID" : "1",
+                    "attendanceTime" : "2018-11-11 12:00:00",
+                    "userID" : "1",
+                    ...
+                }
+                attendance2 : {
+                    ...
+                }
             }
-            flight2 : {
+        }
+        '400': {
+            "message" : "get all attendance fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (get attendance by flight)
+    url : /api/attendance/flight
+    method : GET
+    description : this api is for get attendance by flight (for individual)
+    request : {
+        "userID" : "1",
+        "flightID" : "1"
+    }
+    response : {
+        '200': {
+            attendance : {
+                "attendanceID" : "1",
+                "attendanceTime" : "2018-11-11 12:00:00",
+                "userID" : "1",
                 ...
             }
         }
+        '400': {
+            "message" : "get attendance by flight fail"
+        }
     }
-    '400': {
-        "message" : "search flight fail"
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (attendance check)
+    url : /api/attendance/check
+    method : POST
+    description : this api is for attendance check
+    request : {
+        "userID" : "1",
+        "lectureID" : "1",
+        "flightID" : "1"
     }
+    response : {
+        '200': {
+            "message" : "attendance check success"
+            "attendance-status" : "late"
+            "attendance-time" : "2018-11-11 12:00:00"
+        }
+        '400': {
+            "message" : "attendance check fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (modify attendance) [only for professor]
+    url : /api/attendance/professor/modify
+    method : PUT
+    description : this api is for modify attendance
+    request : {
+        "userID" : "1",
+        "lectureID" : "1",
+        "flightID" : "1",
+        "attendanceID" : "1",
+        "change-status" : "absent"
+    }
+    response : {
+        '200': {
+            "message" : "modify attendance success"
+        }
+        '400': {
+            "message" : "modify attendance fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+    (get attendance detail by flight) [only for professor]
+    url : /api/attendance/professor/detail
+    method : GET
+    description : this api is for get attendance detail by flight
+    request : {
+        "userID" : "1",
+        "userStatus" : "professor",
+        "lectureID" : "1",
+        "flightID" : "1"
+    }
+    response : {
+        '200': {
+            attendance_list {
+                attendance1 : {
+                    "attendanceID" : "1",
+                    "attendanceTime" : "2018-11-11 12:00:00",
+                    "userID" : "1",
+                    ...
+                }
+                attendance2 : {
+                    ...
+                }
+            }
+        }
+        '400': {
+            "message" : "get attendance detail by flight fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+
 }
 
---------------------------------------------------------------------------------------------
+====================================================================================================
+===== [util] : util service ========================================================================
+====================================================================================================
+{
+    --------------------------------------------------------------------------------------------
+    (send email)
+    url : /api/util/email
+    method : POST
+    description : this api is for send email
+    request : {
+        "email" : "example@example.com"
+    }
+    response : {
+        '200': {
+            "message" : "send email success"
+        }
+        '400': {
+            "message" : "send email fail"
+        }
+    }
+    --------------------------------------------------------------------------------------------
+
+
+    --------------------------------------------------------------------------------------------
+}
