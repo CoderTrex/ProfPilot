@@ -11,12 +11,13 @@ lecture is made up of flight and passenger can register the lecture.
 |---------------------------------------------------------------------------------------------------------------------------------------|
 | ===== [User] : user service ==========================================================================================================|
 |---------------------------------------------------------------------------------------------------------------------------------------|
-| 1. signup                             |  POST         |   implementation                      |   2024-05-21      |   2024-05-21      |
-| 2. signup                             |  GET          |   implementation                      |   2024-05-21      |   2024-05-21      |
-| 3. send verify email for signup       |  POST         |   implementation                      |   2024-05-21      |   2024-05-21      |
-| 4. verify email for signup            |  GET          |   implementation                      |   2024-05-21      |   2024-05-21      |
-| 5. signin                             |  POST         |   implementation                      |   2024-05-21      |   2024-05-21      |
-| 6. get user info                      |  GET          |   not implemented                     |   none            |   none            |
+| 0. signup                             |  POST         |   implementation (completed)          |   2024-05-21      |   2024-05-21      |
+| 1. signup                             |  GET          |   implementation (completed)          |   2024-05-21      |   2024-05-21      |
+| 2. send verify email for signup       |  POST         |   implementation (completed)          |   2024-05-21      |   2024-05-21      |
+| 3. verify email for signup            |  GET          |   implementation (completed)          |   2024-05-21      |   2024-05-21      |
+| 4. signin                             |  POST         |   implementation (completed)          |   2024-05-21      |   2024-05-21      |
+| 5. get user info                      |  GET          |   not implemented                     |   none            |   none            |
+| 6. update user info                   |  PUT          |   not implemented                     |   none            |   none            |
 | 7. update user info                   |  PUT          |   not implemented                     |   none            |   none            |
 | 8. forgot password                    |  POST         |   not implemented                     |   none            |   none            |
 | 9. verify professor                   |  POST         |   not implemented                     |   none            |   none            |
@@ -41,7 +42,7 @@ lecture is made up of flight and passenger can register the lecture.
 | 6. make lecture                       |  POST         |   not implemented                     |   none            |   none            |
 |---------------------------------------------------------------------------------------------------------------------------------------|
 | [My page]                                                                                                                             |
-| 1. get my info                        |  GET          |   not implemented                     |   none            |   none            |
+| 1. get my info                        |  GET          |   implementation (not completed)      |   2024-05-21      |   2024-05-21      |
 | 2. update my info                     |  PUT          |   not implemented                     |   none            |   none            |
 | 3. membership page                    |  GET          |   not implemented                     |   none            |   none            |
 | 4. show my cloud storage              |  GET          |   not implemented                     |   none            |   none            |
@@ -77,9 +78,9 @@ lecture is made up of flight and passenger can register the lecture.
 ====================================================================================================
 {
     --------------------------------------------------------------------------------------------
-    (1. signup)
+    (0. signup)
     {
-        url : /user/signup
+        url : /member/signup
         method : POST
         description : this api is for user signup
         request : {
@@ -103,9 +104,9 @@ lecture is made up of flight and passenger can register the lecture.
 
 
     --------------------------------------------------------------------------------------------
-    (2. signup)
+    (1. signup)
     {
-        url : /user/signup
+        url : /member/signup
         method : GET
         description : this api is for user signup
         request : {
@@ -135,7 +136,7 @@ lecture is made up of flight and passenger can register the lecture.
     --------------------------------------------------------------------------------------------
     (2. send verify email for signup)
     {
-        url : /user/signup/email/verify
+        url : /member/signup/email/verify
         method : POST
         description : this api is for send verify email for signup
         request : {
@@ -156,7 +157,7 @@ lecture is made up of flight and passenger can register the lecture.
     --------------------------------------------------------------------------------------------
     (3. verify email for signup)
     {
-        url : /user/signup/email/verify/check
+        url : /member/signup/email/verify/check
         method : GET
         description : this api is for verify email for signup
         request : {
@@ -178,7 +179,7 @@ lecture is made up of flight and passenger can register the lecture.
     --------------------------------------------------------------------------------------------
     (4. signin)
     {
-        url : /user/signin
+        url : /member/signin
         method : POST
         description : this api is for user signin
         request : {
@@ -200,7 +201,7 @@ lecture is made up of flight and passenger can register the lecture.
     --------------------------------------------------------------------------------------------
     (5. get user info)
     {
-        url : /user/info
+        url : /member/info
         method : GET
         description : this api is for get a user info
         request : {
@@ -227,7 +228,7 @@ lecture is made up of flight and passenger can register the lecture.
     --------------------------------------------------------------------------------------------
     (6. update user info)
     {
-        url : /user/info
+        url : /member/info
         method : PUT
         description : this api is for update a user info
         request : {
@@ -253,7 +254,7 @@ lecture is made up of flight and passenger can register the lecture.
     --------------------------------------------------------------------------------------------
     (7. forgot password)
     {
-        url : /user/forgot/password
+        url : /member/forgot/password
         method : POST
         description : this api is for forgot password
         request : {
@@ -274,7 +275,7 @@ lecture is made up of flight and passenger can register the lecture.
     --------------------------------------------------------------------------------------------
     (8. verify professor)
     {
-        url : /user/professor/verify
+        url : /member/professor/verify
         method : POST
         description : this api is for verify professor request
         request : {
@@ -574,7 +575,7 @@ lecture is made up of flight and passenger can register the lecture.
         --------------------------------------------------------------------------------------------
         (1. get my info)
         {
-            url : /site/my/info
+            url : /member/profile/info
             method : GET
             description : this api is for get my info
             request : {
