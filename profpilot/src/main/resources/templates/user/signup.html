@@ -5,72 +5,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 50%;
-            top: 50%;
-            width: 40%;
-            height: 50%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0);
-            transform: translate(-50%, -50%);
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .modal_body {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
-            overflow-y: auto;
-        }
-
-        #modalTitle {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        #modalContent {
-            text-align: left;
-            line-height: 1.6;
-        }
-
-        #modalContent strong {
-            display: block;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-        .btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        #formGroup {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-        }
-
-        #emailLabel {
-            flex: 0 0 50%;
-        }
-
-        #email,
-        #emailDomain {
-            flex: 0 0 50%;
-            margin-top: 10px;
-        }
-
-
-
-    </style>
+    <link rel="stylesheet" href="/css/signup.css">
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
@@ -88,21 +23,26 @@
             <div class="invalid-feedback" th:if="${#fields.hasErrors('university')}" th:errors="*{university}"></div>
         </div>
         <div class="form-group">
-            <label for="email" id="emailLabel">이메일</label>
-            <input type="text" th:field="*{email}" class="form-control" id="email" placeholder="이메일을 입력해주세요.">
-            <select class="box" th:field="*{emailDomain}" id="emailDomain">
-                <option value="">도메인을 선택해주세요.</option>
-                <option value="khu.ac.kr">khu.ac.kr</option>
-                <option value="snu.ac.kr">snu.ac.kr</option>
-            </select>
+            <label for="email">이메일</label>
+            <div class="input-email" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                <input type="text" th:field="*{email}" class="form-control" id="email" placeholder="이메일을 입력해주세요.(도메인 제외)">
+                <span>@</span>
+                <select class="box" th:field="*{emailDomain}" id="emailDomain">
+                    <option value="">도메인을 선택해주세요.</option>
+                    <option value="khu.ac.kr">khu.ac.kr</option>
+                    <option value="snu.ac.kr">snu.ac.kr</option>
+                </select>
+            </div>
         </div>
         <div class="email-form-group">
-            <button type="button" id="sendEmailButton" class="btn btn-primary">이메일 인증번호 전송</button>
+            <button type="button" id="sendEmailButton" class="btn btn-primary">이메일 인증번호 전송</button><br><br>
         </div>
-        <div class="email-form-group" style="display: flex; align-items: center;">
+        <div class="form-group">
             <label for="emailVerify">이메일 인증번호</label>
-            <input type="text" class="form-control" id="emailVerify" placeholder="이메일로 전송된 인증번호를 입력해주세요." style="margin-right: 10px;">
-            <button type="button" class="btn btn-primary">인증번호 확인</button>
+            <div class="email-form-group" style="display: flex; align-items: center;">
+                <input type="text" class="form-control" id="emailVerify" placeholder="이메일로 전송된 인증번호를 입력해주세요." style="margin-right: 10px;">
+                <button type="button" class="btn btn-primary" id="emailVerifyButton">인증번호 확인</button>
+            </div>
         </div>
         <div class="form-group">
             <label for="name">이름</label>
@@ -138,7 +78,6 @@
         </div>
         <button type="submit" class="btn btn-primary" id="signupButton" disabled>회원가입</button>
     </form>
-    
     <button id="openModalBtn">이용약관 보기</button>
     <div class="modal" id="termsModal">
         <div class="modal_body" id="modalBody">
@@ -172,84 +111,7 @@
             </p>
         </div>
     </div>
-    <script>
-        const openModalBtn = document.getElementById('openModalBtn');
-        const termsModal = document.getElementById('termsModal');
-        openModalBtn.addEventListener('click', () => {
-            termsModal.style.display = 'block';
-        });
-        termsModal.addEventListener('click', () => {
-            termsModal.style.display = 'none';
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const agreeCheckbox = document.getElementById('agreeCheckbox');
-            const signupButton = document.getElementById('signupButton');
-
-            agreeCheckbox.addEventListener('change', function() {
-                signupButton.disabled = !agreeCheckbox.checked;
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
-
-            const sendEmailButton = document.getElementById('sendEmailButton');
-            const email = document.getElementById('email');
-            const emailDomain = document.getElementById('emailDomain');
-
-            sendEmailButton.addEventListener('click', function() {
-                if (email.value === '' || emailDomain.value === '') {
-                    alert('이메일 혹은 이메일 도메인을 입력해주세요.');
-                    return;
-                }
-                const emailValue = email.value + '@' + emailDomain.value;
-                alert('이메일 전송: ' + emailValue);
-                console.log(emailValue);
-                $.ajax({
-                    url: "/user/signup/email/verify",
-                    type: "POST",
-                    data: {
-                        email: emailValue
-                    },
-                    beforeSend: function(xhr) {
-                        xhr.setRequestHeader(header, token);
-                    },
-                    success: function(data) {
-                        if (data === "fail") {
-                            alert("이미 가입된 이메일입니다.");
-                        } else if (data === "success") {
-                            alert("이메일 전송 완료");
-                        } else if (data === "already") {
-                            alert("이미 인증이 완료된 이메일입니다.(해당 계정으로 이미 가입된 이메일이 있습니다.)");
-                        } else if (data === "wait") {
-                            alert("5분 후에 다시 시도해주세요.");
-                        } else {
-                            console.log(data);
-                            alert("서버 응답 처리 오류");
-                        }
-                    },
-                    error: function() {
-                        alert("이메일 전송 실패");
-                    }
-                });
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const emailVerify = document.getElementById('emailVerify');
-            const emailVerifyButton = document.getElementById('emailVerifyButton');
-
-            emailVerifyButton.addEventListener('click', function() {
-                const emailVerifyValue = emailVerify.value;
-                alert('이메일 인증번호 확인: ' + emailVerifyValue);
-            });
-        });
-    </script>
+    <script type="text/javascript" src="/js/signup.js"></script>
 </div>
 </body>
 </html>
