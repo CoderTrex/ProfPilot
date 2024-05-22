@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:profpilot/desktop-web/signup.dart';
+import 'package:profpilot/main.dart';
 
 class FindPasswordPage extends StatefulWidget {
   const FindPasswordPage({super.key});
@@ -21,11 +22,11 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
           decoration: BoxDecoration(color: Color(0xFF444444)),
           child: Stack(
             children: [
-              Positioned( // 이런!
+              Positioned(
+                // 이런!
                 left: screenSize.width * 0.1,
                 top: 152,
-                child: 
-                const DefaultTextStyle(
+                child: const DefaultTextStyle(
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 48,
@@ -39,11 +40,11 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                   ),
                 ),
               ),
-              Positioned( // 비밀번호를 잊으셨나요?
+              Positioned(
+                // 비밀번호를 잊으셨나요?
                 left: screenSize.width * 0.1,
                 top: 221,
-                child: 
-                const DefaultTextStyle(
+                child: const DefaultTextStyle(
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 48,
@@ -57,26 +58,27 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                   ),
                 ),
               ),
-              Positioned( // 비밀번호 찾기
+              Positioned(
+                // 비밀번호 찾기
                 left: screenSize.width * 0.5 - 100,
                 width: 200,
                 top: 478,
-                child:
-                  const DefaultTextStyle(
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontFamily: 'BMHANNAPro',
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                      letterSpacing: -0.14,
-                    ),
-                    child: Text(
-                      '비밀번호 찾기',
-                    ),
+                child: const DefaultTextStyle(
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontFamily: 'BMHANNAPro',
+                    fontWeight: FontWeight.w400,
+                    height: 0,
+                    letterSpacing: -0.14,
                   ),
+                  child: Text(
+                    '비밀번호 찾기',
+                  ),
+                ),
               ),
-              Positioned( // 헤더
+              Positioned(
+                // 헤더
                 left: 0,
                 top: 0,
                 child: Container(
@@ -99,7 +101,7 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
-                          fontFamily: 'Inter',
+                          fontFamily: 'BMHANNAPro',
                           fontWeight: FontWeight.w400,
                           height: 0.04,
                           letterSpacing: -0.12,
@@ -107,63 +109,91 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                         child: Text(
                           '프로프파일럿',
                         ),
-                      ),  
+                      ),
                     ],
                   ),
                 ),
               ),
-              Positioned( // 로그인, 비밀번호를 잃어버리셨습니까?
+              Positioned(
+                // 로그인, 비밀번호를 잃어버리셨습니까?
                 left: screenSize.width * 0.5 - 300,
                 top: 649,
                 child: Container(
                   width: 600,
                   height: 60,
-                  padding: const EdgeInsets.symmetric(horizontal: 61, vertical: 14),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 61, vertical: 14),
                   clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(),
-                  child: const Row(
+                  decoration: const BoxDecoration(),
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      DefaultTextStyle(
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                          letterSpacing: -0.12,
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginPage()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
                         ),
-                        child: Text(
-                          '로그인',
+                        child: const DefaultTextStyle(
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontFamily: 'BMHANNAPro',
+                            fontWeight: FontWeight.w400,
+                            height: 0,
+                            letterSpacing: -0.12,
+                          ),
+                          child: Text(
+                            '로그인',
+                          ),
                         ),
                       ),
-                      SizedBox(width: 134),
-                      DefaultTextStyle(
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                          letterSpacing: -0.12,
+                      const SizedBox(width: 134),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SignupPage()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
                         ),
-                        child: Text(
-                          '비밀번호를 잃어버리셨습니까?',
+                        child: const DefaultTextStyle(
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontFamily: 'BMHANNAPro',
+                            fontWeight: FontWeight.w400,
+                            height: 0,
+                            letterSpacing: -0.12,
+                          ),
+                          child: Text('회원가입'),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              Positioned( // 이메일
+              Positioned(
+                // 이메일
                 left: screenSize.width * 0.5 - 300,
                 top: 530,
                 child: Container(
                   width: 600,
                   height: 60,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 14),  
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 14),
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                     color: Colors.white,
