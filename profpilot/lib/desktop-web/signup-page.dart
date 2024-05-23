@@ -3,6 +3,8 @@ import 'package:profpilot/desktop-web/find-password-page.dart';
 import 'package:profpilot/desktop-web/login-page.dart';
 import 'package:profpilot/main.dart';
 import 'package:profpilot/mobile-web/M-login-page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -12,13 +14,28 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+
   bool _passwordsMatch() {
     return passwordController1.text == passwordController2.text;
   }
-
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController1 = TextEditingController();
   TextEditingController passwordController2 = TextEditingController();
   String selectedDomain = '도메인을 선택하세요'; // 기본값 설정
+
+  String _responseText = 'Waiting for response...';
+
+  Future<void> _SendVerifyEmail() async {
+    final response = await http.get(Uri.parse('http://localhost:8080/signup/email/verify?email=${emailController.text}'));
+    if (response.statusCode == 200) {
+      setState(() {
+        _responseText = response.body;
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -260,7 +277,7 @@ class _SignupPageState extends State<SignupPage> {
                   left: screenSize.width * 0.78,
                   top: 200,
                   child: Container(
-                      width: screenSize.width * 0.2,
+                      width: screenSize.width * 0.1,
                       height: 80,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 20),
@@ -297,7 +314,7 @@ class _SignupPageState extends State<SignupPage> {
                             child: DefaultTextStyle(
                               style: const TextStyle(
                                 color: Color(0xFF3D3D3D),
-                                fontSize: 25,
+                                fontSize: 16,
                                 fontFamily: 'BMHANNAPro',
                                 fontWeight: FontWeight.w400,
                                 height: 0.06,
@@ -308,6 +325,54 @@ class _SignupPageState extends State<SignupPage> {
                           );
                         }).toList(),
                       ))),
+              Positioned( // 인증 메일 전송
+                left: screenSize.width * 0.9,
+                top: 200,
+                child: Container(
+                  width: screenSize.width * 0.08,
+                  height: 80,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  clipBehavior: Clip.antiAlias,
+                  decoration: ShapeDecoration(
+                    color: const Color.fromARGB(255, 94, 92, 92),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          _SendVerifyEmail();   
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          minimumSize: const Size(100, 50),
+                        ),
+                        child: DefaultTextStyle(
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 10,
+                            fontFamily: 'BMHANNAPro',
+                            fontWeight: FontWeight.w400,
+                            height: 0.04,
+                            letterSpacing: -0.12,
+                          ),
+                          child: Text(
+                            '인증 메일 전송',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              
               Positioned(
                 // 이메일 인증
                 left: screenSize.width * 0.55,
@@ -698,3 +763,4 @@ class _SignupPageState extends State<SignupPage> {
     ));
   }
 }
+
