@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:profpilot/desktop-web/signup.dart';
-import 'package:profpilot/main.dart';
+import 'package:profpilot/desktop-web/login-page.dart';
+import 'package:profpilot/desktop-web/signup-page.dart';
 
 class FindPasswordPage extends StatefulWidget {
   const FindPasswordPage({super.key});
@@ -28,7 +28,7 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                 top: 152,
                 child: const DefaultTextStyle(
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 62, 158, 163),
                     fontSize: 48,
                     fontFamily: 'BMHANNAPro',
                     fontWeight: FontWeight.w400,

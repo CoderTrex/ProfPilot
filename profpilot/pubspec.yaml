@@ -9,6 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_screenutil: ^5.9.1
+  smooth_page_indicator: ^1.1.0
+
 
 dev_dependencies:
   flutter_test:

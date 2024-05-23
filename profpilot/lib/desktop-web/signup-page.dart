@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:profpilot/desktop-web/find-password.dart';
+import 'package:profpilot/desktop-web/find-password-page.dart';
+import 'package:profpilot/desktop-web/login-page.dart';
 import 'package:profpilot/main.dart';
+import 'package:profpilot/mobile-web/M-login-page.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -21,6 +23,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+    String breakpointName = getBreakpointName(screenSize.width);
     return Scaffold(
         body: Column(
       children: [
@@ -37,7 +40,7 @@ class _SignupPageState extends State<SignupPage> {
                 top: 428,
                 child: DefaultTextStyle(
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 95, 130, 195),
                     fontSize: 48,
                     fontFamily: 'BMHANNAPro',
                     fontWeight: FontWeight.w400,
@@ -123,7 +126,11 @@ class _SignupPageState extends State<SignupPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const LoginPage()),
+                                builder: (context) =>
+                                    breakpointName == 'MOBILE'
+                                        ? LoginPageMobile()
+                                        : LoginPage()
+                                        ),
                           );
                         },
                         style: ElevatedButton.styleFrom(
@@ -249,8 +256,7 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                 ),
               ),
-              Positioned(
-                  // 도메인
+              Positioned( // 도메인
                   left: screenSize.width * 0.78,
                   top: 200,
                   child: Container(
@@ -358,58 +364,53 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                 ),
               ),
-              Positioned(
-                // 이메일
+              Positioned( // 인증 확인
                 left: screenSize.width * 0.78,
                 top: 300,
                 child: Container(
-                  width: screenSize.width * 0.2,
+                  width: screenSize.width * 0.08,
                   height: 80,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
-                    color: Colors.white,
+                    color: const Color.fromARGB(255, 94, 92, 92),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18),
                     ),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0x14000000),
-                        blurRadius: 12,
-                        offset: Offset(2, 4),
-                        spreadRadius: 0,
-                      )
-                    ],
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(
-                          child: TextField(
-                              autofocus: true,
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: '인증 확인',
-                                  hintStyle: TextStyle(
-                                    color: Color(0xFF3D3D3D),
-                                    fontSize: 25,
-                                    fontFamily: 'BMHANNAPro',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0.06,
-                                    letterSpacing: -0.14,
-                                  )),
-                              style: TextStyle(
-                                color: Color(0xFF3D3D3D),
-                                fontSize: 25,
-                                fontFamily: 'BMHANNAPro',
-                                fontWeight: FontWeight.w400,
-                                height: 0.06,
-                                letterSpacing: -0.14,
-                              )))
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FindPasswordPage()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          minimumSize: const Size(100, 50),
+                        ),
+                        child: DefaultTextStyle(
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontFamily: 'BMHANNAPro',
+                            fontWeight: FontWeight.w400,
+                            height: 0.04,
+                            letterSpacing: -0.12,
+                          ),
+                          child: Text(
+                            '인증 확인',
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
