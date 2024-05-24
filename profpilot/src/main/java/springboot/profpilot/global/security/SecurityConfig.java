@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -32,13 +33,19 @@ public class SecurityConfig {
                 .formLogin(formLogin ->
                         formLogin.loginPage("/member/login")
                                 .defaultSuccessUrl("/")
+                                .failureHandler((request, response, exception) -> {
+                                    exception.printStackTrace();
+                                    System.out.println(exception.getMessage());
+                                })
                                 .usernameParameter("email")
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                         .invalidateHttpSession(true)
                         .logoutSuccessUrl("/member/login")
-                );
+                )
+                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                ;
 
         return http.build();
     }

@@ -6,6 +6,7 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import springboot.profpilot.model.member.Member;
 import springboot.profpilot.model.member.MemberService;
 
@@ -17,11 +18,15 @@ public class MainController {
     private final MemberService memberService;
 
     @GetMapping("/")
+    @ResponseBody
     public String main(Principal principal) {
+        System.out.println("main page");
         if (principal == null) {
-            return "redirect:/member/login";
+            return "fail to login";
+//            return "redirect:/member/login";
         }
-        return "redirect:/main/main_page";
+        return "success";
+//        return "redirect:/main/main_page";
     }
 
     @GetMapping("/main/main_page")

@@ -73,7 +73,7 @@ public class MemberController {
             return "fail";
         }
     }
-    
+
     @PostMapping("/signup/email/verify/check")
     public @ResponseBody String checkEmail(@RequestBody CheckEmail checkEmail) {
         String email = checkEmail.getEmail();
@@ -83,6 +83,7 @@ public class MemberController {
 
     @GetMapping("/login")
     public String login() {
+        System.out.println("login page");
         return "user/login";
     }
 
