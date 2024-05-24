@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:profpilot/desktop-web/lecture-detail-page.dart';
 import 'package:profpilot/desktop-web/login-page.dart';
 import 'package:profpilot/mobile-web/M-login-page.dart';
 
@@ -63,7 +64,7 @@ class MyApp extends StatelessWidget {
             home = const LoginPage(); // 기본값으로 데스크탑 페이지를 사용
         }
 
-        // home = MainPage();
+        // home = const MainPage();
 
         
         
