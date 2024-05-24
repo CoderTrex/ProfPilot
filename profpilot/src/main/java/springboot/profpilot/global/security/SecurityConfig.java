@@ -19,29 +19,29 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/csrf/token",
+                                "/member/signup/email/verify", "/member/signup/email/verify/check",
+                                "/member/signup", "/member/login", "/member/logout")
+                )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/signup", "/user/login", "/user/logout",
-                                "/user/signup/email/verify", "/user/signup/email/verify/check", "/images/**", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/csrf/token","/member/signup", "/member/login", "/member/logout",
+                                "/member/signup/email/verify", "/member/signup/email/verify/check", "/images/**", "/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->
-                        formLogin.loginPage("/user/login")
+                        formLogin.loginPage("/member/login")
                                 .defaultSuccessUrl("/")
                                 .usernameParameter("email")
                 )
                 .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                         .invalidateHttpSession(true)
-                        .logoutSuccessUrl("/user/login")
+                        .logoutSuccessUrl("/member/login")
                 );
 
         return http.build();
     }
-
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

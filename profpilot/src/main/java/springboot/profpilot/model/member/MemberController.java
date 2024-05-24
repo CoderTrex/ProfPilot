@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import springboot.profpilot.global.Utils.DTO.CheckEmail;
+import springboot.profpilot.global.Utils.DTO.SignUpDTO;
 import springboot.profpilot.model.emailverfiy.EmailVerfiy;
 import springboot.profpilot.model.emailverfiy.EmailVerfiyService;
 
@@ -23,59 +25,27 @@ public class MemberController {
     private final MemberService memberService;
     private final EmailVerfiyService emailVerfiyService;
 
-    @Getter
-    @Setter
-    class SignupForm {
-        @NotEmpty(message = "대학교를 입력해주세요.")
-        private String university;
-        @NotEmpty(message = "이메일을 입력해주세요.")
-        private String email;
-        @NotEmpty(message = "이메일 도메인을 입력해주세요.")
-        private String emailDomain;
-        @NotEmpty(message = "이름을 입력해주세요.")
-        private String name;
-        @NotEmpty(message = "학번을 입력해주세요.")
-        private Long studentId;
-        @NotEmpty(message = "전공을 입력해주세요.")
-        private String major;
-        @NotEmpty(message = "비밀번호를 입력해주세요.")
-        private String password;
-        @NotEmpty(message = "교수 또는 학생을 선택해주세요.")
-        private String role;
-    }
-    
-    @GetMapping("/signup")
-    public String signup(SignupForm signupForm) {
-        return "user/signup";
-    }
 
+    // 이메일, 비밀번호, 이름, 학번만 받아서 회원가입
     @PostMapping("/signup")
-    public String signup(@Valid SignupForm signupForm, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "user/signup";
+    public @ResponseBody String signup(@RequestBody SignUpDTO member) {
+        if (member.getEmail() == null || member.getPassword() == null || member.getName() == null || member.getStudentId() == null) {
+            return "lack";
         }
-        if (signupForm.getUniversity() != null && signupForm.getEmail() != null && signupForm.getEmailDomain() != null && signupForm.getName() != null && signupForm.getStudentId() != null && signupForm.getMajor() != null && signupForm.getPassword() != null && signupForm.getRole() != null) {
-            if (signupForm.getUniversity().equals("") || signupForm.getEmail().equals("") || signupForm.getEmailDomain().equals("") || signupForm.getName().equals("") || signupForm.getStudentId().equals("") || signupForm.getMajor().equals("") || signupForm.getPassword().equals("") || signupForm.getRole().equals("")) {
-                return "user/signup";
-            }
+        if (memberService.findByEmail(member.getEmail()) != null) {
+            return "already";
         }
-        if (memberService.findByEmail(signupForm.getEmail() + "@" + signupForm.getEmailDomain()) != null) {
-            bindingResult.rejectValue("email", null, "이미 가입된 이메일입니다.");
-            return "user/signup";
-        }
-        EmailVerfiy emailVerfiy = emailVerfiyService.findByEmail(signupForm.getEmail() + "@" + signupForm.getEmailDomain());
+        EmailVerfiy emailVerfiy = emailVerfiyService.findByEmail(member.getEmail());
         if (emailVerfiy == null || !emailVerfiy.isVerified()) {
-            bindingResult.rejectValue("email", null, "이메일 인증을 해주세요.");
-            return "user/signup";
+            return "not-Verified";
         }
-        memberService.save(signupForm.getUniversity(), signupForm.getEmail(), signupForm.getEmailDomain(),
-                signupForm.getName(), signupForm.getStudentId(),
-                signupForm.getMajor(), signupForm.getPassword(), signupForm.getRole());
-        return "redirect:/user/login";
+        memberService.save(member.getEmail(), member.getPassword(), member.getName(), member.getStudentId());
+        return "success";
     }
 
     @PostMapping("/signup/email/verify")
-    public @ResponseBody String verifyEmail(@RequestParam("email") String email) {
+    public @ResponseBody String verifyEmail(@RequestBody String json_email) {
+        String email = json_email.substring(10, json_email.length() - 2);
         EmailVerfiy emailVerfiy = emailVerfiyService.findByEmail(email);
 
         if (emailVerfiy != null) {
@@ -103,12 +73,11 @@ public class MemberController {
             return "fail";
         }
     }
-
+    
     @PostMapping("/signup/email/verify/check")
-    public @ResponseBody String verifyEmail(@RequestParam("email") String email, @RequestParam("code") String code) {
-        System.out.println("verifyEmail");
-        System.out.println("email: " + email);
-        System.out.println("code: " + code);
+    public @ResponseBody String checkEmail(@RequestBody CheckEmail checkEmail) {
+        String email = checkEmail.getEmail();
+        String code = checkEmail.getVerifyCode();
         return memberService.checkEmailVerifyCode(email, code);
     }
 

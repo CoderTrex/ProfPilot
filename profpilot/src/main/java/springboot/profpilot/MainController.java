@@ -1,6 +1,8 @@
 package springboot.profpilot;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +19,7 @@ public class MainController {
     @GetMapping("/")
     public String main(Principal principal) {
         if (principal == null) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
         return "redirect:/main/main_page";
     }

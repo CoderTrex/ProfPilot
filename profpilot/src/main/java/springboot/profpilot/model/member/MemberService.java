@@ -23,19 +23,24 @@ public class MemberService {
         return memberRepository.findByEmail(email);
     }
 
-    public Member save(String university, String email, String emailDomain, String name,
-                       Long studentId, String major, String password, String role) {
+
+    // 이메일, 비밀번호, 이름, 학번만 받아서 회원가입
+    public Member save(String email, String password, String name, Long studentId) {
         Member member = new Member();
-        member.setUniversity(university);
-        member.setEmail(email + "@" + emailDomain);
+        if (email.contains("khu.ac.kr")) {
+            member.setUniversity("경희대학교");
+        } else {
+            member.setUniversity("타대학교");
+        }
+        member.setEmail(email);
         member.setName(name);
         member.setStudentId(studentId);
-        member.setMajor(major);
+        member.setMajor("");
         member.setPhone("");
         member.setMembership("NONE");
         member.setMembershipExpire("");
         member.setPassword(passwordEncoder.encode(password));
-        member.setRole(role);
+        member.setRole("STUDENT");
         member.setStatus("ACTIVE");
         member.setCreate_at(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         member.setAgree_at(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
@@ -57,6 +62,9 @@ public class MemberService {
 
     public String checkEmailVerifyCode(String email, String code) {
         EmailVerfiy emailVerfiy = emailVerfiyService.findByEmail(email);
+        if (emailVerfiy == null) {
+            return "notfound";
+        }
         if (emailVerfiy.getCode().equals(code)) {
             emailVerfiy.setVerified(true);
             emailVerfiyService.save(emailVerfiy);

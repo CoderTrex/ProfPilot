@@ -12,7 +12,7 @@
 <body>
 <div class="container">
     <h2>회원가입</h2>
-    <form th:action="@{/user/signup}" th:object="${signupForm}" method="post">
+    <form th:action="@{/member/signup}" th:object="${signupForm}" method="post">
         <div class="form-group">
             <label for="university">대학교</label>
             <select th:field="*{university}" class="form-control" id="university">
