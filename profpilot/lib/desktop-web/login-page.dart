@@ -1,7 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:profpilot/desktop-web/find-password-page.dart';
 import 'package:profpilot/desktop-web/signup-page.dart';
-
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,8 +14,39 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final Cookie cookie = Cookie('JSESSIONID', '1234');
+  Future<void> _login() async {
+    final String email = _emailController.text;
+    final String password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      showAboutDialog(context: context, children: const [
+        Text('이메일과 비밀번호를 입력해주세요.'),
+      ]);
+      return;
+    }
+
+    final response = await http.post(
+      Uri.parse('http://localhost:8080/member/login'),
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'email': email,
+        'password': password,
+      },
+    );
+
+    print(response.body);
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    _emailController.text = 'silvercaslte@khu.ac.kr';
+    _passwordController.text = '1234';
     final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(
@@ -24,8 +58,7 @@ class _LoginPageState extends State<LoginPage> {
             decoration: const BoxDecoration(color: Color(0xFF444444)),
             child: Stack(
               children: [
-                Positioned(
-                  // 안녕하세요.👋
+                Positioned(                  // 안녕하세요.👋
                   left: screenSize.width / 2 - 500,
                   top: 152,
                   child: const DefaultTextStyle(
@@ -40,8 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text('안녕하세요. \u{1F44B}'),
                   ),
                 ),
-                Positioned(
-                  // 프로프파일럿에 오신 걸 환영합니다.
+                Positioned(                  // 프로프파일럿에 오신 걸 환영합니다.
                   left: screenSize.width / 2 - 500,
                   top: 221,
                   child: const DefaultTextStyle(
@@ -64,8 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                Positioned(
-                  // 프로프파일럿에 로그인
+                Positioned(                  // 프로프파일럿에 로그인
                   left: screenSize.width / 2 - 100,
                   top: 443,
                   child: const SizedBox(
@@ -84,8 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                Positioned(
-                  // 헤더
+                Positioned(                  // 헤더
                   left: 0,
                   top: 0,
                   child: Container(
@@ -119,10 +149,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                Positioned(
-                  // 회원 가입, 비밀번호를 잊으셨나요?
-                  left: screenSize.width / 2 - 267,
-                  top: 746,
+                Positioned(                  // 회원 가입, 비밀번호를 잊으셨나요?
+                  left: screenSize.width / 2 - 300,
+                  top: 900,
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 61, vertical: 14),
@@ -190,8 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                Positioned(
-                  // 이메일
+                Positioned(                  // 이메일
                   left: screenSize.width / 2 - 300,
                   top: 500,
                   child: Container(
@@ -212,12 +240,13 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ],
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Expanded(
                           child: TextField(
-                            decoration: InputDecoration(
+                            controller: _emailController,
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText: '이메일',
                               hintStyle: TextStyle(
@@ -228,7 +257,7 @@ class _LoginPageState extends State<LoginPage> {
                                 letterSpacing: -0.14,
                               ),
                             ),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Color(0xFF3D3D3D),
                               fontSize: 25,
                               fontFamily: 'BMHANNAPro',
@@ -241,8 +270,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                Positioned(
-                  // 비밀번호
+                Positioned(                  // 비밀번호
                   left: screenSize.width / 2 - 300,
                   top: 623,
                   child: Container(
@@ -263,13 +291,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ],
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Expanded(
                           child: TextField(
                             obscureText: true,
-                            decoration: InputDecoration(
+                            controller: _passwordController,
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText: '비밀번호',
                               hintStyle: TextStyle(
@@ -280,7 +309,7 @@ class _LoginPageState extends State<LoginPage> {
                                 letterSpacing: -0.14,
                               ),
                             ),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Color(0xFF3D3D3D),
                               fontSize: 25,
                               fontFamily: 'BMHANNAPro',
@@ -288,6 +317,58 @@ class _LoginPageState extends State<LoginPage> {
                               letterSpacing: -0.14,
                             ),
                           ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: screenSize.width / 2 - 100,
+                  top: 750,
+                  child: Container(
+                    width: 200,
+                    height: 40,
+                    // padding: const EdgeInsets.only(left: 48, right: 46),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: ShapeDecoration(
+                      color: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      shadows: const [
+                        BoxShadow(
+                          color: Color(0x14000000),
+                          blurRadius: 12,
+                          offset: Offset(2, 4),
+                          spreadRadius: 0,
+                        )
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: _login,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            shadowColor: Colors.transparent,
+                            minimumSize: const Size(200, 40),
+                          ),
+                          child: const Text(
+                            '입장하기!',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontFamily: 'BMHANNAPro',
+                              fontWeight: FontWeight.w400,
+                              height: 0.06,
+                              letterSpacing: -0.14,
+                            ),
+                            
+
+                        ),
                         ),
                       ],
                     ),

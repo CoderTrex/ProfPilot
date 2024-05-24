@@ -21,6 +21,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/
   fonts:
     - family: BMHANNAPro
       fonts:
@@ -29,3 +31,4 @@ flutter:
     - family: AppleSDGothicNeo
       fonts:
         - asset: assets/fonts/Apple_SD_Gothic_Neo_Bold.otf
+  

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key});
+class LectureDetail extends StatefulWidget {
+  const LectureDetail({Key? key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<LectureDetail> createState() => _LectureDetailState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _LectureDetailState extends State<LectureDetail> {
   final PageController _pageController = PageController();
 
   @override

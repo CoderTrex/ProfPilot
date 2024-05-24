@@ -1,4 +1,8 @@
+import 'dart:math';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key});
@@ -95,6 +99,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
               ),
+              
               Positioned(
                 right: screenSize.width * 0.02,
                 top: 60,
@@ -114,7 +119,7 @@ class _MainPageState extends State<MainPage> {
                       hintStyle: TextStyle(
                         color: Color(0xFFD9D9D9),
                         fontSize: 20,
-                        fontFamily: 'AppleSDGothicNeo',
+                        fontFamily: 'BMHANNAPro',
                         fontWeight: FontWeight.w400,
                         height: 0.04,
                         letterSpacing: -0.12,
@@ -139,7 +144,7 @@ class _MainPageState extends State<MainPage> {
                         style: TextStyle(
                           color: Color(0xFF9F9F9F),
                           fontSize: 48,
-                          fontFamily: 'BM HANNA_TTF',
+                          fontFamily: 'BMHANNAPro',
                           fontWeight: FontWeight.w400,
                           height: 0.02,
                           letterSpacing: -0.14,
@@ -150,7 +155,7 @@ class _MainPageState extends State<MainPage> {
                         style: TextStyle(
                           color: Color.fromARGB(255, 237, 255, 75),
                           fontSize: 48,
-                          fontFamily: 'BM HANNA_TTF',
+                          fontFamily: 'BMHANNAPro',
                           fontWeight: FontWeight.w400,
                           height: 0.02,
                           letterSpacing: -0.14,
@@ -171,7 +176,7 @@ class _MainPageState extends State<MainPage> {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 48,
-                          fontFamily: 'BM HANNA_TTF',
+                          fontFamily: 'BMHANNAPro',
                           fontWeight: FontWeight.w400,
                           height: 0.02,
                           letterSpacing: -0.14,
@@ -180,9 +185,9 @@ class _MainPageState extends State<MainPage> {
                       TextSpan(
                         text: 'N',
                         style: TextStyle(
-                          color: Color(0xFF88C3FF),
+                          color: Colors.white,
                           fontSize: 48,
-                          fontFamily: 'BM HANNA_TTF',
+                          fontFamily: 'BMHANNAPro',
                           fontWeight: FontWeight.w400,
                           height: 0.02,
                           letterSpacing: -0.14,
@@ -193,7 +198,7 @@ class _MainPageState extends State<MainPage> {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 48,
-                          fontFamily: 'BM HANNA_TTF',
+                          fontFamily: 'BMHANNAPro',
                           fontWeight: FontWeight.w400,
                           height: 0.02,
                           letterSpacing: -0.14,
@@ -216,26 +221,29 @@ class _MainPageState extends State<MainPage> {
             scrollDirection: Axis.horizontal, // 수평 스크롤 설정
             child: Row(
               children: List.generate(10, (index) {
-                return Container(
-                  width: 500, // 적절한 너비 설정
-                  height: 500, // 적절한 높이 설정
-                  margin: EdgeInsets.only(left: 300, right: 100), // 적절한 마진 설정
-                  clipBehavior: Clip.antiAlias,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0x14000000),
-                        blurRadius: 12,
-                        offset: Offset(2, 4),
-                        spreadRadius: 0,
-                      )
-                    ],
+              
+              return Container(
+                width: 500, // 적절한 너비 설정
+                height: 500, // 적절한 높이 설정
+                margin: const EdgeInsets.only(left: 300, right: 100), // 적절한 마진 설정
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/apple-wallpaper.jpg'),
+                    // alignment: Alignment(Random().nextDouble(), Random().nextDouble())
+                    fit: BoxFit.cover, // 이미지가 Container를 완전히 덮도록 설정
                   ),
-                );
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x14000000),
+                      blurRadius: 12,
+                      offset: Offset(2, 4),
+                      spreadRadius: 0,
+                    ),
+                  ],
+                ),
+              );
               } 
               ),
             ),

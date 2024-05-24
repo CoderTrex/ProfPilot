@@ -36,7 +36,7 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                     letterSpacing: -0.14,
                   ),
                   child: Text(
-                    '이런!',
+                    '이런! 🦘비밀번호를 잊으셨나요? ',
                   ),
                 ),
               ),
@@ -54,7 +54,7 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                     letterSpacing: -0.14,
                   ),
                   child: Text(
-                    '비밀번호를 잊으셨나요?',
+                    '등록하신 이메일로 새로운 비밀번호를 보내드릴게요.',
                   ),
                 ),
               ),

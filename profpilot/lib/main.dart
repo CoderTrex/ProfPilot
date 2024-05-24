@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:profpilot/desktop-web/lecture-detail-page.dart';
 import 'package:profpilot/desktop-web/login-page.dart';
+import 'package:profpilot/desktop-web/main-page.dart';
 import 'package:profpilot/mobile-web/M-login-page.dart';
 
 
