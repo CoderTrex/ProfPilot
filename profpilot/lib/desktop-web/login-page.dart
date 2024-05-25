@@ -16,12 +16,15 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final Cookie cookie = Cookie('JSESSIONID', '1234');
+
   Future<void> _login() async {
     final String email = _emailController.text;
     final String password = _passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
+    if (email.isEmpty ||
+        password.isEmpty ||
+        email == '이메일을 입력해주세요.' ||
+        password == '비밀번호를 입력해주세요.') {
       showAboutDialog(context: context, children: const [
         Text('이메일과 비밀번호를 입력해주세요.'),
       ]);
@@ -42,11 +45,10 @@ class _LoginPageState extends State<LoginPage> {
     print(response.body);
   }
 
-
   @override
   Widget build(BuildContext context) {
-    _emailController.text = 'silvercaslte@khu.ac.kr';
-    _passwordController.text = '1234';
+    _emailController.text = '이메일을 입력해주세요.';
+    _passwordController.text = '비밀번호를 입력해주세요.';
     final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(
@@ -56,68 +58,9 @@ class _LoginPageState extends State<LoginPage> {
             height: screenSize.height,
             clipBehavior: Clip.antiAlias,
             decoration: const BoxDecoration(color: Color(0xFF444444)),
-            child: Stack(
+            child: Column(
               children: [
-                Positioned(                  // 안녕하세요.👋
-                  left: screenSize.width / 2 - 500,
-                  top: 152,
-                  child: const DefaultTextStyle(
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 92, 145, 175),
-                      fontSize: 48,
-                      fontFamily: 'BMHANNAPro',
-                      fontWeight: FontWeight.w400,
-                      height: 0.02,
-                      letterSpacing: -0.14,
-                    ),
-                    child: Text('안녕하세요. \u{1F44B}'),
-                  ),
-                ),
-                Positioned(                  // 프로프파일럿에 오신 걸 환영합니다.
-                  left: screenSize.width / 2 - 500,
-                  top: 221,
-                  child: const DefaultTextStyle(
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 216, 216, 216),
-                      fontSize: 48,
-                      fontFamily: 'BMHANNAPro',
-                      fontWeight: FontWeight.w400,
-                      height: 0.02,
-                      letterSpacing: -0.14,
-                    ),
-                    child: Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: '프로프파일럿에 오신 걸 환영합니다.',
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(                  // 프로프파일럿에 로그인
-                  left: screenSize.width / 2 - 100,
-                  top: 443,
-                  child: const SizedBox(
-                    width: 200,
-                    height: 52,
-                    child: DefaultTextStyle(
-                      style: TextStyle(
-                        color: Color(0xFF9F9F9F),
-                        fontSize: 20,
-                        fontFamily: 'BMHANNAPro',
-                        fontWeight: FontWeight.w400,
-                        height: 0.13,
-                        letterSpacing: -0.14,
-                      ),
-                      child: Text('프로프파일럿에 로그인'),
-                    ),
-                  ),
-                ),
-                Positioned(                  // 헤더
-                  left: 0,
-                  top: 0,
+                Positioned(
                   child: Container(
                     width: screenSize.width,
                     padding: const EdgeInsets.only(
@@ -149,77 +92,81 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                Positioned(                  // 회원 가입, 비밀번호를 잊으셨나요?
-                  left: screenSize.width / 2 - 300,
-                  top: 900,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 61, vertical: 14),
-                    clipBehavior: Clip.antiAlias,
-                    decoration: const BoxDecoration(),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SignupPage()),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent, // 배경색 투명
-                            shadowColor: Colors.transparent, // 그림자 투명
-                            minimumSize: const Size(100, 60),
+                const SizedBox(
+                  height: 70,
+                ),
+                const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Positioned(
+                        // 안녕하세요.👋
+                        child: DefaultTextStyle(
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 92, 145, 175),
+                            fontSize: 48,
+                            fontFamily: 'BMHANNAPro',
+                            fontWeight: FontWeight.w400,
+                            height: 0.02,
+                            letterSpacing: -0.14,
                           ),
-                          child: const DefaultTextStyle(
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: 'BMHANNAPro',
-                              fontWeight: FontWeight.w400,
-                              height: 0.04,
-                              letterSpacing: -0.12,
-                            ),
-                            child: Text('회원가입'),
-                          ),
+                          child: Text('안녕하세요. \u{1F44B}'),
                         ),
-                        const SizedBox(width: 134),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const FindPasswordPage()),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            shadowColor: Colors.transparent,
-                            minimumSize: const Size(100, 60),
+                      ),
+                      SizedBox(width: 350),
+                    ]),
+                const SizedBox(
+                  height: 50,
+                ),
+                const Positioned(
+                  // 프로프파일럿에 오신 걸 환영합니다.
+                  child: DefaultTextStyle(
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 216, 216, 216),
+                      fontSize: 48,
+                      fontFamily: 'BMHANNAPro',
+                      fontWeight: FontWeight.w400,
+                      height: 0.02,
+                      letterSpacing: -0.14,
+                    ),
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '프로프파일럿에 오신 걸 환영합니다.',
                           ),
-                          child: const DefaultTextStyle(
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: 'BMHANNAPro',
-                              fontWeight: FontWeight.w400,
-                              height: 0.04,
-                              letterSpacing: -0.12,
-                            ),
-                            child: Text(
-                              '비밀번호를 잃어버리셨습니까?',
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                Positioned(                  // 이메일
+                const SizedBox(
+                  height: 100,
+                ),
+                Positioned(
+                  // 프로프파일럿에 로그인
+                  left: screenSize.width / 2 - 100,
+                  top: 443,
+                  child: const SizedBox(
+                    width: 200,
+                    height: 52,
+                    child: DefaultTextStyle(
+                      style: TextStyle(
+                        color: Color(0xFF9F9F9F),
+                        fontSize: 20,
+                        fontFamily: 'BMHANNAPro',
+                        fontWeight: FontWeight.w400,
+                        height: 0.13,
+                        letterSpacing: -0.14,
+                      ),
+                      child: Text('프로프파일럿에 로그인'),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Positioned(
+                  // 이메일
                   left: screenSize.width / 2 - 300,
                   top: 500,
                   child: Container(
@@ -270,7 +217,11 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                Positioned(                  // 비밀번호
+                const SizedBox(
+                  height: 10,
+                ),
+                Positioned(
+                  // 비밀번호
                   left: screenSize.width / 2 - 300,
                   top: 623,
                   child: Container(
@@ -322,6 +273,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
+                const SizedBox(
+                  height: 50,
+                ),
                 Positioned(
                   left: screenSize.width / 2 - 100,
                   top: 750,
@@ -366,9 +320,82 @@ class _LoginPageState extends State<LoginPage> {
                               height: 0.06,
                               letterSpacing: -0.14,
                             ),
-                            
-
+                          ),
                         ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 100,
+                ),
+                Positioned(
+                  // 회원 가입, 비밀번호를 잊으셨나요?
+                  left: screenSize.width / 2 - 300,
+                  top: 900,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 61, vertical: 14),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SignupPage()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent, // 배경색 투명
+                            shadowColor: Colors.transparent, // 그림자 투명
+                            minimumSize: const Size(100, 60),
+                          ),
+                          child: const DefaultTextStyle(
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontFamily: 'BMHANNAPro',
+                              fontWeight: FontWeight.w400,
+                              height: 0.04,
+                              letterSpacing: -0.12,
+                            ),
+                            child: Text('회원가입'),
+                          ),
+                        ),
+                        const SizedBox(width: 134),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const FindPasswordPage()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            minimumSize: const Size(100, 60),
+                          ),
+                          child: const DefaultTextStyle(
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontFamily: 'BMHANNAPro',
+                              fontWeight: FontWeight.w400,
+                              height: 0.04,
+                              letterSpacing: -0.12,
+                            ),
+                            child: Text(
+                              '비밀번호를 잃어버리셨습니까?',
+                            ),
+                          ),
                         ),
                       ],
                     ),

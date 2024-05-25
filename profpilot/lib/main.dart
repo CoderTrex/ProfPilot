@@ -5,13 +5,13 @@ import 'package:profpilot/desktop-web/login-page.dart';
 import 'package:profpilot/desktop-web/main-page.dart';
 import 'package:profpilot/mobile-web/M-login-page.dart';
 
-
 class Breakpoint {
   final double start;
   final double end;
   final String name;
 
-  const Breakpoint({required this.start, required this.end, required this.name});
+  const Breakpoint(
+      {required this.start, required this.end, required this.name});
 }
 
 const List<Breakpoint> breakpoints = [
@@ -40,14 +40,12 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
       };
 }
 
-
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +62,6 @@ class MyApp extends StatelessWidget {
           default:
             home = const LoginPage(); // 기본값으로 데스크탑 페이지를 사용
         }
-
-        // home = const MainPage();
-
-        
-        
-        
-        
         return MaterialApp(
           theme: ThemeData.dark().copyWith(
             scaffoldBackgroundColor: const Color.fromARGB(255, 69, 131, 197),
