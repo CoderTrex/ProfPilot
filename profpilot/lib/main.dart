@@ -62,6 +62,7 @@ class MyApp extends StatelessWidget {
           default:
             home = const LoginPage(); // 기본값으로 데스크탑 페이지를 사용
         }
+        home = const MainPage();
         return MaterialApp(
           theme: ThemeData.dark().copyWith(
             scaffoldBackgroundColor: const Color.fromARGB(255, 69, 131, 197),

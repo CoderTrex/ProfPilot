@@ -1,6 +1,4 @@
 import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
@@ -14,9 +12,11 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final PageController _pageController = PageController();
 
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+    
     return Scaffold(
       backgroundColor: const Color(0xFF444444),
       body: ListView(
@@ -220,7 +220,9 @@ class _MainPageState extends State<MainPage> {
             scrollDirection: Axis.horizontal, // 수평 스크롤 설정
             child: Row(
               children: List.generate(10, (index) {
-              
+              final random = Random();
+              final double x = random.nextDouble() * 2 - 1; // -1.0 ~ 1.0 사이의 값
+              final double y = random.nextDouble() * 2 - 1; // -1.0 ~ 1.0 사이의 값
               return Container(
                 width: 500, // 적절한 너비 설정
                 height: 500, // 적절한 높이 설정
@@ -228,10 +230,10 @@ class _MainPageState extends State<MainPage> {
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18),
-                  image: const DecorationImage(
+                  image: DecorationImage(
                     image: AssetImage('assets/images/apple-wallpaper.jpg'),
-                    // alignment: Alignment(Random().nextDouble(), Random().nextDouble())
-                    fit: BoxFit.cover, // 이미지가 Container를 완전히 덮도록 설정
+                    alignment: Alignment(x, y), // 랜덤한 위치 설정
+                    fit: BoxFit.none, // 이미지의 원래 크기를 유지
                   ),
                   boxShadow: const [
                     BoxShadow(
