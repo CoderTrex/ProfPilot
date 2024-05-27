@@ -32,23 +32,29 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     final response = await http.post(
-      Uri.parse('http://localhost:8080/member/login'),
+      Uri.parse('http://localhost:8080/login'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: {
-        'email': email,
+        'username': email,
         'password': password,
       },
     );
 
+    response.headers.forEach((key, value) {
+      print('$key: $value');
+    });
+    print(response.statusCode);
     print(response.body);
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    _emailController.text = '이메일을 입력해주세요.';
-    _passwordController.text = '비밀번호를 입력해주세요.';
+    _emailController.text = 'silvercastle@khu.ac.kr';
+    _passwordController.text = '1234';
     final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(

@@ -38,18 +38,11 @@ class _SignupPageState extends State<SignupPage> {
     String fullEmail = '${emailController.text}@$selectedDomain';
     
 
-    // CSRF 토큰을 가져오는 요청
-    final csrfTokenResponse = await http.get(Uri.parse("http://localhost:8080/csrf/token"));
-    // {"parameterName":"_csrf","token":"s6lpfzZ7O9LQP3hvXTMEySUF1byKWp0lbs9NK_5GYJ-1jQoGi89eTARIX-X9DE4Nax4wrEY3-N3uPqwIXq4pH5hwAqrQvDIz","headerName":"X-CSRF-TOKEN"}
-    final csrfToken = csrfTokenResponse.body.split(':')[2].split('"')[1];
-
-
     // 이메일 인증 요청을 보낼 때 CSRF 토큰을 함께 전송
     final response = await http.post(
       Uri.parse('http://localhost:8080/member/signup/email/verify'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'X-CSRF-TOKEN': csrfToken, // CSRF 토큰을 헤더에 추가
       },
       body: jsonEncode(<String, String>{
         'email': fullEmail,
@@ -183,7 +176,6 @@ class _SignupPageState extends State<SignupPage> {
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

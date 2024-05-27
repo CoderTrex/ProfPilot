@@ -99,7 +99,6 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
               ),
-              
               Positioned(
                 right: screenSize.width * 0.02,
                 top: 60,

@@ -8,7 +8,10 @@
             "name": "profpilot",
             "cwd": "profpilot",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "-d", "chrome", "--web-port", "3751"
+            ]
         },
         {
             "name": "profpilot (profile mode)",
