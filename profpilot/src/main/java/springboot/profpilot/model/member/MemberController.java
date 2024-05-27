@@ -1,16 +1,11 @@
 package springboot.profpilot.model.member;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import springboot.profpilot.global.Utils.DTO.CheckEmail;
-import springboot.profpilot.global.Utils.DTO.SignUpDTO;
+import springboot.profpilot.model.DTO.CheckEmail;
+import springboot.profpilot.model.DTO.SignUpDTO;
 import springboot.profpilot.model.emailverfiy.EmailVerfiy;
 import springboot.profpilot.model.emailverfiy.EmailVerfiyService;
 
@@ -24,6 +19,13 @@ import java.time.format.DateTimeFormatter;
 public class MemberController {
     private final MemberService memberService;
     private final EmailVerfiyService emailVerfiyService;
+
+
+    @GetMapping("/test")
+    public @ResponseBody String test() {
+        System.out.println("test");
+        return "test";
+    }
 
 
     // 이메일, 비밀번호, 이름, 학번만 받아서 회원가입

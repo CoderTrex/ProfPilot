@@ -35,6 +35,11 @@ public class Member {
     private String create_at;
     private String agree_at;
 
+    private Boolean AccountNonExpired;
+    private Boolean AccountNonLocked;
+    private Boolean CredentialsNonExpired;
+    private Boolean Enabled;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Lecture> lectures;

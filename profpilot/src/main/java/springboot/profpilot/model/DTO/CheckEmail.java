@@ -1,4 +1,4 @@
-package springboot.profpilot.global.Utils.DTO;
+package springboot.profpilot.model.DTO;
 
 import lombok.Getter;
 import lombok.Setter;

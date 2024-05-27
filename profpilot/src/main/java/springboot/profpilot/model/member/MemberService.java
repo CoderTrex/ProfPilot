@@ -40,8 +40,12 @@ public class MemberService {
         member.setMembership("NONE");
         member.setMembershipExpire("");
         member.setPassword(passwordEncoder.encode(password));
-        member.setRole("STUDENT");
+        member.setRole("ROLE_STUDENT");
         member.setStatus("ACTIVE");
+        member.setAccountNonExpired(true);
+        member.setAccountNonLocked(true);
+        member.setCredentialsNonExpired(true);
+        member.setEnabled(true);
         member.setCreate_at(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         member.setAgree_at(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         return memberRepository.save(member);

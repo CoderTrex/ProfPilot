@@ -184,6 +184,20 @@ class MainServer:
         else:
                     return jsonify({'result': 'fail',       'entrance': 'no',       'late': 'no',  'distance': 'no',                                            "case" : "not lecture day",                         "target_time" : target_time, "now_time" : now_time})
 
+#         tasu_api_key = api_keys["tasu_api_key"]
+# url = "https://bikeapp.tashu.or.kr:50041/v1/openapi/station"
+# headers = {
+#     "api-token": tasu_api_key
+# }
+# response = requests.get(url, headers=headers)
+
+    def test(self):
+        url = "http://localhost:8080/test"
+        response = requests.post(url)
+        print(response.text)
+
+
+
     def run(self):
         self.app.run(debug=True, threaded=True, host='0.0.0.0')
 
