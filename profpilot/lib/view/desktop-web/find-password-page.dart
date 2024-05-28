@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:profpilot/desktop-web/login-page.dart';
-import 'package:profpilot/desktop-web/signup-page.dart';
+import 'package:profpilot/view/desktop-web/login-page.dart';
+import 'package:profpilot/view/desktop-web/signup-page.dart';
 
 class FindPasswordPage extends StatefulWidget {
   const FindPasswordPage({super.key});

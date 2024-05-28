@@ -1,9 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:profpilot/desktop-web/lecture-detail-page.dart';
-import 'package:profpilot/desktop-web/login-page.dart';
-import 'package:profpilot/desktop-web/main-page.dart';
-import 'package:profpilot/mobile-web/M-login-page.dart';
+import 'package:profpilot/view/desktop-web/lecture-detail-page.dart';
+import 'package:profpilot/view/desktop-web/login-page.dart';
+import 'package:profpilot/view/desktop-web/main-page.dart';
+import 'package:profpilot/view/mobile-web/M-login-page.dart';
 
 class Breakpoint {
   final double start;
@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
           default:
             home = const LoginPage(); // 기본값으로 데스크탑 페이지를 사용
         }
-        home = const MainPage();
+        // home = const MainPage();
         return MaterialApp(
           theme: ThemeData.dark().copyWith(
             scaffoldBackgroundColor: const Color.fromARGB(255, 69, 131, 197),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:profpilot/desktop-web/login-page.dart';
-import 'package:profpilot/desktop-web/signup-page.dart';
+import 'package:profpilot/view/desktop-web/login-page.dart';
+import 'package:profpilot/view/desktop-web/signup-page.dart';
 import 'package:profpilot/main.dart';
-import 'package:profpilot/mobile-web/M-login-page.dart';
-import 'package:profpilot/mobile-web/M-signup-page.dart';
+import 'package:profpilot/view/mobile-web/M-login-page.dart';
+import 'package:profpilot/view/mobile-web/M-signup-page.dart';
 
 class FindPasswordPageMobile extends StatefulWidget {
   const FindPasswordPageMobile({super.key});

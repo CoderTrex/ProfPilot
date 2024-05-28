@@ -1,10 +1,11 @@
-import 'dart:convert';
-import 'dart:io';
-
+import 'dart:html';
+import 'dart:js' as js;
 import 'package:flutter/material.dart';
-import 'package:profpilot/desktop-web/find-password-page.dart';
-import 'package:profpilot/desktop-web/signup-page.dart';
-import 'package:http/http.dart' as http;
+import 'package:profpilot/utils/token/token-manager.dart';
+import 'package:profpilot/view/desktop-web/find-password-page.dart';
+import 'package:profpilot/view/desktop-web/main-page.dart';
+import 'package:profpilot/view/desktop-web/signup-page.dart';
+import 'package:dio/dio.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,36 +21,56 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _login() async {
     final String email = _emailController.text;
     final String password = _passwordController.text;
+    final Storage _storage = window.localStorage;
+    final dio = Dio();
 
-    if (email.isEmpty ||
-        password.isEmpty ||
-        email == '이메일을 입력해주세요.' ||
-        password == '비밀번호를 입력해주세요.') {
+
+    if (email.isEmpty || password.isEmpty || email == '이메일을 입력해주세요.' || password == '비밀번호를 입력해주세요.') 
+    {
       showAboutDialog(context: context, children: const [
         Text('이메일과 비밀번호를 입력해주세요.'),
       ]);
       return;
     }
 
-    final response = await http.post(
-      Uri.parse('http://localhost:8080/login'),
-      headers: <String, String>{
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: {
+    final response = await dio.post(
+      'http://localhost:8080/login',
+      data: {
         'username': email,
         'password': password,
       },
+      options: Options(
+        contentType: 'application/x-www-form-urlencoded',
+        responseType: ResponseType.json,
+      ),
     );
+    
+    if (response.statusCode != 200) {
+      showAboutDialog(
+        context: context,
+        children: const [
+          Text('이메일 또는 비밀번호가 틀렸습니다.'),
+        ],
+      );
+      return;
+    } else {
+      showAboutDialog(
+        context: context,
+        children: const [
+          Text('로그인 성공!'),
+        ],
+      );
 
-    response.headers.forEach((key, value) {
-      print('$key: $value');
-    });
-    print(response.statusCode);
-    print(response.body);
+      final String token = response.data['token'];
+      _storage['token'] = token;
+
+      // MainPage로 이동
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainPage()),
+      );
+    }
   }
-
-
 
   @override
   Widget build(BuildContext context) {

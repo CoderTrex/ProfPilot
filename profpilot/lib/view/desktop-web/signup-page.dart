@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:profpilot/desktop-web/find-password-page.dart';
-import 'package:profpilot/desktop-web/login-page.dart';
+import 'package:profpilot/view/desktop-web/find-password-page.dart';
+import 'package:profpilot/view/desktop-web/login-page.dart';
 import 'package:profpilot/main.dart';
-import 'package:profpilot/mobile-web/M-login-page.dart';
+import 'package:profpilot/view/mobile-web/M-login-page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

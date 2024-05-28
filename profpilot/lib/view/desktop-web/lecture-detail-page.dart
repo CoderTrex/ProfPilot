@@ -1,22 +1,18 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 
-
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key});
+class LectureDetail extends StatefulWidget {
+  const LectureDetail({Key? key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<LectureDetail> createState() => _LectureDetailState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _LectureDetailState extends State<LectureDetail> {
   final PageController _pageController = PageController();
-
 
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    
     return Scaffold(
       backgroundColor: const Color(0xFF444444),
       body: ListView(
@@ -107,7 +103,7 @@ class _MainPageState extends State<MainPage> {
                   height: 40,
                   decoration: 
                     ShapeDecoration(
-                      color: Color(0x19D9D9D9),
+                      color: const Color(0x19D9D9D9),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -118,7 +114,7 @@ class _MainPageState extends State<MainPage> {
                       hintStyle: TextStyle(
                         color: Color(0xFFD9D9D9),
                         fontSize: 20,
-                        fontFamily: 'BMHANNAPro',
+                        fontFamily: 'AppleSDGothicNeo',
                         fontWeight: FontWeight.w400,
                         height: 0.04,
                         letterSpacing: -0.12,
@@ -143,7 +139,7 @@ class _MainPageState extends State<MainPage> {
                         style: TextStyle(
                           color: Color(0xFF9F9F9F),
                           fontSize: 48,
-                          fontFamily: 'BMHANNAPro',
+                          fontFamily: 'BM HANNA_TTF',
                           fontWeight: FontWeight.w400,
                           height: 0.02,
                           letterSpacing: -0.14,
@@ -154,7 +150,7 @@ class _MainPageState extends State<MainPage> {
                         style: TextStyle(
                           color: Color.fromARGB(255, 237, 255, 75),
                           fontSize: 48,
-                          fontFamily: 'BMHANNAPro',
+                          fontFamily: 'BM HANNA_TTF',
                           fontWeight: FontWeight.w400,
                           height: 0.02,
                           letterSpacing: -0.14,
@@ -175,7 +171,7 @@ class _MainPageState extends State<MainPage> {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 48,
-                          fontFamily: 'BMHANNAPro',
+                          fontFamily: 'BM HANNA_TTF',
                           fontWeight: FontWeight.w400,
                           height: 0.02,
                           letterSpacing: -0.14,
@@ -184,9 +180,9 @@ class _MainPageState extends State<MainPage> {
                       TextSpan(
                         text: 'N',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Color(0xFF88C3FF),
                           fontSize: 48,
-                          fontFamily: 'BMHANNAPro',
+                          fontFamily: 'BM HANNA_TTF',
                           fontWeight: FontWeight.w400,
                           height: 0.02,
                           letterSpacing: -0.14,
@@ -197,7 +193,7 @@ class _MainPageState extends State<MainPage> {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 48,
-                          fontFamily: 'BMHANNAPro',
+                          fontFamily: 'BM HANNA_TTF',
                           fontWeight: FontWeight.w400,
                           height: 0.02,
                           letterSpacing: -0.14,
@@ -220,31 +216,26 @@ class _MainPageState extends State<MainPage> {
             scrollDirection: Axis.horizontal, // 수평 스크롤 설정
             child: Row(
               children: List.generate(10, (index) {
-              final random = Random();
-              final double x = random.nextDouble() * 2 - 1; // -1.0 ~ 1.0 사이의 값
-              final double y = random.nextDouble() * 2 - 1; // -1.0 ~ 1.0 사이의 값
-              return Container(
-                width: 500, // 적절한 너비 설정
-                height: 500, // 적절한 높이 설정
-                margin: const EdgeInsets.only(left: 300, right: 100), // 적절한 마진 설정
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18),
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/apple-wallpaper.jpg'),
-                    alignment: Alignment(x, y), // 랜덤한 위치 설정
-                    fit: BoxFit.none, // 이미지의 원래 크기를 유지
-                  ),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x14000000),
-                      blurRadius: 12,
-                      offset: Offset(2, 4),
-                      spreadRadius: 0,
+                return Container(
+                  width: 500, // 적절한 너비 설정
+                  height: 500, // 적절한 높이 설정
+                  margin: const EdgeInsets.only(left: 300, right: 100), // 적절한 마진 설정
+                  clipBehavior: Clip.antiAlias,
+                  decoration: ShapeDecoration(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
                     ),
-                  ],
-                ),
-              );
+                    shadows: const [
+                      BoxShadow(
+                        color: Color(0x14000000),
+                        blurRadius: 12,
+                        offset: Offset(2, 4),
+                        spreadRadius: 0,
+                      )
+                    ],
+                  ),
+                );
               } 
               ),
             ),
