@@ -96,7 +96,7 @@ public class JwtLogoutFilter extends GenericFilterBean {
 
         //Refresh 토큰 Cookie 값 0
         Cookie cookie = new Cookie("refresh", null);
-        cookie.setMaxAge(0);
+        cookie.setMaxAge(86400000);
         cookie.setPath("/");
 
         response.addCookie(cookie);

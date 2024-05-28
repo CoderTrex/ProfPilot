@@ -1,6 +1,9 @@
 package springboot.profpilot.model.member;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +13,7 @@ import springboot.profpilot.model.emailverfiy.EmailVerfiy;
 import springboot.profpilot.model.emailverfiy.EmailVerfiyService;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -89,17 +93,32 @@ public class MemberController {
         return "user/login";
     }
 
+    @GetMapping("/my-page")
+    @ResponseBody
+    public ResponseEntity<MemberProfileDto> getProfile(Principal principal) {
+        String email = principal.getName();
+        Member member = memberService.findByEmail(email);
+        MemberProfileDto memberProfile = new MemberProfileDto();
+        memberProfile.setName(member.getName());
+        memberProfile.setStudentId(member.getStudentId());
+        memberProfile.setEmail(member.getEmail());
+        memberProfile.setPurchaseGrade(member.getMembership());
+        if (member.getMembershipExpire() != null)
+            memberProfile.setAuthorityExpirationDate(LocalDate.parse(member.getMembershipExpire()));
+        else
+            memberProfile.setAuthorityExpirationDate(null);
+        memberProfile.setRole(member.getRole());
 
-    @GetMapping("/profile/info")
-    public String GetProfile(Model model, Principal principal) {
-        // myinfo 화면 todo list
-        // 1. 회원 정보 자체
-        // : 이메일, 대학, 이름, 학번, 전공, 핸드폰 번호, 역할, 현재 상태, 가입일
-        // 2. 클라우드 저장 정보
-        // : 저장 용량, 사용량, 파일 수, 최대 파일 수, 최대 파일 크기
-
-        Member member = memberService.findByEmail(principal.getName());
-        model.addAttribute("member", member);
-        return "user/profile";
+        if (member.getRole().equals("professor")) {
+            memberProfile.setCloudGrade("professor");
+            memberProfile.setCloudUsage("professor");
+            memberProfile.setCloudAllowance("professor");
+            return ResponseEntity.ok(memberProfile);
+        } else {
+            memberProfile.setCloudGrade("student");
+            memberProfile.setCloudUsage("student");
+            memberProfile.setCloudAllowance("student");
+            return ResponseEntity.ok(memberProfile);
+        }
     }
 }
