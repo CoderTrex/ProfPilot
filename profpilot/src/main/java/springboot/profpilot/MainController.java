@@ -12,6 +12,8 @@ import springboot.profpilot.model.member.Member;
 import springboot.profpilot.model.member.MemberService;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,10 +40,11 @@ public class MainController {
         model.addAttribute("member", member);
         return "main/main_page";
     }
-
     @GetMapping("/sendToken/{token}")
     @ResponseBody
-    public String sendToken(@PathVariable String token) {
-        return "token: " + token;
+    public Map<String, String> sendToken(@PathVariable String token) {
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+        return response;
     }
 }
