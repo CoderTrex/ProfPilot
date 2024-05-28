@@ -2,10 +2,13 @@ import 'dart:math';
 import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:profpilot/view/desktop-web/main-page.dart';
 import 'package:profpilot/view/desktop-web/my-page.dart';
 
-class MainPage extends StatelessWidget {
+class MyPage extends StatelessWidget {
   final PageController _pageController = PageController();
+
+  MyPage({super.key});
   
   Future<void> _initPageController() async {
     final String? accessToken = window.localStorage['token'];
@@ -18,14 +21,17 @@ class MainPage extends StatelessWidget {
     final dio = Dio();
     try {
       final response = await dio.get(
-        'http://localhost:8080/member/test',
+        'http://localhost:8080/member/my-page',
         options: Options(
           headers: {
             'access': accessToken,
           },
         ),
       );
+      print("=====================================");
+      print("response: " + response.toString());
       print(response.data);
+      print("=====================================");
     } catch (e) {
       print(e);
     }
@@ -34,14 +40,12 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    // _initPageController();
+    _initPageController();
   
     return Scaffold(
       backgroundColor: const Color(0xFF444444),
-      body: ListView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      children: [
-              
+      body: Column(
+        children: [
         Container(
           height: MediaQuery.of(context).size.height * 0.3,
           clipBehavior: Clip.antiAlias,
@@ -91,7 +95,7 @@ class MainPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(30),
                               ),
                             ), 
-                            child:Text(
+                            child: const Text(
                             '수업',
                             style: TextStyle(
                               color: Colors.white,
@@ -119,7 +123,7 @@ class MainPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(30),
                               ),
                             ), 
-                            child:Text(
+                            child:const Text(
                             '내 정보',
                             style: TextStyle(
                               color: Colors.white,
@@ -133,8 +137,8 @@ class MainPage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Spacer(), // 프로프파일럿과 수업&내정보 사이의 공간을 만들기 위해 Spacer를 사용합니다.
-                      Text(
+                      const Spacer(), // 프로프파일럿과 수업&내정보 사이의 공간을 만들기 위해 Spacer를 사용합니다.
+                      const Text(
                         '로그아웃',
                         style: TextStyle(
                           color: Colors.white,
@@ -145,7 +149,7 @@ class MainPage extends StatelessWidget {
                           letterSpacing: -0.12,
                         ),
                       ),
-                      SizedBox(width: 20), // 오른쪽 여백을 만들기 위해 SizedBox를 사용합니다.
+                      const SizedBox(width: 20), // 오른쪽 여백을 만들기 위해 SizedBox를 사용합니다.
                     ],
                   ),
                 ),
@@ -190,7 +194,7 @@ class MainPage extends StatelessWidget {
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: '안녕하세요.',
+                        text: '내 정보',
                         style: TextStyle(
                           color: Color(0xFF9F9F9F),
                           fontSize: 48,
@@ -201,9 +205,9 @@ class MainPage extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: '\u{1FAE0}',
+                        text: '🐋',
                         style: TextStyle(
-                          color: Color.fromARGB(255, 237, 255, 75),
+                          color: Color.fromARGB(255, 87, 117, 180),
                           fontSize: 48,
                           fontFamily: 'BMHANNAPro',
                           fontWeight: FontWeight.w400,
@@ -222,29 +226,7 @@ class MainPage extends StatelessWidget {
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: '오늘은 ',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 48,
-                          fontFamily: 'BMHANNAPro',
-                          fontWeight: FontWeight.w400,
-                          height: 0.02,
-                          letterSpacing: -0.14,
-                        ),
-                      ),
-                      TextSpan(
-                        text: 'N',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 48,
-                          fontFamily: 'BMHANNAPro',
-                          fontWeight: FontWeight.w400,
-                          height: 0.02,
-                          letterSpacing: -0.14,
-                        ),
-                      ),
-                      TextSpan(
-                        text: '개의 수업이 있습니다.',
+                        text: '프로프파일럿내의 정보는 오직 프로프파일럿만의 정보입니다.',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 48,
@@ -262,47 +244,80 @@ class MainPage extends StatelessWidget {
           ),
         ),
         Container(
-          width: MediaQuery.of(context).size.width,
+          alignment: Alignment.center,
           height: MediaQuery.of(context).size.height * 0.6,
           clipBehavior: Clip.antiAlias,
           decoration: const BoxDecoration(color: Color(0xFF444444)),
-          child: SingleChildScrollView(
-            controller: _pageController,
-            scrollDirection: Axis.horizontal, // 수평 스크롤 설정
-            child: Row(
-              children: List.generate(10, (index) {
-              final random = Random();  
-              final double x = random.nextDouble() * 2 - 1; // -1.0 ~ 1.0 사이의 값
-              final double y = random.nextDouble() * 2 - 1; // -1.0 ~ 1.0 사이의 값
-              return Container(
-                width: 500, // 적절한 너비 설정
-                height: 500, // 적절한 높이 설정
-                margin: const EdgeInsets.only(left: 300, right: 100), // 적절한 마진 설정
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18),
-                  image: DecorationImage(
-                    image: const AssetImage('assets/images/apple-wallpaper.jpg'),
-                    alignment: Alignment(x, y), // 랜덤한 위치 설정
-                    fit: BoxFit.none, // 이미지의 원래 크기를 유지
-                  ),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x14000000),
-                      blurRadius: 12,
-                      offset: Offset(2, 4),
-                      spreadRadius: 0,
+              child: Row(
+                children: [
+                  const SizedBox(width: 200),
+                  Positioned(
+                    child: Container(
+                      width: 400,
+                      height: 300,
+                      decoration: ShapeDecoration(
+                        color: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        shadows: const [
+                          BoxShadow(
+                            color: Color(0x14000000),
+                            blurRadius: 12,
+                            offset: Offset(2, 4),
+                            spreadRadius: 0,
+                          )
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              );
-              } 
-              ),
+                  ),
+                  const SizedBox(width: 100),
+                  Positioned(
+                    child: Container(
+                      width: 400,
+                      height: 300,
+                      decoration: ShapeDecoration(
+                        color: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        shadows: const [
+                          BoxShadow(
+                            color: Color(0x14000000),
+                            blurRadius: 12,
+                            offset: Offset(2, 4),
+                            spreadRadius: 0,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 100),
+                  Positioned(
+                    child: Container(
+                      width: 400,
+                      height: 300,
+                      decoration: ShapeDecoration(
+                        color: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        shadows: const [
+                          BoxShadow(
+                            color: Color(0x14000000),
+                            blurRadius: 12,
+                            offset: Offset(2, 4),
+                            spreadRadius: 0,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
-        ),
-      ],
-    ),
+        ],
+      ),
     );
   }
 }

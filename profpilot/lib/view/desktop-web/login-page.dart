@@ -1,7 +1,5 @@
 import 'dart:html';
-import 'dart:js' as js;
 import 'package:flutter/material.dart';
-import 'package:profpilot/utils/token/token-manager.dart';
 import 'package:profpilot/view/desktop-web/find-password-page.dart';
 import 'package:profpilot/view/desktop-web/main-page.dart';
 import 'package:profpilot/view/desktop-web/signup-page.dart';
@@ -47,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
     
     if (response.statusCode != 200) {
       showAboutDialog(
+        // ignore: use_build_context_synchronously
         context: context,
         children: const [
           Text('이메일 또는 비밀번호가 틀렸습니다.'),
@@ -55,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     } else {
       showAboutDialog(
+        // ignore: use_build_context_synchronously
         context: context,
         children: const [
           Text('로그인 성공!'),
@@ -63,12 +63,14 @@ class _LoginPageState extends State<LoginPage> {
 
       final String token = response.data['token'];
       _storage['token'] = token;
+      print('token: $token');
 
       // MainPage로 이동
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => MainPage()),
-      );
+      // Navigator.pushReplacement(
+      //   // ignore: use_build_context_synchronously
+      //   context,
+      //   MaterialPageRoute(builder: (context) => MainPage()),
+      // );
     }
   }
 
