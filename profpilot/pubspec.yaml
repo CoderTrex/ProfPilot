@@ -11,10 +11,9 @@ dependencies:
     sdk: flutter
   flutter_screenutil: ^5.9.1
   flutter_web_auth: ^0.5.0
-  http: ^0.13.6
+  http: ^1.2.1
   dio: ^5.4.3+1
-  cookie_jar: ^4.0.8
-  dio_cookie_manager: ^3.1.1
+  google_fonts: ^6.2.1
 
 
 dev_dependencies:
@@ -30,8 +29,46 @@ flutter:
     - family: BMHANNAPro
       fonts:
         - asset: assets/fonts/BMHANNAProOTF.otf
+    
+    - family: BMHANNAAir
+      fonts:
+        - asset: assets/fonts/BMHANNAAir.otf
 
     - family: AppleSDGothicNeo
       fonts:
         - asset: assets/fonts/Apple_SD_Gothic_Neo_Bold.otf
-  
+    
+    - family: SF-Pro-Display
+      fonts:
+        - asset: assets/fonts/SF-Pro-Display-Thin.otf
+          weight: 100
+        - asset: assets/fonts/SF-Pro-Display-Light.otf
+          weight: 200
+        - asset: assets/fonts/SF-Pro-Display-Regular.otf
+          weight: 400
+        - asset: assets/fonts/SF-Pro-Display-Medium.otf
+          weight: 500
+        - asset: assets/fonts/SF-Pro-Display-Semibold.otf
+          weight: 600
+        - asset: assets/fonts/SF-Pro-Display-Heavy.otf
+
+    - family: inter
+      fonts:
+        - asset: assets/fonts/Inter-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Inter-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Inter-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Inter-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Inter-Black.ttf
+          weight: 900

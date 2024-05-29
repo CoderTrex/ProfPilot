@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:profpilot/view/desktop-web/find-password-page.dart';
+import 'package:profpilot/view/desktop-web/before-auth/FindPassword-page.dart';
 import 'package:profpilot/main.dart';
 import 'package:profpilot/view/mobile-web/M-find-password-page.dart';
 import 'package:profpilot/view/mobile-web/M-signup-page.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:profpilot/view/desktop-web/login-page.dart';
-import 'package:profpilot/view/desktop-web/signup-page.dart';
+import 'package:profpilot/view/desktop-web/before-auth/Login-page.dart';
+import 'package:profpilot/view/desktop-web/before-auth/signup-page.dart';
 import 'package:profpilot/main.dart';
 import 'package:profpilot/view/mobile-web/M-login-page.dart';
 import 'package:profpilot/view/mobile-web/M-signup-page.dart';
