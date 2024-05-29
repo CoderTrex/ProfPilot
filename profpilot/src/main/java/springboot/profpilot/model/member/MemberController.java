@@ -1,21 +1,20 @@
 package springboot.profpilot.model.member;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import springboot.profpilot.global.Utils.MakeJsonResponse;
 import springboot.profpilot.model.DTO.CheckEmail;
+import springboot.profpilot.model.DTO.MemberProfileDTO;
+import springboot.profpilot.model.DTO.MemberProfileEditDTO;
 import springboot.profpilot.model.DTO.SignUpDTO;
 import springboot.profpilot.model.emailverfiy.EmailVerfiy;
 import springboot.profpilot.model.emailverfiy.EmailVerfiyService;
 
 import java.security.Principal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -95,30 +94,46 @@ public class MemberController {
 
     @GetMapping("/my-page")
     @ResponseBody
-    public ResponseEntity<MemberProfileDto> getProfile(Principal principal) {
+    public Map<String, String> getProfile(Principal principal) {
         String email = principal.getName();
         Member member = memberService.findByEmail(email);
-        MemberProfileDto memberProfile = new MemberProfileDto();
+        MemberProfileDTO memberProfile = new MemberProfileDTO();
+
         memberProfile.setName(member.getName());
-        memberProfile.setStudentId(member.getStudentId());
+        memberProfile.setStudentId(member.getStudentId().toString());
         memberProfile.setEmail(member.getEmail());
-        memberProfile.setPurchaseGrade(member.getMembership());
-        if (member.getMembershipExpire() != null)
-            memberProfile.setAuthorityExpirationDate(LocalDate.parse(member.getMembershipExpire()));
-        else
-            memberProfile.setAuthorityExpirationDate(null);
+        memberProfile.setMembershipGrade(member.getMembership());
         memberProfile.setRole(member.getRole());
 
         if (member.getRole().equals("professor")) {
             memberProfile.setCloudGrade("professor");
-            memberProfile.setCloudUsage("professor");
-            memberProfile.setCloudAllowance("professor");
-            return ResponseEntity.ok(memberProfile);
         } else {
-            memberProfile.setCloudGrade("student");
-            memberProfile.setCloudUsage("student");
-            memberProfile.setCloudAllowance("student");
-            return ResponseEntity.ok(memberProfile);
+            memberProfile.setCloudGrade("NONE");
         }
+
+        Map<String, String> response = MakeJsonResponse.makeJsonResponse(memberProfile);
+        return response;
+    }
+
+    @GetMapping("/my-info")
+    @ResponseBody
+    public Map<String, String> getMyInfo(Principal principal) {
+        String email = principal.getName();
+        Member member = memberService.findByEmail(email);
+        MemberProfileEditDTO memberProfileEditDTO = new MemberProfileEditDTO();
+
+        memberProfileEditDTO.setEmail(member.getEmail());
+        memberProfileEditDTO.setUniversity(member.getUniversity());
+        memberProfileEditDTO.setName(member.getName());
+        memberProfileEditDTO.setStudentId(member.getStudentId().toString());
+        memberProfileEditDTO.setMajor(member.getMajor());
+        memberProfileEditDTO.setPhone(member.getPhone());
+        memberProfileEditDTO.setRole(member.getRole());
+        memberProfileEditDTO.setStatus(member.getStatus());
+        memberProfileEditDTO.setCreateAt(member.getCreate_at());
+        memberProfileEditDTO.setAgreeAt(member.getAgree_at());
+
+       Map<String, String> response = MakeJsonResponse.makeJsonResponse(memberProfileEditDTO);
+        return response;
     }
 }

@@ -1,4 +1,4 @@
-package springboot.profpilot.global.config;
+package springboot.profpilot.global.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,4 +1,4 @@
-package springboot.profpilot.global.config;
+package springboot.profpilot.global.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,7 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/member/signup", "/member/login", "/member/logout",
                                 "/member/signup/email/verify", "/member/signup/email/verify/check",
                                 "/images/**", "/css/**", "/js/**", "/sendToken/**", "/reissue").permitAll()
-                        .requestMatchers("/member/my-page").hasRole("STUDENT")
+                        .requestMatchers("/member/my-page" , "/member/my-info").hasRole("STUDENT")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

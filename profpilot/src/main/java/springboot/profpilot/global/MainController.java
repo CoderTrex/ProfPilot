@@ -1,4 +1,4 @@
-package springboot.profpilot;
+package springboot.profpilot.global;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,8 +45,6 @@ public class MainController {
     @GetMapping("/sendToken/{token}")
     @ResponseBody
     public Map<String, String> sendToken(@PathVariable String token, HttpServletResponse res) {
-
-        res.addCookie(new Cookie("aaa", "aaa"));
         Map<String, String> response = new HashMap<>();
         response.put("token", token);
         return response;

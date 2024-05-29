@@ -1,4 +1,4 @@
-package springboot.profpilot.global.config;
+package springboot.profpilot.global.config.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;

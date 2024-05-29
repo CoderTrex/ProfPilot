@@ -35,10 +35,10 @@ public class MemberService {
         member.setEmail(email);
         member.setName(name);
         member.setStudentId(studentId);
-        member.setMajor("");
-        member.setPhone("");
+        member.setMajor("NONE");
+        member.setPhone("NONE");
         member.setMembership("NONE");
-        member.setMembershipExpire("");
+        member.setMembershipExpire("NONE");
         member.setPassword(passwordEncoder.encode(password));
         member.setRole("ROLE_STUDENT");
         member.setStatus("ACTIVE");
