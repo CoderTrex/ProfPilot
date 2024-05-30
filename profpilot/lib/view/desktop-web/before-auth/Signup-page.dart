@@ -443,7 +443,7 @@ class _SignupPageState extends State<SignupPage> {
                                   // 선택 박스 배경색 흰색으로 변경
                                   dropdownColor: Colors.white,
                                   borderRadius: BorderRadius.circular(18),
-                                  items: ['도메인을 선택하세요', 'khu.ac.kr']
+                                  items: ['도메인을 선택하세요', 'khu.ac.kr', 'gmail.com', 'naver.com']
                                       .map<DropdownMenuItem<String>>((String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,

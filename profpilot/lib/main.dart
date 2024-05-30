@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:profpilot/view/desktop-web/after-auth/main/main-detail.dart';
+import 'package:profpilot/view/desktop-web/after-auth/personal/my-email.dart';
 import 'package:profpilot/view/desktop-web/after-auth/personal/my-password.dart';
 import 'package:profpilot/view/desktop-web/after-auth/personal/my-update.dart';
 import 'package:profpilot/view/desktop-web/after-auth/personal/my-edit.dart';
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
           default:
             home = const LoginPage(); // 기본값으로 데스크탑 페이지를 사용
         }
+        home = const PersonalEmailPage();
         return MaterialApp(
           theme: ThemeData.dark().copyWith(
             scaffoldBackgroundColor: const Color.fromARGB(255, 69, 131, 197),

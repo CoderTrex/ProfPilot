@@ -230,17 +230,15 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 100),
+                const SizedBox(height: 50),
                 const Row(children: [ // 개인정보는 소중하게 다뤄주세요 :)
                   SizedBox(width: 200),
                   Positioned(
-                    left: 110,
-                    top: 98,
                     child: Text(
                       '개인정보는 소중하게 다뤄주세요 :|',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 30,
+                        fontSize: 15,
                         fontFamily: 'BMHANNAPro',
                         fontWeight: FontWeight.w400,
                         height: 0.02,
@@ -249,17 +247,15 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                     ),
                   ),
                 ],),
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
                 const Row(children: [ // 
                   SizedBox(width: 200),
                   Positioned(
-                    left: 110,
-                    top: 98,
                     child: Text(
                       '아직 바꿀 수 있는 정보는 별로 없어요 ^_^;',
                       style: TextStyle(
                         color: Color.fromARGB(255, 3, 57, 65),
-                        fontSize: 30,
+                        fontSize: 15,
                         fontFamily: 'BMHANNAPro',
                         fontWeight: FontWeight.w400,
                         height: 0.02,
@@ -267,7 +263,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                     ),
                   ),
                 ],),
-                const SizedBox(height: 150),
+                const SizedBox(height: 50),
                 Row(children: [
                   SizedBox(width: screenSize.width * 0.5 - 400),
                   Positioned(
@@ -301,7 +297,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           '이메일',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             // height: 0.04,
@@ -325,7 +321,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           snapshot.data!.email,
                                           style: const TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             letterSpacing: -0.12,
@@ -349,7 +345,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           '비밀번호',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             height: 0.04,
@@ -374,7 +370,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           "",
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             height: 0.04,
@@ -389,8 +385,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 30),
-                          
+                          const SizedBox(height: 20),
                           Container( // 대학, 역할
                             clipBehavior: Clip.antiAlias,
                             decoration: const BoxDecoration(),
@@ -413,7 +408,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           '대학',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             height: 0.04,
@@ -438,7 +433,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           "대학을 입력해주세요",
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             height: 0.04,
@@ -464,7 +459,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           '역할',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             height: 0.04,
@@ -489,7 +484,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           snapshot.data!.role,
                                           style: const TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             height: 0.04,
@@ -504,8 +499,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 30),
-                          
+                          const SizedBox(height: 20),
                           Container( // 이름, 활동 여부
                             clipBehavior: Clip.antiAlias,
                             decoration: const BoxDecoration(),
@@ -528,7 +522,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           '이름',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             height: 0.04,
@@ -550,10 +544,18 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                             hintText: "이름을 입력해주세요",
                                             hintStyle: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 15,
+                                              fontSize: 10,
                                               fontFamily: 'Inter',
                                               fontWeight: FontWeight.w400,
                                             ),
+                                            
+                                          ),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10,
+                                            fontFamily: 'Inter',
+                                            fontWeight: FontWeight.w400,
+                                            letterSpacing: -0.12,
                                           ),
                                         ),
                                   ),
@@ -572,7 +574,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           '활동 여부',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             height: 0.04,
@@ -597,7 +599,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           snapshot.data!.status,
                                           style: const TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             height: 0.04,
@@ -612,8 +614,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 30),
-                          
+                          const SizedBox(height: 20),
                           Container( // 학번, 가입일
                             clipBehavior: Clip.antiAlias,
                             decoration: const BoxDecoration(),
@@ -637,7 +638,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           '학번',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             letterSpacing: -0.12,
@@ -658,16 +659,22 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                             hintText: "학번을 입력해주세요",
                                             hintStyle: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 15,
+                                              fontSize: 10,
                                               fontFamily: 'Inter',
                                               fontWeight: FontWeight.w400,
                                               letterSpacing: -0.12,
                                             ),
                                           ),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10,
+                                            fontFamily: 'Inter',
+                                            fontWeight: FontWeight.w400,
+                                            letterSpacing: -0.12,
+                                          ),
                                         ),
                                   ),
                                 ),
-                                
                                 Expanded( // 가입일
                                   child: Container(
                                     height: 20,
@@ -682,7 +689,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           '가입일',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             height: 0.04,
@@ -707,7 +714,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           snapshot.data!.createAt,
                                           style: const TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             height: 0.04,
@@ -721,9 +728,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 30),
-                          
-                          
+                          const SizedBox(height: 20),
                           Container( // 전공
                             clipBehavior: Clip.antiAlias,
                             decoration: const BoxDecoration(),
@@ -746,7 +751,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           '전공',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             height: 0.04,
@@ -760,7 +765,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                 Expanded( 
                                   child: Container(
                                     height: 30,
-                                    clipBehavior: Clip.antiAlias,
+                                    // clipBehavior: Clip.antiAlias,
                                     decoration: const BoxDecoration(),
                                     child:TextField(
                                           controller: majorController,
@@ -768,10 +773,17 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                             hintText: snapshot.data!.major,
                                             hintStyle: const TextStyle(
                                               color: Colors.white,
-                                              fontSize: 15,
+                                              fontSize: 10,
                                               fontFamily: 'Inter',
                                               fontWeight: FontWeight.w400,
                                             ),
+                                          ),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10,
+                                            fontFamily: 'Inter',
+                                            fontWeight: FontWeight.w400,
+                                            letterSpacing: -0.12,
                                           ),
                                         ),
                                   ),
@@ -790,7 +802,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           "",
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             height: 0.04,
@@ -815,7 +827,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                                           "",
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
                                             height: 0.04,
@@ -836,9 +848,9 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                   ),
                   SizedBox(width: screenSize.width * 0.2),
                 ],),
-                const SizedBox(height: 100),
+                const SizedBox(height: 70),
                 Row(children: [
-                  SizedBox(width: screenSize.width * 0.8 - 200),
+                  SizedBox(width: screenSize.width * 0.8 - 150),
                   Positioned( // 개인정보 변경
                     child: Container(
                       height: 70,
@@ -857,6 +869,7 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
@@ -864,73 +877,23 @@ class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
                             child: const Text(
                               '개인정보 변경',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontFamily: 'Inter',
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontFamily: 'BMHANNAPro',
                                 fontWeight: FontWeight.w400,
                                 height: 0.04,
                                 letterSpacing: -0.12,
                               ),
+
                             ),
+
                           ),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(width: 50),
-                  Positioned( // 비밀번호 변경
-                    child: Container(
-                      height: 70,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: const BoxDecoration(),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            '비밀번호 변경',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w400,
-                              height: 0.04,
-                              letterSpacing: -0.12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 50),
-                  Positioned( // 이메일 변경
-                    child: Container(
-                      height: 70,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: const BoxDecoration(),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            '이메일 변경',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w400,
-                              height: 0.04,
-                              letterSpacing: -0.12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                
                 ],), 
-                const SizedBox(height: 100),
               ],
             ),
           );
