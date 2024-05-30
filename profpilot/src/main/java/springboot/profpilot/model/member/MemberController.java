@@ -1,17 +1,15 @@
 package springboot.profpilot.model.member;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import springboot.profpilot.global.Utils.MakeJsonResponse;
-import springboot.profpilot.model.DTO.CheckEmail;
-import springboot.profpilot.model.DTO.MemberProfileDTO;
-import springboot.profpilot.model.DTO.MemberProfileEditDTO;
-import springboot.profpilot.model.DTO.MemberProfileUpdateDTO;
-import springboot.profpilot.model.DTO.SignUpDTO;
+import springboot.profpilot.model.DTO.*;
 import springboot.profpilot.model.emailverfiy.EmailVerfiy;
 import springboot.profpilot.model.emailverfiy.EmailVerfiyService;
 
+import javax.swing.plaf.synth.SynthUI;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +21,7 @@ import java.util.Map;
 public class MemberController {
     private final MemberService memberService;
     private final EmailVerfiyService emailVerfiyService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/test")
     public @ResponseBody String test() {
@@ -137,7 +136,7 @@ public class MemberController {
 
     @PutMapping("/my-info/update")
     @ResponseBody
-public String updateMyInfo(@RequestBody MemberProfileUpdateDTO memberProfileEditDTO, Principal principal) {
+    public String updateMyInfo(@RequestBody MemberProfileUpdateDTO memberProfileEditDTO, Principal principal) {
         String email = principal.getName();
         Member member = memberService.findByEmail(email);
 
@@ -148,6 +147,35 @@ public String updateMyInfo(@RequestBody MemberProfileUpdateDTO memberProfileEdit
         member.setStudentId(Long.parseLong(memberProfileEditDTO.getStudentId()));
         member.setMajor(memberProfileEditDTO.getMajor());
 
+        memberService.save(member);
+        return "success";
+    }
+
+    @PostMapping("/check-password")
+    public @ResponseBody boolean checkPassword(@RequestBody PasswordDTO passwordDTO, Principal principal) {
+        String email = principal.getName();
+        Member member = memberService.findByEmail(email);
+        String passwordEncoded = member.getPassword();
+        String password = passwordDTO.getPassword();
+
+        System.out.println(password);
+        System.out.println(passwordEncoded);
+        return passwordEncoder.matches(password, passwordEncoded);
+    }
+
+    @PutMapping("/change-password")
+    public @ResponseBody String changePassword(@RequestBody PasswordDTO passwordDTO, Principal principal) {
+        String email = principal.getName();
+        Member member = memberService.findByEmail(email);
+        String passwordEncoded = member.getPassword();
+        String password = passwordDTO.getPassword();
+        String newPassword = passwordDTO.getNewPassword();
+
+        if (!passwordEncoder.matches(password, passwordEncoded)) {
+            return "wrong";
+        }
+
+        member.setPassword(passwordEncoder.encode(newPassword));
         memberService.save(member);
         return "success";
     }
