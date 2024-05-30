@@ -7,6 +7,7 @@ import springboot.profpilot.global.Utils.MakeJsonResponse;
 import springboot.profpilot.model.DTO.CheckEmail;
 import springboot.profpilot.model.DTO.MemberProfileDTO;
 import springboot.profpilot.model.DTO.MemberProfileEditDTO;
+import springboot.profpilot.model.DTO.MemberProfileUpdateDTO;
 import springboot.profpilot.model.DTO.SignUpDTO;
 import springboot.profpilot.model.emailverfiy.EmailVerfiy;
 import springboot.profpilot.model.emailverfiy.EmailVerfiyService;
@@ -23,15 +24,12 @@ public class MemberController {
     private final MemberService memberService;
     private final EmailVerfiyService emailVerfiyService;
 
-
     @GetMapping("/test")
     public @ResponseBody String test() {
         System.out.println("test");
         return "test";
     }
 
-
-    // 이메일, 비밀번호, 이름, 학번만 받아서 회원가입
     @PostMapping("/signup")
     public @ResponseBody String signup(@RequestBody SignUpDTO member) {
         if (member.getEmail() == null || member.getPassword() == null || member.getName() == null || member.getStudentId() == null) {
@@ -135,5 +133,22 @@ public class MemberController {
 
        Map<String, String> response = MakeJsonResponse.makeJsonResponse(memberProfileEditDTO);
         return response;
+    }
+
+    @PutMapping("/my-info/update")
+    @ResponseBody
+public String updateMyInfo(@RequestBody MemberProfileUpdateDTO memberProfileEditDTO, Principal principal) {
+        String email = principal.getName();
+        Member member = memberService.findByEmail(email);
+
+        System.out.println(memberProfileEditDTO.getName());
+
+
+        member.setName(memberProfileEditDTO.getName());
+        member.setStudentId(Long.parseLong(memberProfileEditDTO.getStudentId()));
+        member.setMajor(memberProfileEditDTO.getMajor());
+
+        memberService.save(member);
+        return "success";
     }
 }

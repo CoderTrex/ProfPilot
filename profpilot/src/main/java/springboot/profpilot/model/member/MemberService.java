@@ -22,9 +22,6 @@ public class MemberService {
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email);
     }
-
-
-    // 이메일, 비밀번호, 이름, 학번만 받아서 회원가입
     public Member save(String email, String password, String name, Long studentId) {
         Member member = new Member();
         if (email.contains("khu.ac.kr")) {
@@ -50,6 +47,9 @@ public class MemberService {
         member.setAgree_at(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         return memberRepository.save(member);
     }
+    public void save(Member member) {
+        memberRepository.save(member);
+    }
     public String verifyEmail(String email) {
         GenerateRandomValue generateRandomValue = new GenerateRandomValue();
         String code = generateRandomValue.getRandomPassword(10);
@@ -63,7 +63,6 @@ public class MemberService {
 
         return EmailService.sendEmailVerifyCode(email, code);
      }
-
     public String checkEmailVerifyCode(String email, String code) {
         EmailVerfiy emailVerfiy = emailVerfiyService.findByEmail(email);
         if (emailVerfiy == null) {
