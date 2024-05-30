@@ -9,7 +9,6 @@ import springboot.profpilot.model.DTO.*;
 import springboot.profpilot.model.emailverfiy.EmailVerfiy;
 import springboot.profpilot.model.emailverfiy.EmailVerfiyService;
 
-import javax.swing.plaf.synth.SynthUI;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -83,9 +82,63 @@ public class MemberController {
         return memberService.checkEmailVerifyCode(email, code);
     }
 
+    @PostMapping("/email/verify")
+    public @ResponseBody String changeEmailVerify(@RequestBody VerifyEmail verifyCodeEmail) {
+        String email = verifyCodeEmail.getEmail();
+        EmailVerfiy emailVerfiy = emailVerfiyService.findByEmail(email);
+
+        if (emailVerfiy != null) {
+            String sendTime = emailVerfiy.getTime();
+            if (emailVerfiy.isVerified()) {
+                return "already";
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime sendTimeParsed = LocalDateTime.parse(sendTime, formatter);
+            LocalDateTime now = LocalDateTime.now();
+            String nowString = now.format(formatter);
+            LocalDateTime nowParsed = LocalDateTime.parse(nowString, formatter);
+            if (nowParsed.isBefore(sendTimeParsed.plusMinutes(5))) {
+                return "wait";
+            }
+            else {
+                emailVerfiyService.deleteByEmail(email);
+            }
+        }
+
+        String response = memberService.verifyEmail(email);
+        if (response.equals("success")) {
+            return "success";
+        } else {
+            return "fail";
+        }
+    }
+
+    @PostMapping("/email/verify/check")
+    public @ResponseBody String checkEmailVerify(@RequestBody CheckEmail checkEmail) {
+        System.out.println(checkEmail.getEmail());
+        String email = checkEmail.getEmail();
+        String code = checkEmail.getVerifyCode();
+        return memberService.checkEmailVerifyCode(email, code);
+    }
+
+    @PutMapping("/email/change")
+    public @ResponseBody String changeEmail(@RequestBody CheckEmail verifyCodeEmail, Principal principal) {
+        String email = verifyCodeEmail.getEmail();
+        String code = verifyCodeEmail.getVerifyCode();
+
+        EmailVerfiy emailVerfiy = emailVerfiyService.findByEmail(email);
+        if (emailVerfiy == null || !emailVerfiy.isVerified()) {
+            return "not-Verified";
+        }
+
+        Member member = memberService.findByEmail(principal.getName());
+        member.setEmail(email);
+        memberService.save(member);
+        return "success";
+    }
+
     @GetMapping("/login")
     public String login() {
-        System.out.println("login page");
         return "user/login";
     }
 
@@ -140,14 +193,16 @@ public class MemberController {
         String email = principal.getName();
         Member member = memberService.findByEmail(email);
 
-        System.out.println(memberProfileEditDTO.getName());
-
-
         member.setName(memberProfileEditDTO.getName());
         member.setStudentId(Long.parseLong(memberProfileEditDTO.getStudentId()));
         member.setMajor(memberProfileEditDTO.getMajor());
 
         memberService.save(member);
+        return "success";
+    }
+
+    @GetMapping("/check")
+    public @ResponseBody String check(Principal principal) {
         return "success";
     }
 
@@ -157,9 +212,6 @@ public class MemberController {
         Member member = memberService.findByEmail(email);
         String passwordEncoded = member.getPassword();
         String password = passwordDTO.getPassword();
-
-        System.out.println(password);
-        System.out.println(passwordEncoded);
         return passwordEncoder.matches(password, passwordEncoded);
     }
 
@@ -170,11 +222,9 @@ public class MemberController {
         String passwordEncoded = member.getPassword();
         String password = passwordDTO.getPassword();
         String newPassword = passwordDTO.getNewPassword();
-
         if (!passwordEncoder.matches(password, passwordEncoded)) {
             return "wrong";
         }
-
         member.setPassword(passwordEncoder.encode(newPassword));
         memberService.save(member);
         return "success";
