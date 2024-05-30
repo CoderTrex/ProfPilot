@@ -4,21 +4,18 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:profpilot/DTO/myedit-dto.dart';
 import 'package:profpilot/view/desktop-web/after-auth/main/main-page.dart';
+import 'package:profpilot/view/desktop-web/after-auth/personal/my-edit.dart';
 import 'package:profpilot/view/desktop-web/after-auth/personal/my-page.dart';
-import 'package:profpilot/view/desktop-web/after-auth/personal/my-update.dart';
 import 'package:profpilot/view/desktop-web/before-auth/Login-page.dart';
 
-
-
-
-class PersonalEditPage extends StatefulWidget {
-  const PersonalEditPage({super.key});
+class PersonalUpdatePage extends StatefulWidget {
+  const PersonalUpdatePage({super.key});
 
   @override
-  State<PersonalEditPage> createState() => _PersonalEditPageState();
+  State<PersonalUpdatePage> createState() => _PersonalUpdatePageState();
 }
 
-class _PersonalEditPageState extends State<PersonalEditPage> {
+class _PersonalUpdatePageState extends State<PersonalUpdatePage> {
   
   
   Future<MyEditDTO> _initPageController() async {
@@ -58,12 +55,58 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
     return MyEditDTO.empty();
   }
 
+  // ignore: non_constant_identifier_names
+  Future<void> _SendUpdateController(TextEditingController studentIdController, TextEditingController nameController, TextEditingController majorController) async {
+    final String? accessToken = window.localStorage['token'];
+    final MyEditDTO myEditDTO;
+
+    if (accessToken == null) {
+      Navigator.pushReplacement(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => const LoginPage()
+        )
+      );
+    }
+
+    final dio = Dio();
+
+    try {
+      final response = await dio.put(
+        'http://localhost:8080/member/my-info/update',
+        options: Options(
+          headers: {
+            'access' : accessToken,
+          }
+        ),
+        data: {
+          'name' : nameController.text,
+          'major' : majorController.text,
+          'studentId' : studentIdController.text,
+        }
+      );
+      MyEditDTO myEditDTO = MyEditDTO.fromResponse(response);
+      return ;
+    } catch (e) {
+      Navigator.pushReplacement(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => const PersonalEditPage()
+        )
+      );
+    }
+    return ;
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    final TextEditingController studentIdController = TextEditingController();
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController majorController = TextEditingController();
     final Size screenSize = MediaQuery.of(context).size;
-    _initPageController();
+    
     return Scaffold(
-
       body: FutureBuilder<MyEditDTO>(
         future: _initPageController(),
         builder: (BuildContext context, AsyncSnapshot<MyEditDTO> snapshot) {
@@ -72,7 +115,9 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
-            MyEditDTO myEditDTO = snapshot.data!;
+            nameController.text = snapshot.data!.name;
+            majorController.text = snapshot.data!.major;
+            studentIdController.text = snapshot.data!.studentId;
             return  Container(
             width: screenSize.width,
             height: screenSize.height,
@@ -205,27 +250,25 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                   ),
                 ],),
                 const SizedBox(height: 50),
-                const Row(children: [ // 채우고 싶지 않는 정보는 비워도 됩니다. :)
+                const Row(children: [ // 
                   SizedBox(width: 200),
                   Positioned(
                     left: 110,
                     top: 98,
                     child: Text(
-                      '꼭 안전하게 보관해줘요 :)',
+                      '아직 바꿀 수 있는 정보는 별로 없어요 ^_^;',
                       style: TextStyle(
                         color: Color.fromARGB(255, 3, 57, 65),
                         fontSize: 30,
                         fontFamily: 'BMHANNAPro',
                         fontWeight: FontWeight.w400,
                         height: 0.02,
-                        letterSpacing: -0.14,
                       ),
                     ),
                   ),
                 ],),
                 const SizedBox(height: 150),
-                Center(
-                  child: Row(children: [
+                Row(children: [
                   SizedBox(width: screenSize.width * 0.5 - 400),
                   Positioned(
                     child: SizedBox(
@@ -347,7 +390,8 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                             ),
                           ),
                           const SizedBox(height: 30),
-                          Container( // 학번, 역할
+                          
+                          Container( // 대학, 역할
                             clipBehavior: Clip.antiAlias,
                             decoration: const BoxDecoration(),
                             child: Row(
@@ -355,7 +399,7 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded( // 학번
+                                Expanded( // 대학
                                   child: Container(
                                     height: 20,
                                     clipBehavior: Clip.antiAlias,
@@ -366,32 +410,8 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          '학번',
+                                          '대학',
                                           style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontFamily: 'Inter',
-                                            fontWeight: FontWeight.w400,
-                                            letterSpacing: -0.12,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    height: 20,
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: const BoxDecoration(),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          snapshot.data!.studentId,
-                                          style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 15,
                                             fontFamily: 'Inter',
@@ -404,6 +424,32 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                                     ),
                                   ),
                                 ),
+                                Expanded( 
+                                  child: Container(
+                                    height: 20,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: const BoxDecoration(),
+                                    child: const Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "대학을 입력해주세요",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15,
+                                            fontFamily: 'Inter',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.04,
+                                            letterSpacing: -0.12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                
                                 Expanded( // 역할
                                   child: Container(
                                     height: 20,
@@ -459,6 +505,7 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                             ),
                           ),
                           const SizedBox(height: 30),
+                          
                           Container( // 이름, 활동 여부
                             clipBehavior: Clip.antiAlias,
                             decoration: const BoxDecoration(),
@@ -494,27 +541,21 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                                 ),
                                 Expanded(
                                   child: Container(
-                                    height: 20,
-                                    clipBehavior: Clip.antiAlias,
+                                    height: 30,
+                                    // clipBehavior: Clip.antiAlias,
                                     decoration: const BoxDecoration(),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          snapshot.data!.name,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontFamily: 'Inter',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0.04,
-                                            letterSpacing: -0.12,
+                                    child: TextField(
+                                          controller: nameController,
+                                          decoration: const InputDecoration(
+                                            hintText: "이름을 입력해주세요",
+                                            hintStyle: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontFamily: 'Inter',
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
                                         ),
-                                      ],
-                                    ),
                                   ),
                                 ),
                                 Expanded( // 활동 여부
@@ -572,7 +613,8 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                             ),
                           ),
                           const SizedBox(height: 30),
-                          Container( // 대학, 가입일
+                          
+                          Container( // 학번, 가입일
                             clipBehavior: Clip.antiAlias,
                             decoration: const BoxDecoration(),
                             child: Row(
@@ -580,7 +622,8 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded( // 대학
+                                
+                                Expanded( // 학번
                                   child: Container(
                                     height: 20,
                                     clipBehavior: Clip.antiAlias,
@@ -591,13 +634,12 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          '대학',
+                                          '학번',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 15,
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
-                                            height: 0.04,
                                             letterSpacing: -0.12,
                                           ),
                                         ),
@@ -607,29 +649,25 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                                 ),
                                 Expanded(
                                   child: Container(
-                                    height: 20,
+                                    height: 30,
                                     clipBehavior: Clip.antiAlias,
                                     decoration: const BoxDecoration(),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          snapshot.data!.university,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontFamily: 'Inter',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0.04,
-                                            letterSpacing: -0.12,
+                                    child: TextField(
+                                          controller: studentIdController,
+                                          decoration: const InputDecoration(
+                                            hintText: "학번을 입력해주세요",
+                                            hintStyle: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontFamily: 'Inter',
+                                              fontWeight: FontWeight.w400,
+                                              letterSpacing: -0.12,
+                                            ),
                                           ),
                                         ),
-                                      ],
-                                    ),
                                   ),
                                 ),
+                                
                                 Expanded( // 가입일
                                   child: Container(
                                     height: 20,
@@ -680,11 +718,12 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                                     ),
                                   ),
                                 ),
-                              
                               ],
                             ),
                           ),
                           const SizedBox(height: 30),
+                          
+                          
                           Container( // 전공
                             clipBehavior: Clip.antiAlias,
                             decoration: const BoxDecoration(),
@@ -718,29 +757,23 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                                     ),
                                   ),
                                 ),
-                                Expanded(
+                                Expanded( 
                                   child: Container(
-                                    height: 20,
+                                    height: 30,
                                     clipBehavior: Clip.antiAlias,
                                     decoration: const BoxDecoration(),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          snapshot.data!.major,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontFamily: 'Inter',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0.04,
-                                            letterSpacing: -0.12,
+                                    child:TextField(
+                                          controller: majorController,
+                                          decoration: InputDecoration(
+                                            hintText: snapshot.data!.major,
+                                            hintStyle: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontFamily: 'Inter',
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
                                         ),
-                                      ],
-                                    ),
                                   ),
                                 ),
                                 Expanded(
@@ -803,7 +836,6 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                   ),
                   SizedBox(width: screenSize.width * 0.2),
                 ],),
-                ),
                 const SizedBox(height: 100),
                 Row(children: [
                   SizedBox(width: screenSize.width * 0.8 - 200),
@@ -811,7 +843,9 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                     child: Container(
                       height: 70,
                       clipBehavior: Clip.antiAlias,
-                      decoration: const BoxDecoration(),
+                      decoration: const BoxDecoration(
+                        color: Colors.transparent,
+                      ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -819,29 +853,23 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                    PersonalUpdatePage()
-                                )
-                              );
+                              _SendUpdateController(studentIdController, nameController, majorController);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.transparent,
-                              shadowColor: Colors.transparent,
-                            ),
-                            child: const DefaultTextStyle(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ), 
+                            child: const Text(
+                              '개인정보 변경',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontSize: 20,
-                                fontFamily: 'BMHANNAPro',
+                                fontFamily: 'Inter',
                                 fontWeight: FontWeight.w400,
                                 height: 0.04,
                                 letterSpacing: -0.12,
-                              ),
-                              child: Text(
-                                '개인정보 변경',
                               ),
                             ),
                           ),
@@ -855,37 +883,20 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                       height: 70,
                       clipBehavior: Clip.antiAlias,
                       decoration: const BoxDecoration(),
-                      child: Row(
+                      child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                    PersonalUpdatePage()
-                                )
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              shadowColor: Colors.transparent,
-                            ),
-                            child: const DefaultTextStyle(
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontFamily: 'BMHANNAPro',
-                                fontWeight: FontWeight.w400,
-                                height: 0.04,
-                                letterSpacing: -0.12,
-                              ),
-                              child: Text(
-                                '개인정보 변경',
-                              ),
+                          Text(
+                            '비밀번호 변경',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w400,
+                              height: 0.04,
+                              letterSpacing: -0.12,
                             ),
                           ),
                         ],
@@ -918,8 +929,6 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                       ),
                     ),
                   ),
-                
-                
                 ],), 
                 const SizedBox(height: 100),
               ],
