@@ -6,6 +6,7 @@ import 'package:profpilot/DTO/myedit-dto.dart';
 import 'package:profpilot/view/desktop-web/after-auth/main/main-page.dart';
 import 'package:profpilot/view/desktop-web/after-auth/personal/my-page.dart';
 import 'package:profpilot/view/desktop-web/after-auth/personal/my-update.dart';
+import 'package:profpilot/view/desktop-web/after-auth/personal/my-password.dart';
 import 'package:profpilot/view/desktop-web/before-auth/Login-page.dart';
 
 
@@ -57,6 +58,114 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
     }
     return MyEditDTO.empty();
   }
+
+  Future<bool> _checkPassword(String password) async {
+    final String? accessToken = window.localStorage['token'];
+    final MyEditDTO myEditDTO;
+    if (accessToken == null) {
+      Navigator.pushReplacement(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => const LoginPage()
+        )
+      );
+    }
+    final dio = Dio();
+    try {
+      final response = await dio.post(
+        'http://localhost:8080/member/check-password',
+        options: Options(
+          headers: {
+            'access' : accessToken,
+          }
+        ),
+        data: {
+          'password' : password,
+          'newPassword' : '',
+        }
+      );
+      return response.data;
+    } catch (e) {
+      Navigator.pushReplacement(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => const LoginPage()
+        )
+      );
+    }
+    return false;
+  }
+
+
+  Future<void> _GotoPasswordChange() async {
+    final TextEditingController passwordController = TextEditingController();
+    bool isPassword = false;
+
+    // 비밀번호 확인 모달
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('비밀번호를 입력해주세요'),
+          content: TextField(
+            controller: passwordController,
+            obscureText: true,
+            decoration: const InputDecoration(
+              hintText: '비밀번호',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('취소'),
+            ),
+            TextButton(
+              onPressed: () async {
+                bool passwordCheck = await _checkPassword(passwordController.text);
+                if (passwordCheck) {
+                  isPassword = true;
+                  Navigator.pop(context);  // 다이얼로그 닫기
+                } else {
+                  Navigator.pop(context);  // 다이얼로그 닫기
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('비밀번호가 일치하지 않습니다.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('확인'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
+
+    // 비밀번호가 맞는 경우 비밀번호 변경 페이지로 이동
+    if (isPassword) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PersonalPasswordPage(),
+        ),
+      );
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -224,8 +333,7 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                   ),
                 ],),
                 const SizedBox(height: 150),
-                Center(
-                  child: Row(children: [
+                Row(children: [
                   SizedBox(width: screenSize.width * 0.5 - 400),
                   Positioned(
                     child: SizedBox(
@@ -803,7 +911,6 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                   ),
                   SizedBox(width: screenSize.width * 0.2),
                 ],),
-                ),
                 const SizedBox(height: 100),
                 Row(children: [
                   SizedBox(width: screenSize.width * 0.8 - 200),
@@ -861,6 +968,44 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           ElevatedButton(
+                            onPressed: () 
+                            {
+                              _GotoPasswordChange();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                            ),
+                            child: const DefaultTextStyle(
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontFamily: 'BMHANNAPro',
+                                fontWeight: FontWeight.w400,
+                                height: 0.04,
+                                letterSpacing: -0.12,
+                              ),
+                              child: Text(
+                                '비밀번호 변경',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 50),
+                  Positioned( // 이메일 변경
+                    child: Container(
+                      height: 70,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: const BoxDecoration(),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -884,34 +1029,8 @@ class _PersonalEditPageState extends State<PersonalEditPage> {
                                 letterSpacing: -0.12,
                               ),
                               child: Text(
-                                '개인정보 변경',
+                                '이메일 변경',
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 50),
-                  Positioned( // 이메일 변경
-                    child: Container(
-                      height: 70,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: const BoxDecoration(),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            '이메일 변경',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w400,
-                              height: 0.04,
-                              letterSpacing: -0.12,
                             ),
                           ),
                         ],
