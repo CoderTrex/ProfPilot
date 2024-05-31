@@ -4,21 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-//data: {
-//        'LectureName': LectureName,
-//        'LectureDay': LectureDay,
-//        'LectureStartTime': LectureStartTime,
-//        'LectureEndTime': LectureEndTime,
-//        'Building': Building,
-//        'Password': Password,
-//        },
 @Getter
 @Setter
 public class LectureCreateDTO {
-    private String LectureName;
-    private String LectureDay;
-    private String LectureStartTime;
-    private String LectureEndTime;
-    private String Building;
-    private String Password;
+    private String lectureName;
+    private String lectureDay;
+    private String lectureStartTime;
+    private String lectureEndTime;
+    private String building;
+    private String password;
 }
