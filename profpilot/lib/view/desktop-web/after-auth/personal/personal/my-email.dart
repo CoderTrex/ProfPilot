@@ -6,9 +6,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:profpilot/DTO/myedit-dto.dart';
 import 'package:profpilot/view/desktop-web/after-auth/main/main-page.dart';
-import 'package:profpilot/view/desktop-web/after-auth/personal/my-edit.dart';
-import 'package:profpilot/view/desktop-web/after-auth/personal/my-page.dart';
-import 'package:profpilot/view/desktop-web/after-auth/personal/my-password.dart';
+import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-edit.dart';
+import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-page.dart';
+import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-password.dart';
 import 'package:profpilot/view/desktop-web/before-auth/Login-page.dart';
 
 class PersonalEmailPage extends StatefulWidget {
@@ -103,7 +103,6 @@ class _PersonalEmailPageState extends State<PersonalEmailPage> {
           'email': fullEmail,
         },
       );
-      print(response.data);
       if (response.statusCode == 200) {
         if (response.data == 'success') {
           // ignore: use_build_context_synchronously
@@ -153,8 +152,6 @@ class _PersonalEmailPageState extends State<PersonalEmailPage> {
   // query param string으로 넘어간다.
 
     String fullEmail = '${emailController.text}@$selectedDomain';
-    print("fullEmail: $fullEmail");
-    print("emailCheckController.text: ${emailCheckController.text}");
     try{
       final Response response = await dio.post(
         'http://localhost:8080/member/email/verify/check',
@@ -211,7 +208,6 @@ class _PersonalEmailPageState extends State<PersonalEmailPage> {
           'verifyCode': emailCheckController.text,
         }
       );
-      print("response: $response");
       if (response.statusCode == 200) {
 
         window.alert('이메일 변경에 성공했습니다.');
@@ -306,7 +302,7 @@ class _PersonalEmailPageState extends State<PersonalEmailPage> {
                                   Navigator.push(
                                     context, 
                                     MaterialPageRoute(
-                                      builder: (context) => MyPage()
+                                      builder: (context) => const PersonalMainPage()
                                     )
                                   );
                                 },

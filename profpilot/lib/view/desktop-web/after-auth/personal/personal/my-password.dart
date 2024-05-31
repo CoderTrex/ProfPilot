@@ -5,9 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:profpilot/DTO/myedit-dto.dart';
 import 'package:profpilot/view/desktop-web/after-auth/main/main-page.dart';
-import 'package:profpilot/view/desktop-web/after-auth/personal/my-edit.dart';
-import 'package:profpilot/view/desktop-web/after-auth/personal/my-email.dart';
-import 'package:profpilot/view/desktop-web/after-auth/personal/my-page.dart';
+import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-edit.dart';
+import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-email.dart';
+import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-page.dart';
 import 'package:profpilot/view/desktop-web/before-auth/Login-page.dart';
 
 class PersonalPasswordPage extends StatefulWidget {
@@ -216,7 +216,7 @@ class _PersonalPasswordPageState extends State<PersonalPasswordPage> {
                                   Navigator.push(
                                     context, 
                                     MaterialPageRoute(
-                                      builder: (context) => MyPage()
+                                      builder: (context) => const PersonalMainPage()
                                     )
                                   );
                                 },
