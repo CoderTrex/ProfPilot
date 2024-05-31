@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import springboot.profpilot.model.AuthApply.AuthApply;
 import springboot.profpilot.model.attendance.Attendance;
 import springboot.profpilot.model.flight.Flight;
 import springboot.profpilot.model.lecture.Lecture;
@@ -55,4 +56,8 @@ public class Member {
     @ManyToMany(cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Notification> notifications;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
+    private AuthApply authApply;
 }

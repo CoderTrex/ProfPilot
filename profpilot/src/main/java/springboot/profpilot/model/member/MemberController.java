@@ -5,13 +5,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import springboot.profpilot.global.Utils.MakeJsonResponse;
+import springboot.profpilot.model.AuthApply.AuthApply;
+import springboot.profpilot.model.AuthApply.AuthApplyService;
 import springboot.profpilot.model.DTO.*;
+import springboot.profpilot.model.emailverfiy.EmailService;
 import springboot.profpilot.model.emailverfiy.EmailVerfiy;
 import springboot.profpilot.model.emailverfiy.EmailVerfiyService;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -21,6 +25,7 @@ public class MemberController {
     private final MemberService memberService;
     private final EmailVerfiyService emailVerfiyService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthApplyService authApplyService;
 
     @GetMapping("/test")
     public @ResponseBody String test() {
@@ -228,5 +233,68 @@ public class MemberController {
         member.setPassword(passwordEncoder.encode(newPassword));
         memberService.save(member);
         return "success";
+    }
+
+    @GetMapping("/my-membership")
+    @ResponseBody
+    public Map<String, String> getMembership(Principal principal) {
+        String email = principal.getName();
+        Member member = memberService.findByEmail(email);
+        MembershipPageDTO membershipPageDTO = new MembershipPageDTO();
+        AuthApply authApplies = authApplyService.findByApplicant(member);
+
+        if (member.getRole().equals("professor")) {
+            membershipPageDTO.setIsProfessor("true");
+        } else {
+            membershipPageDTO.setIsProfessor("false");
+        }
+        membershipPageDTO.setRole(member.getRole());
+        if (authApplies != null) {
+            membershipPageDTO.setProfessorAuthapply("true");
+            membershipPageDTO.setProfessorUniversity(authApplies.getApprovedUniversity());
+        } else {
+            membershipPageDTO.setProfessorAuthapply("none");
+            membershipPageDTO.setProfessorUniversity("none");
+        }
+        membershipPageDTO.setMembershipGrade(member.getMembership());
+        membershipPageDTO.setMembershipExpirationDate("none");
+        membershipPageDTO.setCloudCapacity("none");
+
+        Map<String, String> response = MakeJsonResponse.makeJsonResponse(membershipPageDTO);
+        return response;
+    }
+
+
+
+    @PostMapping("/apply-professor")
+    @ResponseBody
+    public String applyProfessor(Principal principal) {
+        try {
+            String email = principal.getName();
+            Member member = memberService.findByEmail(email);
+            AuthApply authApply1 = authApplyService.findByApplicant(member);
+
+            if (authApply1 != null) {
+                return "already";
+            }
+
+            AuthApply authApply = new AuthApply();
+            authApply.setApplicant(member);
+            authApply.setApplicantUniversity(member.getUniversity());
+            authApply.setApplyDate(LocalDateTime.now().toString());
+            authApply.setIsPermitted("none");
+            authApplyService.save(authApply);
+
+            try {
+                EmailService.sendApplyAuth(member.getUniversity(), member);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "fail";
+            }
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
     }
 }
