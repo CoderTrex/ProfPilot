@@ -19,6 +19,12 @@ class _LectureGeneratePageState extends State<LectureGeneratePage> {
   String building = '건물을 선택하세요';
   TimeOfDay? selectedStartTime;
   TimeOfDay? selectedEndTime;
+  final TextEditingController LectureNameController = TextEditingController();
+  final TextEditingController LectureDayController = TextEditingController();
+  final TextEditingController LectureStartTimeController = TextEditingController();
+  final TextEditingController LectureEndTimeController = TextEditingController();
+  final TextEditingController BuildingController = TextEditingController();
+  final TextEditingController PasswordController = TextEditingController();
 
   final List<DayInWeek> _days = [
     DayInWeek(
@@ -99,15 +105,6 @@ class _LectureGeneratePageState extends State<LectureGeneratePage> {
     final String Building = building;
     final String Password = PasswordController.text;
 
-    print("--------------------");
-    print(LectureName);
-    print(LectureDay);
-    print(LectureStartTime);
-    print(LectureEndTime);
-    print(Building);
-    print(Password);
-    print("--------------------");
-
     final Dio dio = Dio();
 
     final String? accessToken = window.localStorage['token'];
@@ -122,6 +119,16 @@ class _LectureGeneratePageState extends State<LectureGeneratePage> {
       );
     }
 
+
+    print("--------------------");
+    print(LectureName);
+    print(LectureDay);
+    print(LectureStartTime);
+    print(LectureEndTime);
+    print(Building);
+    print(Password);
+    print("--------------------");
+
     final response = await dio.post(
       'http://localhost:8080/lecture/create',
       options: Options(
@@ -133,12 +140,12 @@ class _LectureGeneratePageState extends State<LectureGeneratePage> {
           },
       ),
       data: {
-        'LectureName': LectureName,
-        'LectureDay': LectureDay,
-        'LectureStartTime': LectureStartTime,
-        'LectureEndTime': LectureEndTime,
-        'Building': Building,
-        'Password': Password,
+        'lectureName': LectureName,
+        'lectureDay': LectureDay,
+        'lectureStartTime': LectureStartTime,
+        'lectureEndTime': LectureEndTime,
+        'building': Building,
+        'password': Password,
       },
     );
 
@@ -150,12 +157,6 @@ class _LectureGeneratePageState extends State<LectureGeneratePage> {
 
   }
 
-  final TextEditingController LectureNameController = TextEditingController();
-  final TextEditingController LectureDayController = TextEditingController();
-  final TextEditingController LectureStartTimeController = TextEditingController();
-  final TextEditingController LectureEndTimeController = TextEditingController();
-  final TextEditingController BuildingController = TextEditingController();
-  final TextEditingController PasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
