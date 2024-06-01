@@ -6,18 +6,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import springboot.profpilot.global.Utils.GenerateRandomValue;
 import springboot.profpilot.model.emailverfiy.EmailService;
-import springboot.profpilot.model.emailverfiy.EmailVerfiy;
+import springboot.profpilot.model.emailverfiy.EmailVerify;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import springboot.profpilot.model.emailverfiy.EmailVerfiyService;
+import springboot.profpilot.model.emailverfiy.EmailVerifyService;
+import springboot.profpilot.model.lecture.Lecture;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EmailVerfiyService emailVerfiyService;
+    private final EmailVerifyService emailVerifyService;
 
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email);
@@ -54,27 +55,36 @@ public class MemberService {
         GenerateRandomValue generateRandomValue = new GenerateRandomValue();
         String code = generateRandomValue.getRandomPassword(10);
 
-        EmailVerfiy emailVerfiy = new EmailVerfiy();
+        EmailVerify emailVerfiy = new EmailVerify();
         emailVerfiy.setEmail(email);
         emailVerfiy.setCode(code);
         emailVerfiy.setTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         emailVerfiy.setVerified(false);
-        emailVerfiyService.save(emailVerfiy);
+        emailVerifyService.save(emailVerfiy);
 
         return EmailService.sendEmailVerifyCode(email, code);
      }
     public String checkEmailVerifyCode(String email, String code) {
-        EmailVerfiy emailVerfiy = emailVerfiyService.findByEmail(email);
+        EmailVerify emailVerfiy = emailVerifyService.findByEmail(email);
         if (emailVerfiy == null) {
             return "notfound";
         }
         if (emailVerfiy.getCode().equals(code)) {
             emailVerfiy.setVerified(true);
-            emailVerfiyService.save(emailVerfiy);
+            emailVerifyService.save(emailVerfiy);
             return "success";
         } else {
             return "fail";
         }
     }
 
+    public String addLecture(Member member, Lecture lecture) {
+        if (member.getLectures().contains(lecture)) {
+            return "already";
+        } else {
+            member.getLectures().add(lecture);
+            memberRepository.save(member);
+        }
+        return "success";
+    }
 }

@@ -1,4 +1,4 @@
-package springboot.profpilot.model.DTO;
+package springboot.profpilot.model.DTO.lecture;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,5 +12,6 @@ public class LectureCreateDTO {
     private String lectureStartTime;
     private String lectureEndTime;
     private String building;
+    private String room;
     private String password;
 }

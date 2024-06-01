@@ -7,15 +7,21 @@ import org.springframework.web.bind.annotation.*;
 import springboot.profpilot.global.Utils.MakeJsonResponse;
 import springboot.profpilot.model.AuthApply.AuthApply;
 import springboot.profpilot.model.AuthApply.AuthApplyService;
-import springboot.profpilot.model.DTO.*;
+import springboot.profpilot.model.DTO.auth.CheckEmail;
+import springboot.profpilot.model.DTO.auth.PasswordDTO;
+import springboot.profpilot.model.DTO.auth.SignUpDTO;
+import springboot.profpilot.model.DTO.auth.VerifyEmail;
+import springboot.profpilot.model.DTO.member.MemberProfileDTO;
+import springboot.profpilot.model.DTO.member.MemberProfileEditDTO;
+import springboot.profpilot.model.DTO.member.MemberProfileUpdateDTO;
+import springboot.profpilot.model.DTO.member.MembershipPageDTO;
 import springboot.profpilot.model.emailverfiy.EmailService;
-import springboot.profpilot.model.emailverfiy.EmailVerfiy;
-import springboot.profpilot.model.emailverfiy.EmailVerfiyService;
+import springboot.profpilot.model.emailverfiy.EmailVerify;
+import springboot.profpilot.model.emailverfiy.EmailVerifyService;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -23,7 +29,7 @@ import java.util.Map;
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
-    private final EmailVerfiyService emailVerfiyService;
+    private final EmailVerifyService emailVerifyService;
     private final PasswordEncoder passwordEncoder;
     private final AuthApplyService authApplyService;
 
@@ -41,7 +47,7 @@ public class MemberController {
         if (memberService.findByEmail(member.getEmail()) != null) {
             return "already";
         }
-        EmailVerfiy emailVerfiy = emailVerfiyService.findByEmail(member.getEmail());
+        EmailVerify emailVerfiy = emailVerifyService.findByEmail(member.getEmail());
         if (emailVerfiy == null || !emailVerfiy.isVerified()) {
             return "not-Verified";
         }
@@ -52,7 +58,7 @@ public class MemberController {
     @PostMapping("/signup/email/verify")
     public @ResponseBody String verifyEmail(@RequestBody String json_email) {
         String email = json_email.substring(10, json_email.length() - 2);
-        EmailVerfiy emailVerfiy = emailVerfiyService.findByEmail(email);
+        EmailVerify emailVerfiy = emailVerifyService.findByEmail(email);
 
         if (emailVerfiy != null) {
             String sendTime = emailVerfiy.getTime();
@@ -68,7 +74,7 @@ public class MemberController {
                 return "wait";
             }
             else {
-                emailVerfiyService.deleteByEmail(email);
+                emailVerifyService.deleteByEmail(email);
             }
         }
 
@@ -90,7 +96,7 @@ public class MemberController {
     @PostMapping("/email/verify")
     public @ResponseBody String changeEmailVerify(@RequestBody VerifyEmail verifyCodeEmail) {
         String email = verifyCodeEmail.getEmail();
-        EmailVerfiy emailVerfiy = emailVerfiyService.findByEmail(email);
+        EmailVerify emailVerfiy = emailVerifyService.findByEmail(email);
 
         if (emailVerfiy != null) {
             String sendTime = emailVerfiy.getTime();
@@ -106,7 +112,7 @@ public class MemberController {
                 return "wait";
             }
             else {
-                emailVerfiyService.deleteByEmail(email);
+                emailVerifyService.deleteByEmail(email);
             }
         }
 
@@ -131,7 +137,7 @@ public class MemberController {
         String email = verifyCodeEmail.getEmail();
         String code = verifyCodeEmail.getVerifyCode();
 
-        EmailVerfiy emailVerfiy = emailVerfiyService.findByEmail(email);
+        EmailVerify emailVerfiy = emailVerifyService.findByEmail(email);
         if (emailVerfiy == null || !emailVerfiy.isVerified()) {
             return "not-Verified";
         }
@@ -166,8 +172,7 @@ public class MemberController {
             memberProfile.setCloudGrade("NONE");
         }
 
-        Map<String, String> response = MakeJsonResponse.makeJsonResponse(memberProfile);
-        return response;
+        return MakeJsonResponse.makeJsonResponse(memberProfile);
     }
 
     @GetMapping("/my-info")

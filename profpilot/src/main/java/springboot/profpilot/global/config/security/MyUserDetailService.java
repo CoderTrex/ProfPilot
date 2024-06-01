@@ -1,17 +1,13 @@
 package springboot.profpilot.global.config.security;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import springboot.profpilot.model.DTO.SignInDTO;
+import springboot.profpilot.model.DTO.auth.SignInDTO;
 import springboot.profpilot.model.member.Member;
-import springboot.profpilot.model.member.MemberRepository;
 import springboot.profpilot.model.member.MemberService;
-import java.util.List;
 
 
 @Service

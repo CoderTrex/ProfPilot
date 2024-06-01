@@ -1,4 +1,4 @@
-package springboot.profpilot.model.DTO;
+package springboot.profpilot.model.DTO.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

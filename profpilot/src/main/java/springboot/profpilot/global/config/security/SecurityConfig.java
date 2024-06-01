@@ -56,11 +56,12 @@ public class SecurityConfig {
 
                         .requestMatchers("/member/signup", "/member/login", "/member/logout",
                                 "/member/signup/email/verify", "/member/signup/email/verify/check",
-                                "/images/**", "/css/**", "/js/**", "/sendToken/**", "/reissue").permitAll()
+                                "/images/**", "/css/**", "/js/**", "/sendToken/**", "/reissue", "/WhoAmI").permitAll()
 
                         .requestMatchers("/member/my-page", "/member/my-info", "/my-info/update", "/member/check-password",
                                 "/member/change-password", "/member/check", "/member/email/verify", "/member/email/verify/check",
-                                "/member/email/change", "/member/my-membership", "/member/apply-professor", "/main/page", "/lecture/create").hasAnyRole("STUDENT", "PROFESSOR")
+                                "/member/email/change", "/member/my-membership", "/member/apply-professor", "/main/page",
+                                "/lecture/create", "/lecture/search", "/lecture/Enrolment").hasAnyRole("STUDENT", "PROFESSOR")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()

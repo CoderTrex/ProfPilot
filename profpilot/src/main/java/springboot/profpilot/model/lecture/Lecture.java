@@ -19,18 +19,12 @@ public class Lecture {
     private Long id;
 
     private String name;
-
-    @Column(unique = true)
-    private Long identifier;
-
-    private String date;
-    private String time;
+    private String day;
+    private String room;
     private String building;
     private String password;
     private String start_time;
     private String end_time;
-    private Long attendance_rate;
-    private String materials;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Member> Students;

@@ -12,7 +12,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import springboot.profpilot.global.Utils.JwtUtil;
-import springboot.profpilot.model.DTO.SignInDTO;
 import springboot.profpilot.model.refresh.RefreshEntity;
 import springboot.profpilot.model.refresh.RefreshRepository;
 

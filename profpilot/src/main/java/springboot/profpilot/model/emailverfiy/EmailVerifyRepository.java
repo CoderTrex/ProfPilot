@@ -5,12 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-public interface EmailVerfiyRepository extends JpaRepository<EmailVerfiy, Long> {
-    EmailVerfiy findByEmail(String email);
+public interface EmailVerifyRepository extends JpaRepository<EmailVerify, Long> {
+    EmailVerify findByEmail(String email);
 
     @Modifying
     @Transactional
-    @Query("delete from EmailVerfiy e where e.email = ?1")
+    @Query("delete from EmailVerify e where e.email = ?1")
     void deleteByEmail(String email);
 }
 

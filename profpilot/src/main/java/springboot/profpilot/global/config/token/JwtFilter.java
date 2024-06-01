@@ -8,18 +8,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import springboot.profpilot.global.Utils.JwtUtil;
-import springboot.profpilot.model.DTO.SignInDTO;
+import springboot.profpilot.model.DTO.auth.SignInDTO;
 import springboot.profpilot.model.member.Member;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import java.io.IOException;
-import java.util.List;
 
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
