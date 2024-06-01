@@ -6,7 +6,9 @@ import 'package:profpilot/view/desktop-web/after-auth/personal/membership/member
 import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-edit.dart';
 import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-email.dart';
 import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-page.dart';
+import 'package:profpilot/view/desktop-web/before-auth/FindPassword-page.dart';
 import 'package:profpilot/view/desktop-web/before-auth/Login-page.dart';
+import 'package:profpilot/view/desktop-web/before-auth/Signup-page.dart';
 import 'package:profpilot/view/mobile-web/M-login-page.dart';
 
 class Breakpoint {
@@ -66,7 +68,7 @@ class MyApp extends StatelessWidget {
           default:
             home = const LoginPage();
         }
-        // home = MainPage();
+        home = MainPage();
         return MaterialApp(
           theme: ThemeData.dark().copyWith(
             scaffoldBackgroundColor: const Color.fromARGB(255, 69, 131, 197),

@@ -29,7 +29,7 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                 child: const DefaultTextStyle(
                   style: TextStyle(
                     color: Color.fromARGB(255, 62, 158, 163),
-                    fontSize: 48,
+                    fontSize: 15,
                     fontFamily: 'BMHANNAPro',
                     fontWeight: FontWeight.w400,
                     height: 0.02,
@@ -43,11 +43,11 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
               Positioned(
                 // 비밀번호를 잊으셨나요?
                 left: screenSize.width * 0.1,
-                top: 221,
+                top: 190,
                 child: const DefaultTextStyle(
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 48,
+                    fontSize: 15,
                     fontFamily: 'BMHANNAPro',
                     fontWeight: FontWeight.w400,
                     height: 0.02,
@@ -60,9 +60,9 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
               ),
               Positioned(
                 // 비밀번호 찾기
-                left: screenSize.width * 0.5 - 100,
+                left: screenSize.width * 0.5 - 60,
                 width: 200,
-                top: 478,
+                top: 278,
                 child: const DefaultTextStyle(
                   style: TextStyle(
                     color: Colors.white,
@@ -115,14 +115,12 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                 ),
               ),
               Positioned(
-                // 로그인, 비밀번호를 잃어버리셨습니까?
+                // 로그인, 회원가입
                 left: screenSize.width * 0.5 - 300,
-                top: 649,
+                top: 500,
                 child: Container(
                   width: 600,
                   height: 60,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 61, vertical: 14),
                   clipBehavior: Clip.antiAlias,
                   decoration: const BoxDecoration(),
                   child: Row(
@@ -188,12 +186,11 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
               Positioned(
                 // 이메일
                 left: screenSize.width * 0.5 - 300,
-                top: 530,
+                top: 350,
                 child: Container(
                   width: 600,
                   height: 60,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 14),
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                     color: Colors.white,
@@ -220,7 +217,6 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                           fontSize: 30,
                           fontFamily: 'BMHANNAPro',
                           fontWeight: FontWeight.w400,
-                          height: 0.06,
                           letterSpacing: -0.14,
                         ),
                         child: Text('이메일'),
