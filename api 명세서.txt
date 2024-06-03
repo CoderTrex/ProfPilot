@@ -1,5 +1,3 @@
-
-
 api document: 
 This project is University attendance system.
 This project's concept is base on airport. student called passenger and teacher called pliot and the class called flight.

@@ -62,6 +62,7 @@ public class SecurityConfig {
                                 "/member/change-password", "/member/check", "/member/email/verify", "/member/email/verify/check",
                                 "/member/email/change", "/member/my-membership", "/member/apply-professor", "/main/page",
                                 "/lecture/create", "/lecture/search", "/lecture/Enrolment").hasAnyRole("STUDENT", "PROFESSOR")
+
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()

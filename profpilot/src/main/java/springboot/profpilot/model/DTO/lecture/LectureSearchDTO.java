@@ -4,10 +4,6 @@ package springboot.profpilot.model.DTO.lecture;
 import lombok.Getter;
 import lombok.Setter;
 
-// 1. 검색어, 2. 강의명, 3. 교수명, 4. 강의실
-// 5. 요일, 6. 시간대(시작 시간, 종료 시간) 7. 건물
-
-
 @Getter
 @Setter
 public class LectureSearchDTO {

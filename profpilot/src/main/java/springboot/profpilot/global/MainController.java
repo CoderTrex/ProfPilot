@@ -8,12 +8,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import springboot.profpilot.global.Utils.MakeJsonResponse;
 import springboot.profpilot.model.DTO.page.MainPageDTO;
+import springboot.profpilot.model.lecture.Lecture;
 import springboot.profpilot.model.member.Member;
 import springboot.profpilot.model.member.MemberService;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,12 +33,27 @@ public class MainController {
 
     @GetMapping("/main/page")
     @ResponseBody
-    public Map<String, String> mainPage(Principal principal) {
+    public Map<String, Object> mainPage(Principal principal) {
         Member member = memberService.findByEmail(principal.getName());
-        MainPageDTO mainPageDTO = new MainPageDTO();
-        mainPageDTO.setName(member.getName());
-        mainPageDTO.setRole(member.getRole());
-        return MakeJsonResponse.makeJsonResponse(mainPageDTO);
+        Map<String, Object> response = new HashMap<>();
+        List<Lecture> lectures = member.getLectures();
+
+        List<MainPageDTO> mainPageDTOList = lectures.stream().map(lecture -> new MainPageDTO(
+                lecture.getName(),
+                lecture.getDay(),
+                lecture.getStart_time(),
+                lecture.getEnd_time(),
+                lecture.getBuilding(),
+                lecture.getRoom(),
+                lecture.getProfessor().getName()
+        )).collect(Collectors.toList());
+
+        response.put("name", member.getName());
+        response.put("email", member.getEmail());
+        response.put("role", member.getRole());
+        response.put("lectures-size", lectures.size());
+        response.put("mainPageDTOList", mainPageDTOList);
+        return response;
     }
 
 
