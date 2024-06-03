@@ -1,6 +1,3 @@
-
-import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-page.dart';
-
 class MyPageDTO {
   String name;
   String studentId;

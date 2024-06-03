@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:html';
+import 'dart:io';
 import 'dart:math';
 import 'package:dio/dio.dart';
 
@@ -30,6 +31,7 @@ class _MainPageState extends State<MainPage> {
       window.alert('로그인이 필요합니다.');
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => LoginPage()));
+      return Future.error('로그인이 필요합니다.');
     }
 
     final Dio dio = Dio();
@@ -43,12 +45,12 @@ class _MainPageState extends State<MainPage> {
               'withCredentials': true,
             },
           ));
-
-      print(response.data);
-      return MainPageDTO.empty();
+      // print(response.data);
+      // return response.data;
+      return MainPageDTO.fromJson(response.data);
     } catch (e) {
       print(e);
-      return MainPageDTO.empty();
+      return Future.error('데이터를 불러오는 중 오류가 발생했습니다.');
     }
   }
 
@@ -128,7 +130,6 @@ class _MainPageState extends State<MainPage> {
 
   Future<void> _onSearchIconPressed() async {
     String searchText = _searchController.text;
-
     String accessToken = window.localStorage['token'] ?? '';
 
     if (accessToken.isEmpty) {
@@ -301,12 +302,13 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: const Color(0xFF444444),
       body: FutureBuilder<MainPageDTO>(
           future: _initPageController(),
-          builder: (context, snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<MainPageDTO> snapshot) {
+            MainPageDTO data = snapshot.data!;
+            // print(data.mainPageDTOList);
             return ListView(
               physics: const AlwaysScrollableScrollPhysics(),
               children: [
@@ -569,29 +571,17 @@ class _MainPageState extends State<MainPage> {
                   clipBehavior: Clip.antiAlias,
                   decoration: const BoxDecoration(color: Color(0xFF444444)),
                   child: SingleChildScrollView(
-                    controller: _pageController,
-                    scrollDirection: Axis.horizontal, // 수평 스크롤 설정
+                    scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: List.generate(10, (index) {
-                        final random = Random();
-                        final double x =
-                            random.nextDouble() * 2 - 1; // -1.0 ~ 1.0 사이의 값
-                        final double y =
-                            random.nextDouble() * 2 - 1; // -1.0 ~ 1.0 사이의 값
+                      children: data.mainPageDTOList.map((lecture) {
                         return Container(
-                          width: 200, // 적절한 너비 설정
-                          height: 200, // 적절한 높이 설정
-                          margin: const EdgeInsets.only(
-                              left: 300, right: 100), // 적절한 마진 설정
+                          width: 300,
+                          height: 200,
+                          margin: const EdgeInsets.only(left: 300, right: 100),
                           clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18),
-                            image: DecorationImage(
-                              image: const AssetImage(
-                                  'assets/images/apple-wallpaper.jpg'),
-                              alignment: Alignment(x, y), // 랜덤한 위치 설정
-                              fit: BoxFit.none, // 이미지의 원래 크기를 유지
-                            ),
+                            color: Colors.black.withOpacity(0.800000011920929),
                             boxShadow: const [
                               BoxShadow(
                                 color: Color(0x14000000),
@@ -601,8 +591,95 @@ class _MainPageState extends State<MainPage> {
                               ),
                             ],
                           ),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 30),
+                              Row(children: [
+                                const SizedBox(width: 20),
+                                Text(lecture.lectureName, 
+                                  style: 
+                                    const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontFamily: 'BMHANNAPro',
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: -0.14,
+                                  ),
+                                ),
+                              ],),
+                              const SizedBox(height: 50),
+                              Row(children: [
+                                const SizedBox(width: 20),
+                                Text('교수님: ${lecture.lectureProfessor}', 
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontFamily: 'BMHANNAPro',
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: -0.14,
+                                  )
+                                ),
+                              ],),
+                              Row(
+                                children: [
+                                  const SizedBox(width: 20),
+                                  Text('강의 요일: ${lecture.lectureDay.substring(1, lecture.lectureDay.length - 1)}', 
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontFamily: 'BMHANNAPro',
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: -0.14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const SizedBox(width: 20),
+                                  Text('강의 시작 시간: ${lecture.lectureStartTime}', 
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontFamily: 'BMHANNAPro',
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: -0.14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const SizedBox(width: 20),
+                                  Text('강의 건물: ${lecture.lectureBuilding}', 
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontFamily: 'BMHANNAPro',
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: -0.14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const SizedBox(width: 20),
+                                  Text('강의실: ${lecture.lectureRoom}', 
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontFamily: 'BMHANNAPro',
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: -0.14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         );
-                      }),
+                      }).toList(),
                     ),
                   ),
                 ),

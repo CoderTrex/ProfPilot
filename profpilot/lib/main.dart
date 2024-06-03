@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
           default:
             home = const LoginPage();
         }
-        home = MainPage();
+        // home = MainPage();
         return MaterialApp(
           theme: ThemeData.dark().copyWith(
             scaffoldBackgroundColor: const Color.fromARGB(255, 69, 131, 197),

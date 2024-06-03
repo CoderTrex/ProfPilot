@@ -1,31 +1,61 @@
-
-
 class MainPageDTO {
-  final String title;
-  final String description;
-  final String image;
+  final String role;
+  final String name;
+  final String email;
+  final int lecturesSize;
+  final List<LectureDTO> mainPageDTOList;
 
-  MainPageDTO({required this.title, required this.description, required this.image});
+  MainPageDTO({
+    required this.role,
+    required this.name,
+    required this.email,
+    required this.lecturesSize,
+    required this.mainPageDTOList,
+  });
 
   factory MainPageDTO.fromJson(Map<String, dynamic> json) {
+    var list = json['mainPageDTOList'] as List;
+    List<LectureDTO> lectureList = list.map((i) => LectureDTO.fromJson(i)).toList();
+
     return MainPageDTO(
-      title: json['title'],
-      description: json['description'],
-      image: json['image'],
+      role: json['role'],
+      name: json['name'],
+      email: json['email'],
+      lecturesSize: json['lectures-size'],
+      mainPageDTOList: lectureList,
     );
   }
+}
 
-  Map<String, dynamic> toJson() => {
-    'title': title,
-    'description': description,
-    'image': image,
-  };
+class LectureDTO {
+  final String lectureName;
+  final String lectureDay;
+  final String lectureStartTime;
+  final String lectureEndTime;
+  final String lectureBuilding;
+  final String lectureRoom;
+  final String lectureProfessor;
 
-  factory MainPageDTO.empty() {
-    return MainPageDTO(
-      title: '',
-      description: '',
-      image: '',
+  LectureDTO({
+    required this.lectureName,
+    required this.lectureDay,
+    required this.lectureStartTime,
+    required this.lectureEndTime,
+    required this.lectureBuilding,
+    required this.lectureRoom,
+    required this.lectureProfessor,
+  });
+
+  factory LectureDTO.fromJson(Map<String, dynamic> json) {
+    
+    return LectureDTO(
+      lectureName: json['lectureName'],
+      lectureDay: json['lectureDay'],
+      lectureStartTime: json['lectureStartTime'],
+      lectureEndTime: json['lectureEndTime'],
+      lectureBuilding: json['lectureBuilding'],
+      lectureRoom: json['lectureRoom'],
+      lectureProfessor: json['lectureProfessor'],
     );
   }
 }

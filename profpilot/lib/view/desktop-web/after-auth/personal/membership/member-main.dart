@@ -55,7 +55,6 @@ class _MemebershipMainPageState extends State<MemebershipMainPage> {
     return MsmainDTO.empty();
   }
 
-
   Future<void> _applyProfessor(String apply) async {
     final String? accessToken = window.localStorage['token'];
     final dio = Dio();
@@ -149,7 +148,6 @@ class _MemebershipMainPageState extends State<MemebershipMainPage> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    final MsmainDTO msmainDTO = MsmainDTO.empty();
 
     return Scaffold(
       backgroundColor: const Color(0xFF444444),
