@@ -57,7 +57,7 @@ public class SecurityConfig {
                         .requestMatchers("/member/signup", "/member/login", "/member/logout",
                                 "/member/signup/email/verify", "/member/signup/email/verify/check",
                                 "/images/**", "/css/**", "/js/**", "/sendToken/**", "/reissue", "/WhoAmI",
-                                "/chat/chatList", "/chat/createRoom", "/chat/chatRoom", "/ws/chat").permitAll()
+                                "/chatting/**").permitAll()
 
                         .requestMatchers("/member/my-page", "/member/my-info", "/my-info/update", "/member/check-password",
                                 "/member/change-password", "/member/check", "/member/email/verify", "/member/email/verify/check",
