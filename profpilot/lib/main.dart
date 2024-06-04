@@ -1,14 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:profpilot/view/desktop-web/after-auth/main/lecture-gen.dart';
-import 'package:profpilot/view/desktop-web/after-auth/main/main-page.dart';
-import 'package:profpilot/view/desktop-web/after-auth/personal/membership/member-main.dart';
-import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-edit.dart';
-import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-email.dart';
-import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-page.dart';
-import 'package:profpilot/view/desktop-web/before-auth/FindPassword-page.dart';
 import 'package:profpilot/view/desktop-web/before-auth/Login-page.dart';
-import 'package:profpilot/view/desktop-web/before-auth/Signup-page.dart';
 import 'package:profpilot/view/mobile-web/M-login-page.dart';
 
 class Breakpoint {

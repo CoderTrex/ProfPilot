@@ -1,12 +1,10 @@
-import 'dart:convert';
 import 'dart:html';
-import 'dart:io';
-import 'dart:math';
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:profpilot/DTO/mainpage-dto.dart';
 import 'package:profpilot/view/desktop-web/after-auth/main/lecture-gen.dart';
+import 'package:profpilot/view/desktop-web/after-auth/main/lecture-page.dart';
 import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-page.dart';
 import 'package:profpilot/view/desktop-web/before-auth/Login-page.dart';
 
@@ -18,11 +16,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final PageController _pageController = PageController();
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _lectureIdController = TextEditingController();
-  final TextEditingController _lecturePasswordController =
-      TextEditingController();
+  final TextEditingController _lecturePasswordController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
 
   Future<MainPageDTO> _initPageController() async {
     final String? accessToken = window.localStorage['token'];
@@ -705,7 +702,30 @@ class _MainPageState extends State<MainPage> {
                       ),
                     )
                   ],
-                )
+                ),
+                
+                
+                TextField(
+                  controller: _userNameController,
+                  decoration: const InputDecoration(
+                    labelText: '사용자 이름',
+                  ),
+                ),
+
+                
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ChattingPage(
+                              title: '채팅방',
+                              myUuid: _userNameController.text,
+                            )));
+                  },
+                  child: const Text('채팅방으로 이동'),
+                ),
+
               ],
             );
           }),
