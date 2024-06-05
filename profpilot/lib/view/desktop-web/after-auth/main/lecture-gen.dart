@@ -87,7 +87,7 @@ class _LectureGeneratePageState extends State<LectureGeneratePage> {
                 builder: (BuildContext context) {
                   return Dialog(
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(
+                      constraints: const BoxConstraints(
                         maxHeight: 300,
                       ),
                       child: child,

@@ -369,7 +369,8 @@ class _PersonalPasswordPageState extends State<PersonalPasswordPage> {
                                   fontWeight: FontWeight.w400,
                                 ),
                                 onChanged: (_) {
-                                      setState(() {});
+                                  //setState(() {});하지 말고 TextField 위젯의 style의 color를 변경해주면 됨
+                                  _passwordsMatch();
                                 },
                               ),
                         ),

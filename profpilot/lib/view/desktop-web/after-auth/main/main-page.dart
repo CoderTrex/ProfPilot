@@ -20,6 +20,7 @@ class _MainPageState extends State<MainPage> {
   final TextEditingController _lectureIdController = TextEditingController();
   final TextEditingController _lecturePasswordController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _chattingRoomController = TextEditingController();
 
   Future<MainPageDTO> _initPageController() async {
     final String? accessToken = window.localStorage['token'];
@@ -513,7 +514,7 @@ class _MainPageState extends State<MainPage> {
                           SizedBox(
                             width: 200,
                           ),
-                          const Positioned(
+                          Positioned(
                             // 오늘은 N개의 수업이 있습니다.
                             left: 193,
                             top: 221,
@@ -712,14 +713,20 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
 
-                
+                TextField(
+                  controller: _chattingRoomController,
+                  decoration: const InputDecoration(
+                    labelText: '채팅방 이름',
+                  ),
+                ),
+
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => ChattingPage(
-                              title: '채팅방',
+                              chattingId: _chattingRoomController.text,
                               myUuid: _userNameController.text,
                             )));
                   },
