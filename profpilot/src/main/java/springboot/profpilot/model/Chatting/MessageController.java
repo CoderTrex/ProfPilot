@@ -12,6 +12,7 @@ import springboot.profpilot.model.Game.GameService;
 @RequiredArgsConstructor
 public class MessageController {
     private final GameService gameService;
+//    private final MessageRepository messageRepository;
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -23,6 +24,7 @@ public class MessageController {
             GameState gameState = gameService.startGame(message.getChattingId());
             messagingTemplate.convertAndSend("/topic/game/" + message.getChattingId(), gameState);
         }
+//        messageRepository.save(message);
         messagingTemplate.convertAndSend("/topic/message/" + message.getChattingId(), message);
     }
 }

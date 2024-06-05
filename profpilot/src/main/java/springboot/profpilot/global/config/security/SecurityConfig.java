@@ -53,19 +53,15 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
-
                         .requestMatchers("/member/signup", "/member/login", "/member/logout",
                                 "/member/signup/email/verify", "/member/signup/email/verify/check",
                                 "/images/**", "/css/**", "/js/**", "/sendToken/**", "/reissue", "/WhoAmI",
                                 "/chatting/**").permitAll()
-
                         .requestMatchers("/member/my-page", "/member/my-info", "/my-info/update", "/member/check-password",
                                 "/member/change-password", "/member/check", "/member/email/verify", "/member/email/verify/check",
                                 "/member/email/change", "/member/my-membership", "/member/apply-professor", "/main/page",
                                 "/lecture/create", "/lecture/search", "/lecture/Enrolment").hasAnyRole("STUDENT", "PROFESSOR")
-
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class)
