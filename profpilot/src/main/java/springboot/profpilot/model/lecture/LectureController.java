@@ -77,4 +77,31 @@ public class LectureController {
             return "fail";
         }
     }
+
+
+    @PostMapping("/generate")
+    public Map<String, String> generate(Principal principal) {
+        Member member = memberService.findByEmail(principal.getName());
+        Map<String, String> response;
+
+        if (member.getRole().equals("ROLE_PROFESSOR")) {
+            int result = lectureService.generateFlight(member);
+            if (result == 1) {
+                response = Map.of("response", "success");
+                return response;
+            } else if (result == 2) {
+                response = Map.of("response", "not lecture time");
+                return response;
+            } else if (result == 3) {
+                response = Map.of("response", "not this lecture professor");
+                return response;
+            } else {
+                response = Map.of("response", "don't have lecture");
+                return response;
+            }
+        } else {
+            response = Map.of("response", "not professor");
+            return response;
+        }
+    }
 }

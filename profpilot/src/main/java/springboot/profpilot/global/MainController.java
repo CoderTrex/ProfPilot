@@ -39,6 +39,7 @@ public class MainController {
         List<Lecture> lectures = member.getLectures();
 
         List<MainPageDTO> mainPageDTOList = lectures.stream().map(lecture -> new MainPageDTO(
+                lecture.getId().toString(),
                 lecture.getName(),
                 lecture.getDay(),
                 lecture.getStart_time(),

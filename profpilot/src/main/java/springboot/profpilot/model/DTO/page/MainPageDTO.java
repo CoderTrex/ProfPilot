@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 public class MainPageDTO {
 
+    private String LectureId;
     private String LectureName;
     private String LectureDay;
     private String LectureStartTime;
@@ -16,7 +17,9 @@ public class MainPageDTO {
     private String LectureProfessor;
 
 
-    public MainPageDTO(String lectureName, String lectureDay, String lectureStartTime, String lectureEndTime, String lectureBuilding, String lectureRoom, String lectureProfessor) {
+    public MainPageDTO(String lectureId, String lectureName, String lectureDay, String lectureStartTime,
+                       String lectureEndTime, String lectureBuilding, String lectureRoom, String lectureProfessor) {
+        LectureId = lectureId;
         LectureName = lectureName;
         LectureDay = lectureDay;
         LectureStartTime = lectureStartTime;
