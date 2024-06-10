@@ -28,6 +28,7 @@ class MainPageDTO {
 }
 
 class LectureDTO {
+  final String lectureId;
   final String lectureName;
   final String lectureDay;
   final String lectureStartTime;
@@ -37,6 +38,7 @@ class LectureDTO {
   final String lectureProfessor;
 
   LectureDTO({
+    required this.lectureId,
     required this.lectureName,
     required this.lectureDay,
     required this.lectureStartTime,
@@ -49,6 +51,7 @@ class LectureDTO {
   factory LectureDTO.fromJson(Map<String, dynamic> json) {
     
     return LectureDTO(
+      lectureId: json['lectureId'],
       lectureName: json['lectureName'],
       lectureDay: json['lectureDay'],
       lectureStartTime: json['lectureStartTime'],

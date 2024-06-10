@@ -3,19 +3,20 @@ import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:profpilot/DTO/mainpage-dto.dart';
-import 'package:profpilot/view/desktop-web/after-auth/lecture/Lectuer-detail.dart';
-import 'package:profpilot/view/desktop-web/after-auth/main/lecture-generate.dart';
+import 'package:profpilot/view/desktop-web/after-auth/main/main-page.dart';
 import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-page.dart';
 import 'package:profpilot/view/desktop-web/before-auth/Login-page.dart';
 
-class MainPage extends StatefulWidget {
-  MainPage({super.key});
+class LectureDetailPage extends StatefulWidget {
+  final String lectureId;
+
+  const LectureDetailPage({Key? key, required this.lectureId}) : super(key: key);
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<LectureDetailPage> createState() => _LectureDetailPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _LectureDetailPageState extends State<LectureDetailPage> {
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _lectureIdController = TextEditingController();
   final TextEditingController _lecturePasswordController = TextEditingController();
@@ -41,8 +42,6 @@ class _MainPageState extends State<MainPage> {
               'withCredentials': true,
             },
           ));
-      // print(response.data);
-      // return response.data;
       return MainPageDTO.fromJson(response.data);
     } catch (e) {
       print(e);
@@ -50,56 +49,20 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  Future<void> _GenerateLecture() async {
+  Future<void> _generateLecture() async {
     final String? accessToken = window.localStorage['token'];
 
     if (accessToken == null) {
       window.alert('로그인이 필요합니다.');
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => LoginPage()));
+      return;
     }
 
     final Dio dio = Dio();
-
-    try {
-      final Response response = await dio.get(
-        'http://localhost:8080/WhoAmI',
-        options: Options(
-          headers: {
-            'access': accessToken,
-          },
-          extra: {
-            'withCredentials': true,
-          },
-        ),
-      );
-      if (response.data != 'ROLE_PROFESSOR') {
-        window.alert('수업 생성 권한이 없습니다.');
-        return;
-      }
-    } catch (e) {
-      print(e);
-    }
-
-    if (accessToken != null) {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => LectureGeneratePage()));
-    }
-  }
-
-  Future<void> _addLecture() async {
-    final String? accessToken = window.localStorage['token'];
-
-    if (accessToken == null) {
-      window.alert('로그인이 필요합니다.');
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
-    }
-    final Dio dio = Dio();
-
     try {
       final Response response = await dio.post(
-        'http://localhost:8080/lecture/Enrolment',
+        'http://localhost:8080/lecture/generate',
         options: Options(
           headers: {
             'access': accessToken,
@@ -110,190 +73,30 @@ class _MainPageState extends State<MainPage> {
         ),
         data: {
           'lectureId': _lectureIdController.text,
-          'password': _lecturePasswordController.text,
+          'lecturePassword': _lecturePasswordController.text,
         },
       );
-
-      if (response.data == 'success') {
-        window.alert('수업 등록에 성공했습니다.');
+      if (response.statusCode == 200) {
+        print("response : " + response.data.toString());
+        if (response.data["response"] == "success") {
+          window.alert('수업이 생성되었습니다.');
+        } else if (response.data["response"] == "not lecture time") {
+          window.alert('수업 시간이 아닙니다.');
+        } else if (response.data["response"] == "not this lecture professor") {
+          window.alert('해당 강의의 교수님이 아닙니다.');
+        } else if (response.data["response"] == "don't have lecture") {
+          window.alert('해당 강의가 존재하지 않습니다.');
+        } else {
+          window.alert('교수님이 아닙니다.');
+        }
       } else {
-        window.alert('수업 등록에 실패했습니다.');
+        window.alert('수업 생성에 실패했습니다.');
       }
     } catch (e) {
       print(e);
     }
   }
 
-  Future<void> _onSearchIconPressed() async {
-    String searchText = _searchController.text;
-    String accessToken = window.localStorage['token'] ?? '';
-
-    if (accessToken.isEmpty) {
-      window.alert('로그인이 필요합니다.');
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
-      return;
-    }
-
-    final Dio dio = Dio();
-    try {
-      final response = await dio.post(
-        'http://localhost:8080/lecture/search',
-        options: Options(
-          headers: {
-            'access': accessToken,
-          },
-          extra: {
-            'withCredentials': true,
-          },
-        ),
-        data: {
-          'searchText': searchText,
-        },
-      );
-
-      var data = response.data;
-
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('검색 결과'),
-            content: Container(
-              width: 700,
-              height: 500,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('검색어: $searchText'),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        var lecture = data[index]; // 인덱스로 접근
-                        return Card(
-                          child: ListTile(
-                            title: Text(lecture['lectureName'].toString(),
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: 'BMHANNAPro',
-                                  fontWeight: FontWeight.w400,
-                                )),
-                            subtitle: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '요일: ${lecture['day'].substring(1, lecture['day'].length - 1)}',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'BMHANNAPro',
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Text('강의 시작 시간: ${lecture['startTime']}',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontFamily: 'BMHANNAPro',
-                                      fontWeight: FontWeight.w400,
-                                    )),
-                                const SizedBox(width: 10),
-                                Text('강의 종료 시간: ${lecture['endTime']}',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontFamily: 'BMHANNAPro',
-                                      fontWeight: FontWeight.w400,
-                                    )),
-                                const SizedBox(width: 10),
-                                Text('건물: ${lecture['building']}',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontFamily: 'BMHANNAPro',
-                                      fontWeight: FontWeight.w400,
-                                    )),
-                                const SizedBox(width: 10),
-                                Text('강의실: ${lecture['room']}',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontFamily: 'BMHANNAPro',
-                                      fontWeight: FontWeight.w400,
-                                    )),
-                                const SizedBox(width: 10),
-                                Text('교수: ${lecture['professorName']}',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontFamily: 'BMHANNAPro',
-                                      fontWeight: FontWeight.w400,
-                                    )),
-                              ],
-                            ),
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text('강좌 등록'),
-                                    content: Container(
-                                      width: 300,
-                                      height: 200,
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                              '${lecture['lectureName']} 등록하시겠습니까?'),
-                                          const SizedBox(height: 30),
-                                          TextField(
-                                            controller:
-                                                _lecturePasswordController,
-                                            decoration: const InputDecoration(
-                                              labelText: '비밀번호',
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text('아니오'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          _lectureIdController.text =
-                                              lecture['lectureId'];
-                                          _addLecture();
-                                        },
-                                        child: Text('예'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('닫기'),
-              ),
-            ],
-          );
-        },
-      );
-    } catch (e) {
-      print(e);
-    }
-  }
 
 
   @override
@@ -428,48 +231,6 @@ class _MainPageState extends State<MainPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        children: [
-                          // 강의 검색
-                          SizedBox(
-                            width: screenSize.width - 350,
-                          ),
-                          Container(
-                            width: 300,
-                            height: 40,
-                            decoration: ShapeDecoration(
-                              color: const Color(0x19D9D9D9),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                            ),
-                            child: TextField(
-                              controller: _searchController,
-                              decoration: InputDecoration(
-                                hintText: '강의 검색',
-                                hintStyle: const TextStyle(
-                                  color: Color(0xFFD9D9D9),
-                                  fontSize: 15,
-                                  fontFamily: 'BMHANNAPro',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.04,
-                                  letterSpacing: -0.12,
-                                ),
-                                prefixIcon: IconButton(
-                                  icon: const Icon(Icons.search),
-                                  color: const Color(0xFFD9D9D9),
-                                  onPressed:
-                                      _onSearchIconPressed, // 검색 아이콘을 눌렀을 때 호출되는 함수
-                                ),
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
                       const Row(
                         children: [
                           SizedBox(
@@ -576,7 +337,7 @@ class _MainPageState extends State<MainPage> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: data.mainPageDTOList.map((lecture) {
-                        return
+                        return 
                         InkWell(
                           onTap: () {
                             Navigator.push(
@@ -708,14 +469,56 @@ class _MainPageState extends State<MainPage> {
                 ),
                 Row(
                   children: [
-                    SizedBox(width: screenSize.width * 0.8),
+                    SizedBox(width: screenSize.width * 0.6),
                     SizedBox(
                       width: 150,
                       height: 40,
                       child: ElevatedButton(
-                        onPressed: _GenerateLecture,
+                        onPressed: () {
+                          _generateLecture();
+                        },
                         child: const Text(
-                          '강의 생성',
+                          '수업 생성',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontFamily: 'BMHANNAPro',
+                            fontWeight: FontWeight.w400,
+                            height: 0.02,
+                            letterSpacing: -0.14,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    SizedBox(
+                      width: 150,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: () {
+                        },
+                        child: const Text(
+                          '출석 체크',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontFamily: 'BMHANNAPro',
+                            fontWeight: FontWeight.w400,
+                            height: 0.02,
+                            letterSpacing: -0.14,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    SizedBox(
+                      width: 150,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: () {
+                        },
+                        child: const Text(
+                          '강의 입장',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,
@@ -729,7 +532,6 @@ class _MainPageState extends State<MainPage> {
                     )
                   ],
                 ),
-
               ],
             );
           }),

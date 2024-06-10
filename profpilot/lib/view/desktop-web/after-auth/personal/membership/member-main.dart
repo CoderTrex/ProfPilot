@@ -3,7 +3,7 @@ import 'dart:html';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:profpilot/DTO/msmain-dto.dart';
+import 'package:profpilot/DTO/membership-dto.dart';
 import 'package:profpilot/DTO/mypage-dto.dart';
 import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-edit.dart';
 import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-page.dart';
