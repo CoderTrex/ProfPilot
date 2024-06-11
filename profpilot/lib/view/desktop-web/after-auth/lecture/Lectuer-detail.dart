@@ -2,6 +2,7 @@ import 'dart:html';
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
+import 'package:profpilot/DTO/lecture-detail.dart';
 import 'package:profpilot/DTO/mainpage-dto.dart';
 import 'package:profpilot/view/desktop-web/after-auth/main/main-page.dart';
 import 'package:profpilot/view/desktop-web/after-auth/personal/personal/my-page.dart';
@@ -21,7 +22,7 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
   final TextEditingController _lectureIdController = TextEditingController();
   final TextEditingController _lecturePasswordController = TextEditingController();
 
-  Future<MainPageDTO> _initPageController() async {
+  Future<LectureDetailDTO> _initPageController() async {
     final String? accessToken = window.localStorage['token'];
 
     if (accessToken == null) {
@@ -32,8 +33,9 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
     }
 
     final Dio dio = Dio();
+
     try {
-      final Response response = await dio.get('http://localhost:8080/main/page',
+      final Response response = await dio.post('http://localhost:8080/lecture/page',
           options: Options(
             headers: {
               'access': accessToken,
@@ -41,12 +43,38 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
             extra: {
               'withCredentials': true,
             },
-          ));
-      return MainPageDTO.fromJson(response.data);
+          ),
+          data: {
+            'lectureId': widget.lectureId,
+          }
+      );
+      return LectureDetailDTO.fromJson(response.data);
     } catch (e) {
       print(e);
-      return Future.error('데이터를 불러오는 중 오류가 발생했습니다.');
     }
+
+
+
+    // try {
+    //   final Response response = await dio.get('http://localhost:8080/main/page',
+    //       options: Options(
+    //         headers: {
+    //           'access': accessToken,
+    //         },
+    //         extra: {
+    //           'withCredentials': true,
+    //         },
+    //       ));
+    //   return LectureDetailDTO.fromJson(response.data);
+    // } catch (e) {
+    //   Navigator.pushReplacement(
+    //     context, 
+    //     MaterialPageRoute(
+    //       builder: (context) => const LoginPage()
+    //     )
+    //   );
+    // }
+    return Future.error('에러가 발생했습니다.');
   }
 
   Future<void> _generateLecture() async {
@@ -104,16 +132,16 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
     final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xFF444444),
-      body: FutureBuilder<MainPageDTO>(
+      body: FutureBuilder<LectureDetailDTO>(
           future: _initPageController(),
-          builder: (BuildContext context, AsyncSnapshot<MainPageDTO> snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<LectureDetailDTO> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } 
-            MainPageDTO data = snapshot.data!;
-            // print(data.mainPageDTOList);
+            LectureDetailDTO data = snapshot.data!;
+            // print(data.LectureDetailDTOList);
             return ListView(
               physics: const AlwaysScrollableScrollPhysics(),
               children: [
@@ -274,42 +302,20 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Row(
+                      const Row(
                         children: [
-                          const SizedBox(
+                          SizedBox(
                             width: 200,
                           ),
                           Positioned(
-                            // 오늘은 N개의 수업이 있습니다.
+                            // 재미있는 수업을 들으러 오셨군요?
                             left: 193,
                             top: 221,
                             child: Text.rich(
                               TextSpan(
                                 children: [
-                                  const TextSpan(
-                                    text: '오늘은 ',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontFamily: 'BMHANNAPro',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.02,
-                                      letterSpacing: -0.14,
-                                    ),
-                                  ),
                                   TextSpan(
-                                    text: data.lecturesSize.toString(),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontFamily: 'BMHANNAPro',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.02,
-                                      letterSpacing: -0.14,
-                                    ),
-                                  ),
-                                  const TextSpan(
-                                    text: '개의 수업이 있습니다.',
+                                    text: '재미있는 수업을 들으러 오셨군요?',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 15,
@@ -319,6 +325,28 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
                                       letterSpacing: -0.14,
                                     ),
                                   ),
+                                  // // TextSpan(
+                                  // //   text: data.
+                                  // //   style: const TextStyle(
+                                  // //     color: Colors.white,
+                                  // //     fontSize: 15,
+                                  // //     fontFamily: 'BMHANNAPro',
+                                  // //     fontWeight: FontWeight.w400,
+                                  // //     height: 0.02,
+                                  // //     letterSpacing: -0.14,
+                                  // //   ),
+                                  // // ),
+                                  // TextSpan(
+                                  //   text: '개의 수업이 있습니다.',
+                                  //   style: TextStyle(
+                                  //     color: Colors.white,
+                                  //     fontSize: 15,
+                                  //     fontFamily: 'BMHANNAPro',
+                                  //     fontWeight: FontWeight.w400,
+                                  //     height: 0.02,
+                                  //     letterSpacing: -0.14,
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),
@@ -336,17 +364,17 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: data.mainPageDTOList.map((lecture) {
+                      children: data.attendanceList.map((lecture) {
                         return 
                         InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LectureDetailPage(lectureId: lecture.lectureId),
-                              ),
-                            );
-                          },
+                          // onTap: () {
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => LectureDetailPage(lectureId: lecture.),
+                          //     ),
+                          //   );
+                          // },
                           child: Container(
                             width: 300,
                             height: 200,
@@ -371,7 +399,8 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
                                   children: [
                                     const SizedBox(width: 20),
                                     Text(
-                                      lecture.lectureName,
+                                      // lecture.lectureName,
+                                      "수업 날짜 : ${lecture.date}",
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 15,
@@ -387,7 +416,7 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
                                   children: [
                                     const SizedBox(width: 20),
                                     Text(
-                                      '교수님: ${lecture.lectureProfessor}',
+                                      '강의 시작 시간: ${data.lectureStartTime}',
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 10,
@@ -402,7 +431,7 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
                                   children: [
                                     const SizedBox(width: 20),
                                     Text(
-                                      '강의 요일: ${lecture.lectureDay.substring(1, lecture.lectureDay.length - 1)}',
+                                      '강의 종료 시간: ${data.lectureEndTime}',
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 10,
@@ -417,37 +446,7 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
                                   children: [
                                     const SizedBox(width: 20),
                                     Text(
-                                      '강의 시작 시간: ${lecture.lectureStartTime}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 10,
-                                        fontFamily: 'BMHANNAPro',
-                                        fontWeight: FontWeight.w400,
-                                        letterSpacing: -0.14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const SizedBox(width: 20),
-                                    Text(
-                                      '강의 건물: ${lecture.lectureBuilding}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 10,
-                                        fontFamily: 'BMHANNAPro',
-                                        fontWeight: FontWeight.w400,
-                                        letterSpacing: -0.14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const SizedBox(width: 20),
-                                    Text(
-                                      '강의실: ${lecture.lectureRoom}',
+                                      "출석 여부: ${lecture.status}",
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 10,
@@ -478,7 +477,7 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
                           _generateLecture();
                         },
                         child: const Text(
-                          '수업 생성',
+                          '수업 시작',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,
