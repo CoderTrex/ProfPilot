@@ -8,7 +8,7 @@ import springboot.profpilot.model.AuthApply.AuthApply;
 import springboot.profpilot.model.attendance.Attendance;
 import springboot.profpilot.model.flight.Flight;
 import springboot.profpilot.model.lecture.Lecture;
-import springboot.profpilot.model.notification.Notification;
+//import springboot.profpilot.model.notification.Notification;
 
 import java.util.List;
 
@@ -49,13 +49,13 @@ public class Member {
     @JsonBackReference
     private List<Flight> flights;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Attendance> attendances;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JsonBackReference
-    private List<Notification> notifications;
+//    @ManyToMany(cascade = CascadeType.ALL)
+//    @JsonBackReference
+//    private List<Notification> notifications;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonBackReference

@@ -8,6 +8,7 @@ import springboot.profpilot.model.flight.Flight;
 import springboot.profpilot.model.member.Member;
 import springboot.profpilot.model.notification.Notification;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,16 +28,13 @@ public class Lecture {
     private String end_time;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    private List<Member> Students;
+    private List<Member> Students = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Attendance> attendances;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Attendance> attendances = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Notification> notifications;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Flight> flights;
+//    @ManyToMany(cascade = CascadeType.ALL)
+//    private List<Notification> notifications;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Member Professor;

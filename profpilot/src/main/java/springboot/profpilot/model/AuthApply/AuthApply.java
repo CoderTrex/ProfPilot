@@ -3,6 +3,8 @@ package springboot.profpilot.model.AuthApply;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import springboot.profpilot.model.member.Member;
 
 @Entity
@@ -14,6 +16,7 @@ public class AuthApply {
     private Long id;
 
     @OneToOne
+    @Cascade(CascadeType.ALL)
     private Member applicant;
 
     private String applicantUniversity;

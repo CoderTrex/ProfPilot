@@ -45,11 +45,11 @@ public class Flight {
     @JsonBackReference
     private List<Member> Students;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JsonBackReference
-    private List<Attendance> attendances;
+//    @ManyToMany(cascade = CascadeType.ALL)
+//    @JsonBackReference
+//    private List<Attendance> attendances;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JsonBackReference
-    private List<Notification> notifications;
+//    @ManyToMany(cascade = CascadeType.ALL)
+//    @JsonBackReference
+//    private List<Notification> notifications;
 }

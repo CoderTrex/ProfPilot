@@ -10,6 +10,8 @@ import springboot.profpilot.model.lecture.Lecture;
 import springboot.profpilot.model.member.Member;
 import springboot.profpilot.model.notification.Notification;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -18,22 +20,18 @@ public class Attendance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String date;
     private String status;
-    private String time;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
-    private Member Student;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonBackReference
-    private Flight flight;
+    private Member student;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     private Lecture lecture;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonBackReference
-    private Notification notification;
+//
+//    @ManyToMany(cascade = CascadeType.ALL)
+//    @JsonBackReference
+//    private Notification notification;
 }

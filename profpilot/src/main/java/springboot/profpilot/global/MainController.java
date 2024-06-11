@@ -72,7 +72,6 @@ public class MainController {
         } else if (member.getRole().equals("ROLE_STUDENT")) {
             return "ROLE_STUDENT";
         } else {
-            System.out.println("member role is null");
             return "null";
         }
     }

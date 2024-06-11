@@ -5,11 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import springboot.profpilot.global.Utils.GenerateRandomValue;
+import springboot.profpilot.model.attendance.Attendance;
 import springboot.profpilot.model.emailverfiy.EmailService;
 import springboot.profpilot.model.emailverfiy.EmailVerify;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 import springboot.profpilot.model.emailverfiy.EmailVerifyService;
 import springboot.profpilot.model.lecture.Lecture;
 
@@ -77,7 +80,6 @@ public class MemberService {
             return "fail";
         }
     }
-
     public String addLecture(Member member, Lecture lecture) {
         if (member.getLectures().contains(lecture)) {
             return "already";
@@ -86,5 +88,9 @@ public class MemberService {
             memberRepository.save(member);
         }
         return "success";
+    }
+
+    public List<Attendance> getAttendance(Member member) {
+        return member.getAttendances();
     }
 }
