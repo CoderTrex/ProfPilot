@@ -30,7 +30,7 @@ The project is organized into the following directories:
 
 PROJECT_NAME : profpilot
 PROJECT_DESCRIPTION : ProfPilot is a platform designed for professors. It offers a free WebRTC-based video conferencing service and chat service for classes. Similar to Zoom, it includes features like attendance tracking and Cloud Storage specifically for professors.
-PROJECT_URL : 'https://github.com/Tyranno-Rex/ProfPilot.git'
+PROJECT_URL : 'https://github.com/Tyranno-Rex/profpilot.git'
 PROJECT_COMPLETION_STATUS : FALSE
 PROJECT_MULTI : FALSE
 PROJECT_SUBPROJECT : NONE
