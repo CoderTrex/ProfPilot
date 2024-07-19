@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProfPilot✈️: Lecture Create</title>
+    <link rel="stylesheet" th:href="@{/styles/lecture/lecture_create.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <h5 class="my-3 border-bottom pb-2">수업 생성</h5>
+    <form th:object="${lectureForm}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div th:replace="~{utils/form_errors :: formErrorsFragment}"></div>
+        <div class="mb-3">
+            <label for="lectureName" class="form-label">강의명</label>
+            <input type="text" th:field="*{lectureName}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="lectureRoom" class="form-label">강의실</label>
+            <select id="university" class="form-control">
+                <option value="">대학 선택</option>
+                <option value="1">경희대학교</option>
+                <option value="2">공룡대학교</option>
+            </select>
+            <select id="building" class="form-control" disabled>
+                <option value="">건물 선택</option>
+                <!-- lectureBuilding값 js에서 받아서 lectureBuilding이라는 값으로 보내기-->
+                <input type="hidden" th:field="*{lectureBuilding}" id="lectureBuilding">
+            </select>
+            <input type="text" th:field="*{lectureRoom}" class="form-control">
+            <script>
+                // 사용자가 대학 선택 시 건물 선택 옵션 활성화
+                document.getElementById('university').addEventListener('change', function() {
+                    var buildingSelect = document.getElementById('building');
+                    buildingSelect.disabled = false;
+                    buildingSelect.innerHTML = '<option value="">건물 선택</option>';
+                    $.ajax({
+                        url: '/api/buildings?universityId=' + this.value,
+                        type: 'GET',
+                        success: function(data) {
+                            data.forEach(function(building) {
+                                var option = document.createElement('option');
+                                option.value = building.id;
+                                option.text = building.buildingName;
+                                buildingSelect.appendChild(option);
+                            });
+
+                            // 선택된 건물 이름을 lectureBuilding 필드에 저장
+                            document.getElementById('building').addEventListener('change', function() {
+                                var selectedBuilding = this.options[this.selectedIndex].text;
+                                console.log(selectedBuilding);
+                                document.getElementById('lectureBuilding').value = selectedBuilding;
+                            });
+
+                        }
+                    });
+                });
+
+            </script>
+        </div>
+        <br>
+        <div class="weekPicker">
+            <label for="lectureDay" class="form-label">요일</label>
+            <div class="dowPicker">
+                <div class="dowPickerOption">
+                    <input type="checkbox" id="dow1" name="lectureDay" value="Sun">
+                    <label for="dow1">Sun</label>
+                </div>
+                <div class="dowPickerOption">
+                    <input type="checkbox" id="dow2" name="lectureDay" value="Mon">
+                    <label for="dow2">Mon</label>
+                </div>
+                <div class="dowPickerOption">
+                    <input type="checkbox" id="dow3" name="lectureDay" value="Tue">
+                    <label for="dow3">Tue</label>
+                </div>
+                <div class="dowPickerOption">
+                    <input type="checkbox" id="dow4" name="lectureDay" value="Wed">
+                    <label for="dow4">Wed</label>
+                </div>
+                <div class="dowPickerOption">
+                    <input type="checkbox" id="dow5" name="lectureDay" value="Thu">
+                    <label for="dow5">Thu</label>
+                </div>
+                <div class="dowPickerOption">
+                    <input type="checkbox" id="dow6" name="lectureDay" value="Fri">
+                    <label for="dow6">Fri</label>
+                </div>
+                <div class="dowPickerOption">
+                    <input type="checkbox" id="dow7" name="lectureDay" value="Sat">
+                    <label for="dow7">Sat</label>
+                </div>
+            </div>
+        </div>
+        <br><br>
+        <div class="mb-3">
+            <label for="lectureStartTime" class="form-label">시작 시간</label>
+            <input type="time" th:field="*{lectureStartTime}" class="form-control" step="300">
+        </div>
+        <br>
+        <div class="mb-3">
+            <label for="lectureEndTime" class="form-label">종료 시간</label>
+            <input type="time" th:field="*{lectureEndTime}" class="form-control" step="300">
+        </div>
+        <br>
+        <div class="mb-3">
+            <label for="password" class="form-label">강의 비밀번호</label>
+            <input type="password" th:field="*{lecturePassword}" class="form-control">
+        </div>
+        <input type="submit" value="저장하기" class="btn btn-primary my-2">
+    </form>
+</div>
+</body>
+</html>
+
+

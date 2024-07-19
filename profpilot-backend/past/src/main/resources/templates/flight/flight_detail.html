@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <h1>Flight Detail</h1>
+            <span th:text="${flight.name}"></span>
+            <span th:text="${flight.building}"></span>
+            <span th:text="${flight.Room}"></span>
+            <span th:text="${flight.lectureDay}"></span>
+            <span th:text="${flight.startTime}"></span>
+            <span th:text="${flight.endTime}"></span>
+            <span th:text="${flight.pilot.getName()}"></span>
+            <span th:text="${flight.lecture.getName()}"></span>
+    </body>
+    <div>
+        <br>
+        <div th:if="${user.role == 'prof'}">
+            <span >수업자료 업로드</span>
+            <span th:text="${flight.id}"></span>
+            <form method="POST" enctype="multipart/form-data" th:action="@{|/upload/${flight.id}|}">
+                <table>
+                    <tr>
+                        <td><input type="file" name="file" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="submit" value="Upload" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <br>
+        <span>수업자료</span>
+        <div>
+            <ul>
+                <li th:each="file : ${files}">
+                    <a th:href="${file}" id="filename" th:text="${file}"></a>
+                    <button id="deleteButton">삭제</button>
+                </li>
+            </ul>
+        </div>
+        <a th:href="@{|/lecture/boarding/${flight.id}}">강의 입장</a>
+    </div>
+    <script th:inline="javascript">
+        document.getElementById("deleteButton").addEventListener("click", function() {
+            var userName = /*[[${user.name}]]*/ '';
+            var flightId = /*[[${flight.id}]]*/ ''
+            var file     = /*[[${file}]]*/ '';
+            var url = '/upload/delete/' + userName + '/' + flightId + '/' + file;
+            window.location.href = url;
+        });
+    </script>
+</html>

@@ -1,0 +1,4 @@
+pymysql
+flask
+flask-cors
+cryptography

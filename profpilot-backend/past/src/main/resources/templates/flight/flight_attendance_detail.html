@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Title</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr class="text-center">
+                <th>번호</th>
+                <th>날짜</th>
+                <th>출결</th>
+                <th>학생명</th>
+            </tr>
+        </thead>
+        <tr class="text-center" th:each="attendance, loop : ${attendanceList}">
+            <div th:if="${attendance.user.role != 'prof'}">
+                <td th:text="${loop.index + 1}"></td>
+                <td th:text="${attendance.date}"></td>
+                <td>
+                <td>
+                    <button type="button" class="btn btn-success attendance-btn" data-status="출석">출석</button>
+                    <button type="button" class="btn btn-primary attendance-btn" data-status="지각">지각</button>
+                    <button type="button" class="btn btn-warning attendance-btn" data-status="결석">결석</button>
+                </td>
+                </td>
+                <td th:text="${attendance.user.name}"></td>
+            </div>
+    </table>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const attendanceButtons = document.querySelectorAll('.attendance-btn');
+        attendanceButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const status = this.getAttribute('data-status');
+                const attendanceId = this.getAttribute('data-attendance-id');
+                const flightId = this.getAttribute('data-flight-id');
+                const url = `/attendance/prof/click/${status.toLowerCase()}/${attendanceId}/${flightId}`;
+                var csrfHeader = document.querySelector("#_csrf_header").getAttribute("content");
+                var csrfToken = document.querySelector("#_csrf").getAttribute("content");
+
+                // AJAX 요청 보내기
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader(csrfHeader, csrfToken);
+                    },
+                    success: function(response) {
+                        if (response === 'success') {
+                            alert('출결이 성공적으로 등록되었습니다.');
+                            location.reload();
+                        } else {
+                            alert('출결 등록에 실패했습니다.');
+                        }
+                    },
+                    error: function() {
+                        alert('서버와의 통신에 실패했습니다.');
+                    }
+                });
+            });
+        });
+    });
+</script>
+</html>

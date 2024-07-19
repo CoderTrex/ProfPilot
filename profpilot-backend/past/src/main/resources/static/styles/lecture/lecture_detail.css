@@ -1,0 +1,75 @@
+/* 모달 스타일 */
+.modal {
+    display: none; /* 기본적으로 모달은 숨김 */
+    position: fixed; /* 위치를 고정 */
+    z-index: 1; /* 모달을 다른 요소 위에 표시 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* 스크롤이 생길 경우 스크롤 지원 */
+    background-color: rgba(0,0,0,0.4); /* 배경을 어둡고 투명하게 */
+}
+
+.modal-content {
+    background-color: #fefefe; /* 모달 내용의 배경색 */
+    margin: 15% auto; /* 모달이 화면 중앙에 위치하도록 */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px; /* 모달의 최대 너비 설정 */
+    border-radius: 10px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 테이블 및 버튼 스타일 */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table th, .table td {
+    border: 1px solid #dee2e6;
+    padding: 8px;
+    text-align: center;
+}
+
+.table thead {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.lecture_board td {
+    width: 20%;
+}
+
+.delete-lecture {
+    text-align: center;
+}
+
+.delete-lecture button {
+    padding: 10px 20px;
+    background-color: #dc3545;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.delete-lecture button:hover {
+    background-color: #c82333;
+}

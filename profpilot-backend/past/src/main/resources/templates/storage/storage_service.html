@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>용량 안내 및 구매 추천</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        #container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        #userCapacity, #recommendation {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        #recommendation {
+            text-align: center;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <h1>용량 안내 및 구매 추천</h1>
+    <!-- 사용자의 용량 정보 -->
+    <div id="userCapacity">
+        <p>기본 용량: 2GB (단위: decimal)</p>
+        <!-- 사용량은 타임리프 변수로부터 받아와 표시 -->
+        <span th:text="'현재 사용 중인 용량: ' + ${storage_size} + 'MB'"></span>
+    </div>
+
+    <!-- 용량 초과 시에 보여줄 구매 추천 메시지 -->
+    <div id="recommendation">
+        <div th:if="${version == 1}">
+            <div th:if="${storage_size > 2048}">
+                <p>현재 사용 중인 용량이 2GB를 초과하였습니다.</p>
+            </div>
+            <div th:if="${storage_size + file_size > 2048}">
+                <p>해당 파일은 업로드 할 수 없습니다. 용량을 추가로 구매해주세요.</p>
+                <span th:text="'파일 용량: ' + ${file_size} + 'MB'"></span>
+            </div>
+        </div>
+
+        <!-- 구매 정보 안내 -->
+        <br>
+        <p>Plan1. 매달 $10를 지불하면 추가 20GB의 용량을 사용할 수 있습니다.</p>
+        <a href="/storage/purchase/1" id="purchaseButton1">Plan1. 구매하기</a>
+
+        <br>
+        <p>Plan2. 매달 $20를 지불하면 추가 50GB의 용량을 사용할 수 있습니다.</p>
+        <a href="/storage/purchase/2" id="purchaseButton2">Plan2. 구매하기</a>
+        <br>
+    </div>
+</div>
+<!-- 기타 내용 추가 가능 -->
+</body>
+</html>

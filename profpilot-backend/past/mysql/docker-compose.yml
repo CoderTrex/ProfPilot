@@ -1,0 +1,23 @@
+version: '3.8'
+volumes:
+  mysql-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: C:/Users/admin/project/docker-container-volume/mysql/data
+      o: bind
+services:
+  db:
+    container_name: mysql-server
+    image: mysql
+    ports:
+      - "3307:3306"
+    volumes:
+      - C:/Users/admin/project/docker-container-volume/mysql/data:/data
+    environment:
+      MYSQL_ROOT_PASSWORD: '1234'
+      TZ: Asia/Seoul
+    restart: always
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci

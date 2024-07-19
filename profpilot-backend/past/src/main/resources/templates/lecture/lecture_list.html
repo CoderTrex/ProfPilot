@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html layout:decorate="~{utils/layout}">
+<head>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta charset="UTF-8">
+    <title>ProfPilot✈️: Lecture list</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/lecture/lecture_list.css}">
+    <script>
+        // 모달을 열고 닫는 함수
+        function openModal() {
+            document.getElementById('lecture-popup').style.display = 'block';
+        }
+    
+        function closeModal() {
+            document.getElementById('lecture-popup').style.display = 'none';
+        }
+    
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            var modal = document.getElementById('lecture-popup');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</head>
+<body>
+    <div layout:fragment="content" class="container my-3">
+        <table class="table">
+            <thead class="table-dark">
+            <tr class="text-center">
+                <th style="width:5%">번호</th>
+                <th style="width:20%">강의명</th>
+                <th style="width:5%">강의실</th>
+                <th style="width:10%">수업요일</th>
+                <th style="width:10%">수업시작</th>
+                <th style="width:10%">수업종료</th>
+                <th style="width:10%">교수</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-center" th:each="lecture, loop : ${lectureList}">
+                <div class="lecture_board">
+                    <td th:text="${loop.index + 1}"></td>
+                    <td><a th:href="@{/lecture/enter(id=${lecture.id}, lectureName=${lecture.name})}" th:text="${lecture.name}"></a></td>
+                    <td th:text="${lecture.Room}"></td>
+                    <td th:text="${lecture.LectureDay}"></td>
+                    <td th:text="${lecture.startTime}"></td>
+                    <td th:text="${lecture.endTime}"></td>
+                    <td th:text="${lecture.professor.getName()}"></td>
+                </div>
+            </tr>
+            </tbody>
+        </table>
+        <br><br><br><br>
+        <div class="search-lecture">
+            <h3 class="search-lecture-header">강의 검색</h3>
+            <input type="text" id="search-lecture-input" class="form-control" placeholder="강의명 혹은 교수명을 입력하세요">
+            <button id="listBtn" class="btn btn-primary">검색</button>
+        </div>
+        <br><br><br><br>
+        <div class="create-class" th:if="${userRole == 'prof'}">
+            <a th:href="@{/lecture/create}">
+                <button class="btn btn-primary">create Lecture</button>
+            </a>
+        </div>
+        <div id="lecture-popup" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span> <!-- 닫기 버튼 -->
+                <div id="lecture-info"></div>
+            </div>
+        </div>
+    <script type="text/javascript" src="/js/lecture_list.js"></script>
+    </div>
+</body>
+</html>
